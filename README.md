@@ -3,6 +3,8 @@
 ---
 
 An arduino project.
+
+![alt text](https://github.com/kokkonisd/pression/project.JPG "Logo Title Text 1"
 ---
 
 Force-voltage equation:
