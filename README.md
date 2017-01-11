@@ -4,7 +4,7 @@
 
 An arduino project.
 
-![alt text](https://github.com/kokkonisd/pression/project.JPG "project image")
+![alt text](https://github.com/kokkonisd/pression/blob/master/project.JPG "project image")
 ---
 
 Force-voltage equation:
