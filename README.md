@@ -3,3 +3,9 @@
 ---
 
 An arduino project.
+---
+
+Force-voltage equation:
+
+Vo = Vcc ( R / (R + FSR) )
+
