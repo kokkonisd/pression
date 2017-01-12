@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 
+import com.fazecast.jSerialComm.SerialPort;
+
 public class Chaise {
+	
 
 	ArrayList<Pied> Pieds;
 
