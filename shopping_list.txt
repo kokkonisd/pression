@@ -1,2 +1,6 @@
 -resistances (variables?)
 
+4 HX711
+4 Load Sensors 50kg from electronic scale
+8 1kOhm resistors
+
