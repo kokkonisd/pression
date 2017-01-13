@@ -1,9 +1,9 @@
+package Calculation;
 import java.util.ArrayList;
 
-import com.fazecast.jSerialComm.SerialPort;
 
 public class Chaise {
-	
+
 
 	ArrayList<Pied> Pieds;
 
@@ -31,7 +31,7 @@ public class Chaise {
 			double posX=currentPied.getPosX();
 			double posY=currentPied.getPosY();
 			double value=currentPied.getValue();
-			
+
 			totalValue+=value;
 
 			tmpPosX+=(posX*value);	//x*masse

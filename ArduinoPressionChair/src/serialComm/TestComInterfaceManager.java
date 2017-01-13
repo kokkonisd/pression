@@ -10,9 +10,6 @@ public class TestComInterfaceManager {
 
 	public static void main(String[] args) {
 
-		//JFrame jf=new JFrame();
-		//jf.setVisible(true);
-
 		ComInterfaceManager CIM=new ComInterfaceManager();
 
 		if(CIM.length==0){

@@ -10,6 +10,9 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
+import Calculation.Chaise;
+
+
 /**
  * This class is designed to manage receiving and sending data from a specified SerialPort Object from JSerialComm library
  * @author Jérémy
@@ -60,6 +63,8 @@ public class ComInterface {
 		 * Booleen de verification pour savoir si le port est ouvert
 		 */
 		private boolean isOpen=false;
+
+		Chaise chaise;
 
 
 
@@ -148,10 +153,12 @@ public class ComInterface {
 
 		/**
 		 * new ComInterface(SerialPort serial) crée une interface de communication sur la port serial.
+		 * @param <Chaise>
 		 * @param serial
 		 */
-		public ComInterface(SerialPort serial ){
+		public ComInterface(SerialPort serial){
 			this.serial=serial;
+			this.chaise=new Chaise();
 			SystemName=serial.getSystemPortName();
 			DescriptivePortName=serial.getDescriptivePortName();
 			configurePort(); //Applique les paramètres par défaut au port.
@@ -211,6 +218,9 @@ public class ComInterface {
 				}
 			}
 		}
+
+
+
 
 
 		private class mSerialPortDataListener implements SerialPortDataListener{
