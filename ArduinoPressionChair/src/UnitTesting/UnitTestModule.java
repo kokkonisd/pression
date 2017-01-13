@@ -45,12 +45,12 @@ public class UnitTestModule {
 		int passed = 0;
 		int failed = 0;
 		
-		// si le non ou le tableau des tests n'est pas valide
+		// si le nom ou le tableau des tests n'est pas valide
 		if (this.name != null && this.tests != null) {
 			// on commence le test
 			System.out.printf("Unit testing module %s :\n", this.name);
 			for (int i = 0; i < this.tests.length; i++) {
-				// on transforme tout en String (avec ""+), afin de pouvoir les comparer
+				// on transforme tout en String (avec ""+), afin de pouvoir comparer les éléments
 				if ((""+this.tests[i][0]).equals(""+this.tests[i][1])) {
 					status = "PASSED";
 					passed++;
