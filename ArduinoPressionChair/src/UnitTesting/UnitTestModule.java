@@ -7,13 +7,13 @@ public class UnitTestModule {
 	private String[][] tests;
 	
 	// constructor, sans arguments
-	UnitTestModule() {
+	public UnitTestModule() {
 		this.name = null;
 		this.tests = null;
 	}
 	
 	// constructor, avec arguments
-	UnitTestModule(String name, String[][] tests) {
+	public UnitTestModule(String name, String[][] tests) {
 		setName(name);
 		setTests(tests);
 	}
