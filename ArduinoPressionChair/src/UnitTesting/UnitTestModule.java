@@ -50,8 +50,8 @@ public class UnitTestModule {
 			// on commence le test
 			System.out.printf("Unit testing module %s :\n", this.name);
 			for (int i = 0; i < this.tests.length; i++) {
-				// on transforme tout en String (avec ""+), afin de pouvoir comparer les éléments
-				if ((""+this.tests[i][0]).equals(""+this.tests[i][1])) {
+				// on fait une comparaison des éléments
+				if ((this.tests[i][0]).equals(this.tests[i][1])) {
 					status = "PASSED";
 					passed++;
 				} else {
