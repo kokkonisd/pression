@@ -1,6 +1,6 @@
--resistances (variables?)
-
-2 configurations 2 prices
+2 configurations 
+2 prices
+2 Schematics
 
 Configuration 1 (cheapest -> uses half-weathstone bridge load sensors completed with 2 1Kohms resistors to make a full bridge. Is sensitive to thermal Noise):
 4 HX711 
