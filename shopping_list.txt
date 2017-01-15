@@ -1,6 +1,17 @@
 -resistances (variables?)
 
-4 HX711
-4 Load Sensors 50kg from electronic scale
+2 configurations 2 prices
+
+Configuration 1 (cheapest -> uses half-weathstone bridge load sensors completed with 2 1Kohms resistors to make a full bridge. Is sensitive to thermal Noise):
+4 HX711 
+https://fr.aliexpress.com/item/Dual-Channel-HX711-Weighing-Pressure-Sensor-24-bit-Precision-A-D-Module-For-Arduino-DIY-Electronic/32605537152.html?spm=2114.06010108.3.49.3KHszu&ws_ab_test=searchweb0_0,searchweb201602_1_10065_10068_10000009_10084_10000025_10083_10000029_10080_10082_10081_10000028_10110_10111_10112_10060_10113_10062_10114_10056_503_10055_10054_10059_10099_501_10078_10079_10000022_10000012_10103_10073_10102_10000015_10096_10000018_10000019_10052_10053_10107_10050_10106_10051-10051_10111,searchweb201603_2,afswitch_5,single_sort_3_default&btsid=c789ea9b-6c6c-41db-bc57-2bf0dff2a895
+4 Load Sensors 50kg from electronic scale 
+https://fr.aliexpress.com/item/4pcs-lot-Experiments-body-scale-wholesale-human-scale-load-cell-sensor-resistance-strain-50kg-half-bridge/32657653513.html?spm=2114.06010108.3.99.jZ7HFe&ws_ab_test=searchweb0_0,searchweb201602_1_10065_10068_10000009_10084_10000025_10083_10000029_10080_10082_10081_10000028_10110_10111_10112_10060_10113_10062_10114_10056_503_10055_10054_10059_10099_501_10078_10079_10000022_10000012_10103_10073_10102_10000015_10096_10000018_10000019_10052_10053_10107_10050_10106_10051,searchweb201603_2,afswitch_5,single_sort_3_default&btsid=c1445319-4dad-4f2a-b423-e385e8f992a6
 8 1kOhm resistors
+
+Configuration 2 (the most expensive-> uses 2 half_wheatstone bridge load sensors to make full bridges and reduce sensitivity to thermal noise):
+4HX711
+https://fr.aliexpress.com/item/Dual-Channel-HX711-Weighing-Pressure-Sensor-24-bit-Precision-A-D-Module-For-Arduino-DIY-Electronic/32605537152.html?spm=2114.06010108.3.49.3KHszu&ws_ab_test=searchweb0_0,searchweb201602_1_10065_10068_10000009_10084_10000025_10083_10000029_10080_10082_10081_10000028_10110_10111_10112_10060_10113_10062_10114_10056_503_10055_10054_10059_10099_501_10078_10079_10000022_10000012_10103_10073_10102_10000015_10096_10000018_10000019_10052_10053_10107_10050_10106_10051-10051_10111,searchweb201603_2,afswitch_5,single_sort_3_default&btsid=c789ea9b-6c6c-41db-bc57-2bf0dff2a895
+8 load sensors 50kg from electronic scale
+https://fr.aliexpress.com/item/4pcs-lot-Experiments-body-scale-wholesale-human-scale-load-cell-sensor-resistance-strain-50kg-half-bridge/32657653513.html?spm=2114.06010108.3.99.jZ7HFe&ws_ab_test=searchweb0_0,searchweb201602_1_10065_10068_10000009_10084_10000025_10083_10000029_10080_10082_10081_10000028_10110_10111_10112_10060_10113_10062_10114_10056_503_10055_10054_10059_10099_501_10078_10079_10000022_10000012_10103_10073_10102_10000015_10096_10000018_10000019_10052_10053_10107_10050_10106_10051,searchweb201603_2,afswitch_5,single_sort_3_default&btsid=c1445319-4dad-4f2a-b423-e385e8f992a6
 
