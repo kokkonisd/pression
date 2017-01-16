@@ -2,20 +2,29 @@ package UnitTesting;
 
 public class UnitTestModule {
 
-	// le nom et les tests du module
+	// the name and tests of the module
 	private String name;
-	private String[][] tests;
 	
-	// constructor, sans arguments
+	// variables to keep track of the tests
+	private String status;
+	private int passed;
+	private int failed;
+	
+	private int[][] intTests;
+	private double[][] doubleTests;
+	private char[][] charTests;
+	private String[][] StringTests;
+	
+	private String active_tests = null;
+	
+	// constructor, without argument
 	public UnitTestModule() {
 		this.name = null;
-		this.tests = null;
 	}
 	
-	// constructor, avec arguments
-	public UnitTestModule(String name, String[][] tests) {
+	// constructor, with argument
+	public UnitTestModule(String name) {
 		setName(name);
-		setTests(tests);
 	}
 	
 	// ---
@@ -25,70 +34,151 @@ public class UnitTestModule {
 		this.name = name;
 	}
 	
+	public void setTests(int[][] tests) {
+		this.intTests = tests;
+		this.active_tests = "int";
+	}
+	
+	public void setTests(double[][] tests) {
+		this.doubleTests = tests;
+		this.active_tests = "double";
+	}
+	
+	public void setTests(char[][] tests) {
+		this.charTests = tests;
+		this.active_tests = "char";
+	}
+	
 	public void setTests(String[][] tests) {
-		this.tests = tests;
+		this.StringTests = tests;
+		this.active_tests = "String";
 	}
 	
 	public String getName() {
 		return this.name;
 	}
 	
-	public String[][] getTests() {
-		return this.tests;
+	//---
+	// method that handles input test array and
+	// runs the tests accordingly
+	public void runTests() {
+		// start the test
+		System.out.printf("Unit testing module %s :\n", this.name);
+		this.passed = 0;
+		this.failed = 0;
+		switch(active_tests) {
+			case "int":
+				parseAndRun(this.intTests);
+				break;
+			case "double":
+				parseAndRun(this.doubleTests);
+				break;
+			case "char":
+				parseAndRun(this.charTests);
+				break;
+			case "String":
+				parseAndRun(this.StringTests);
+				break;
+			default:
+				System.out.println("No tests specified.");
+		}
+		if (active_tests != null) {
+			System.out.printf("---\nTest results : %d tests, %d passed, %d failed\n", 
+					this.passed + this.failed, this.passed, this.failed);
+		}
 	}
 	
-	//---
-	// méthode pour performer les tests
 	
-	public void runTests() {
-		String status;
-		int passed = 0;
-		int failed = 0;
-		
-		// si le nom ou le tableau des tests n'est pas valide
-		if (this.name != null && this.tests != null) {
-			// on commence le test
-			System.out.printf("Unit testing module %s :\n", this.name);
-			for (int i = 0; i < this.tests.length; i++) {
-				// on fait une comparaison des éléments
-				if ((this.tests[i][0]).equals(this.tests[i][1])) {
+	// overloading the parseAndRun method to support all basic types
+	private void parseAndRun(int[][] tests) {
+		for (int i = 0; i < tests.length; i++) {
+			// compare the elements
+			if(tests[i][0] == tests[i][1]) {
+				status = "PASSED";
+				passed++;
+			} else {
+				status = "FAILED";
+				failed++;
+			}
+
+			System.out.printf("\tTest %d : %s\n", i+1, status);
+		}
+	}
+	
+	private void parseAndRun(double[][] tests) {
+		for (int i = 0; i < tests.length; i++) {
+			// compare the elements
+			if(tests[i][0] == tests[i][1]) {
+				status = "PASSED";
+				passed++;
+			} else {
+				status = "FAILED";
+				failed++;
+			}
+
+			System.out.printf("\tTest %d : %s\n", i+1, status);
+		}
+	}
+	
+	private void parseAndRun(char[][] tests) {
+		for (int i = 0; i < tests.length; i++) {
+			// compare the elements
+			if(tests[i][0] == tests[i][1]) {
+				status = "PASSED";
+				passed++;
+			} else {
+				status = "FAILED";
+				failed++;
+			}
+
+			System.out.printf("\tTest %d : %s\n", i+1, status);
+		}
+	}
+	
+	private void parseAndRun(String[][] tests) {
+			for (int i = 0; i < tests.length; i++) {
+				// compare the elements
+				if((tests[i][0]).equals(tests[i][1])) {
 					status = "PASSED";
 					passed++;
 				} else {
 					status = "FAILED";
 					failed++;
 				}
-				
+
 				System.out.printf("\tTest %d : %s\n", i+1, status);
 			}
-			System.out.printf("---\nTest results : %d tests, %d passed, %d failed", passed+failed, passed, failed);
-		} else {
-			System.out.printf("Unit Testing Error : no name or tests");
-		}
 	}
 	
-	// exemple de méthode pour tester:
+	// example methods to run tests on
 	public static String majuscules(String s) {
 		return s.toUpperCase();
 	}
 	
+	public static int power(int i) {
+		return i * i;
+	}
+	
+	public static double power(double d) {
+		return Math.pow(d, 2);
+	}
+	
 	public static void main(String[] args) {
-		// On utilise l'object comme ça:
+		// here's how to use the object
 		
-		UnitTestModule myMethod = new UnitTestModule(); // on peut specifier les tests directement aussi
-		// on définit le nom du module et les tests
-		myMethod.setName("Majuscules");
-		/* en gros on a des petits tableaux qui contiennent à la place 0
-			l'entrée de la méthode qu'on veut tester et à la place 1
-			la sortie qu'on attend */
-		// dans ce cas, le dernier va être un fail
+		UnitTestModule myTester = new UnitTestModule(); // we can also specify the tests in the constructor
+		// define the name of the module
+		myTester.setName("Majuscules");
+		
+		// make a 2D array, containing smaller 2 element 1D arrays
+		// the first element of the 1D arrays is the input, the second is the expected output
 		String[][] mytests = {{majuscules("abc"), "ABC"}, {majuscules("3"), "3"}, {majuscules("true"), "TRUe"}};
-		// puis on passe le tableau qui contient tout à notre module
-		myMethod.setTests(mytests);
-		// et finalement on execute les tests
-		myMethod.runTests();
+		// pass the test array to the module
+		myTester.setTests(mytests);
+		// run the tests
+		myTester.runTests();
 		
-		/* donc on a l'output suivant:
+		/* here's the output we get for this one
 
 		 Unit testing module Majuscules :
 			Test 1 : PASSED
@@ -97,6 +187,18 @@ public class UnitTestModule {
 		---
 		Test results : 3 tests, 2 passed, 1 failed
 		*/
+		
+		// now let's test the second method
+		myTester.setName("Power");
+		myTester.setTests(new int[][] {{power(1), 1}, {power(2), 4}, {power(3), 9}});
+		System.out.println();
+		myTester.runTests();
+		
+		// and finally the third method (which is really just overloading the second)
+		myTester.setName("Double Power");
+		myTester.setTests(new double[][] {{power(2.0), 4.0}, {power(5.0), 25.0}});
+		System.out.println();
+		myTester.runTests();
 	}
 
 }
