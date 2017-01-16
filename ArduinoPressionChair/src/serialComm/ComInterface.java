@@ -164,6 +164,14 @@ public class ComInterface {
 		 * @return : an one-dimensional integer array containing the indexed data.
 		 */
 		public static int[] parseArduinoData(String s) {
+			
+			// bug testing, optional
+			if(s.equals("") || s.charAt(s.length() - 1) == ';') {
+				System.out.println("ERROR: parseArduinoData: bad input (empty string or missing data)");
+				// error exit
+				System.exit(1);
+			}
+			
 			String[] data_chunks = s.split(";");
 			int[] parsed_data = new int[data_chunks.length];
 			for (int i = 0; i < data_chunks.length; i++) {
