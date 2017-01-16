@@ -168,8 +168,8 @@ public class ComInterface {
 			// bug testing, optional
 			if(s.equals("") || s.charAt(s.length() - 1) == ';') {
 				System.out.println("ERROR: parseArduinoData: bad input (empty string or missing data)");
-				// error exit
-				System.exit(1);
+				// return empty integer array
+				return new int[] {};
 			}
 			
 			String[] data_chunks = s.split(";");

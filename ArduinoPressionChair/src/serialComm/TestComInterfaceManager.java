@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 
 import serialComm.ComInterface;
 
+import UnitTesting.UnitTestModule;
+
 public class TestComInterfaceManager {
 
 	static Scanner in=new Scanner(System.in);
@@ -43,12 +45,15 @@ public class TestComInterfaceManager {
 		
 		
 		// testing the arduino data parser
-		System.out.println("\n---\n");
+		System.out.println("\n===\n");
 		
-		int[] parserTest = ComInterface.parseArduinoData("1;2;3;4");
-		for (int i = 0; i < parserTest.length; i++) {
-			System.out.println(i + " : " + parserTest[i]);
-		}
+		UnitTestModule parserTest = new UnitTestModule("Arduino Parser");
+		String parseString = "172;1827;8493;99";
+		parserTest.setTests(new int[][] {{ComInterface.parseArduinoData(parseString)[0], 172}, 
+			{ComInterface.parseArduinoData(parseString)[1], 1827}, 
+			{ComInterface.parseArduinoData(parseString)[2], 8493},
+			{ComInterface.parseArduinoData(parseString)[3], 99}});
+		parserTest.runTests();
 		
 	}
 
