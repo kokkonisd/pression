@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import javax.swing.JFrame;
 
+import serialComm.ComInterface;
+
 public class TestComInterfaceManager {
 
 	static Scanner in=new Scanner(System.in);
@@ -27,7 +29,7 @@ public class TestComInterfaceManager {
 		int selectedComPortIndex;
 
 		do{
-			System.out.printf("Entrez un nombre de 0 à %d pour choisir le port com dans la liste:",CIM.length-1);
+			System.out.printf("Entrez un nombre de 0 ï¿½ %d pour choisir le port com dans la liste:",CIM.length-1);
 			selectedComPortIndex=Integer.parseInt(in.nextLine());
 		}while(selectedComPortIndex<0 || selectedComPortIndex>=CIM.length);
 
@@ -35,10 +37,19 @@ public class TestComInterfaceManager {
 
 		System.out.println("Vous avez choisi le port:"+SelectedCM.getSystemPortName() +"|"+SelectedCM.getDescriptivePortName());
 
-		System.out.println("Tentative d'ouverture du port et de création des flux.");
+		System.out.println("Tentative d'ouverture du port et de crï¿½ation des flux.");
 		SelectedCM.start();
-		System.out.println("Ouverture réussie écoute des données sur le port:");
-
+		System.out.println("Ouverture rï¿½ussie ï¿½coute des donnï¿½es sur le port:");
+		
+		
+		// testing the arduino data parser
+		System.out.println("\n---\n");
+		
+		int[] parserTest = ComInterface.parseArduinoData("1;2;3;4");
+		for (int i = 0; i < parserTest.length; i++) {
+			System.out.println(i + " : " + parserTest[i]);
+		}
+		
 	}
 
 }

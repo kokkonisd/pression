@@ -15,42 +15,42 @@ import Calculation.Chaise;
 
 /**
  * This class is designed to manage receiving and sending data from a specified SerialPort Object from JSerialComm library
- * @author Jérémy
+ * @author Jï¿½rï¿½my
  *
  */
 public class ComInterface {
 
 	//---------------------------Variables-----------------------------//
 		/**
-		 * Le port à utiliser
+		 * Le port ï¿½ utiliser
 		 */
 		private SerialPort serial;
 		/**
-		 * Flux de réception de données
+		 * Flux de rï¿½ception de donnï¿½es
 		 */
 		private InputStream serialInputStream;
 		/**
-		 * Flux d'émission de données
+		 * Flux d'ï¿½mission de donnï¿½es
 		 */
 		private OutputStream serialOutputStream;
 		/**
 		 * Vitesse de communication
 		 */
-		private int BaudRate=9600; //Par défaut 9600
+		private int BaudRate=9600; //Par dï¿½faut 9600
 		/**
-		 * Nombre de bits de données
+		 * Nombre de bits de donnï¿½es
 		 */
-		private int DataBits=8; //Par défaut 8
+		private int DataBits=8; //Par dï¿½faut 8
 		/**
 		 * Nombre de bits de Stop
 		 */
-		private int StopBits=1; //Par défaut 1
+		private int StopBits=1; //Par dï¿½faut 1
 		/**
-		 * Parité du message
+		 * Paritï¿½ du message
 		 */
-		private int Parity=SerialPort.NO_PARITY; //Par défaut pair
+		private int Parity=SerialPort.NO_PARITY; //Par dï¿½faut pair
 		/**
-		 * Nom système port COM
+		 * Nom systï¿½me port COM
 		 */
 		private String SystemName;
 		/**
@@ -147,12 +147,37 @@ public class ComInterface {
 		public boolean isOpen() {
 			return isOpen;
 		}
+		
+		// --------- STATICS ---------
+		/**
+		 * Method to parse string data received from the Arduino by
+		 * serial communication. We capture the data in order, so 
+		 * the values are stored in an one-dimensional integer array.
+		 * 
+		 * The sensor IDs corresponding to these values are simply the indexes.
+		 * (eg: parsed_data[0] will contain the data coming from the sensor with ID = 0)
+		 * 
+		 * The format of the string will be:
+		 * dataFromSensorID0;dataFromSensorID1;dataFromSensorID2 etc.
+		 * 
+		 * @param s : string of data communicated by the Arduino
+		 * @return : an one-dimensional integer array containing the indexed data.
+		 */
+		public static int[] parseArduinoData(String s) {
+			String[] data_chunks = s.split(";");
+			int[] parsed_data = new int[data_chunks.length];
+			for (int i = 0; i < data_chunks.length; i++) {
+				parsed_data[i] = Integer.parseInt(data_chunks[i]);
+			}
+			
+			return parsed_data;
+		}
 
 
-		//---------------------------Méthodes------------------------
+		//---------------------------Mï¿½thodes------------------------
 
 		/**
-		 * new ComInterface(SerialPort serial) crée une interface de communication sur la port serial.
+		 * new ComInterface(SerialPort serial) crï¿½e une interface de communication sur la port serial.
 		 * @param <Chaise>
 		 * @param serial
 		 */
@@ -161,11 +186,11 @@ public class ComInterface {
 			this.chaise=new Chaise();
 			SystemName=serial.getSystemPortName();
 			DescriptivePortName=serial.getDescriptivePortName();
-			configurePort(); //Applique les paramètres par défaut au port.
+			configurePort(); //Applique les paramï¿½tres par dï¿½faut au port.
 		}
 
 		/**
-		 * Applique les paramètres au Port COM
+		 * Applique les paramï¿½tres au Port COM
 		 */
 		public void configurePort(){
 			this.serial.setComPortParameters(BaudRate, DataBits, StopBits, Parity);
@@ -174,7 +199,7 @@ public class ComInterface {
 		}
 
 		/**
-		 * Ouvrir le port COM et créer les Flux
+		 * Ouvrir le port COM et crï¿½er les Flux
 		 */
 		public boolean open(){
 			if(serial.openPort()){
@@ -212,7 +237,7 @@ public class ComInterface {
 			if(isOpen){
 				OutputStream serialOutputStream=serial.getOutputStream();
 				String dataMessage=message;
-				char[] data=dataMessage.toCharArray(); //Convertion de la chaine de caractère en Tableau de characteres
+				char[] data=dataMessage.toCharArray(); //Convertion de la chaine de caractï¿½re en Tableau de characteres
 				for(int i=0;i<data.length;i++){
 					serialOutputStream.write((int)data[i]); //Envoi du message
 				}
@@ -237,13 +262,13 @@ public class ComInterface {
 			@Override
 			public void serialEvent(SerialPortEvent event){
 
-				//Si on n'est pas en train d'attendre des données, on passe
+				//Si on n'est pas en train d'attendre des donnï¿½es, on passe
 				if(event.getEventType()!=SerialPort.LISTENING_EVENT_DATA_AVAILABLE){
 					return;
 				}
 
-				byte[] dataBuffer=new byte[serial.bytesAvailable()]; //On crée un buffer des octets disponibles sur le Port
-				int numRead=serial.readBytes(dataBuffer, dataBuffer.length); //On lit les données du port série en les plaçant dans le Buffer
+				byte[] dataBuffer=new byte[serial.bytesAvailable()]; //On crï¿½e un buffer des octets disponibles sur le Port
+				int numRead=serial.readBytes(dataBuffer, dataBuffer.length); //On lit les donnï¿½es du port sï¿½rie en les plaï¿½ant dans le Buffer
 
 				int inputData;
 
