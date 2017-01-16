@@ -29,7 +29,7 @@ public class Chaise {
 		gposY=0;
 	}
 
-	void addPied(Pied p){
+	public void addPied(Pied p){
 		Pieds.add(p);
 	}
 
@@ -37,7 +37,7 @@ public class Chaise {
 		return Pieds.get(piedIndex);
 	}
 
-	void calculateGpos(){
+	public void calculateGpos(){
 
 		//Init of the total value to ponderate the final result
 		double totalValue=0;
