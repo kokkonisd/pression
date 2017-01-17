@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
@@ -15,8 +16,7 @@ public class PostureVisualizationJPanel extends JPanel {
 
 	private Chaise chaise;
 
-	public static final int circleDiameter=10;
-	public static final int margin=50;
+	public static final int circleDiameter=20;
 
 	public PostureVisualizationJPanel() {
 		this.chaise=new Chaise();
@@ -51,40 +51,51 @@ public class PostureVisualizationJPanel extends JPanel {
 		return this.chaise;
 	}
 
-	public void paint(Graphics g){
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+
+
 
 		Graphics2D g2d=(Graphics2D)g;
+
+		FontMetrics fm=g2d.getFontMetrics();
 
 		g2d.setColor(Color.BLACK);
 
 		ArrayList<Pied> Pieds=chaise.getPieds();
 		for(int i=0;i<Pieds.size();i++){
 			Pied pied=Pieds.get(i);
-			System.out.println(pied.getPosX());
+			double posX=pied.getPosX();
+			double posY=pied.getPosY();
+			int x=scaleX(posX);
+			int y=scaleY(posY);
+			int ovalCenterX=x+circleDiameter/2;
+			int ovalCenterY=y+circleDiameter/2;
 
-			g2d.drawOval(scaleX(pied.getPosX()), scaleY(pied.getPosY()), circleDiameter, circleDiameter);
+			char[] chars=(pied.getSensorID()+"").toCharArray();
+			String sensorIDStr=pied.getSensorID()+"";
+			int strwidth=fm.stringWidth(sensorIDStr);
+			int strHeight=fm.getHeight();
+			int stringStartX=ovalCenterX-strwidth/2;
+			int stringStartY=ovalCenterY+strHeight/2-fm.getDescent();
+
+
+			g2d.drawString(sensorIDStr, stringStartX, stringStartY);
+			g2d.drawOval(x, y, circleDiameter, circleDiameter);
 		}
 
 		g2d.fillOval(scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, circleDiameter);
 
 	}
 
-	public void paintG(double x,double y){
-		int xscreen=scaleX(x);
-		int yscreen=scaleY(y);
-		Graphics2D g2d=(Graphics2D)getGraphics();
-		g2d.setColor(Color.RED);
-		g2d.fillOval(xscreen, yscreen, circleDiameter, circleDiameter);
-	}
-
 	public int scaleX(double posX){
-		int width=getWidth()-circleDiameter;
+		int width=getWidth()-circleDiameter-1;
 		int Xvalue=(int)(width*(posX/chaise.getMaxPosX()));
 		return Xvalue;
 	}
 
 	public int scaleY(double posY){
-		int height=getHeight()-circleDiameter;
+		int height=getHeight()-circleDiameter-1;
 		int Yvalue=(int)(height*(posY/chaise.getMaxPosX()));
 		return Yvalue;
 	}

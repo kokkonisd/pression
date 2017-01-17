@@ -14,8 +14,8 @@ import Calculation.Chaise;
 public class MainWindow extends JFrame {
 
 	//window size in pixels
-	private final int width=400;
-	private final int height=200;
+	private final int width=300;
+	private final int height=300;
 	private final String AppTitle="Amazing Posture Detector";
 	private Chaise chaise;
 	PostureVisualizationJPanel panel;
@@ -27,6 +27,8 @@ public class MainWindow extends JFrame {
 		panel=new PostureVisualizationJPanel(chaise);
 
 		this.setContentPane(panel);
+		//add(panel);
+		this.setMinimumSize(new Dimension(300, 300));
 		this.setSize(width,height);
 		this.setTitle(AppTitle);
 		this.setVisible(true);

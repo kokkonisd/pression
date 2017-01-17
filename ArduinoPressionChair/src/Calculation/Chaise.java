@@ -7,12 +7,12 @@ public class Chaise {
 
 	ArrayList<Pied> Pieds;
 
-	double gposX,gposY;	//coordonnées du point G barycentre des masses de la chaise en fonction de ses pieds. relatif à 0.
+	double gposX=Double.NaN;
+	double gposY=Double.NaN;	//coordonnées du point G barycentre des masses de la chaise en fonction de ses pieds. relatif à 0.
+
 
 	public Chaise(){
 		Pieds=new ArrayList<>();
-		gposX=0;
-		gposY=0;
 	}
 
 	/**
@@ -21,16 +21,22 @@ public class Chaise {
 	 * @param piedsNumber
 	 */
 	public Chaise(int piedsNumber){
-		Pieds=new ArrayList<>();
+		this();
 		for(int i=0;i<piedsNumber;i++){
 			addPied(new Pied(i));
 		}
-		gposX=0;
-		gposY=0;
 	}
 
 	public void addPied(Pied p){
 		Pieds.add(p);
+	}
+
+	public void removePied(Pied p){
+		Pieds.remove(p);
+	}
+
+	public void removePied(int index){
+		Pieds.remove(index);
 	}
 
 	Pied getPied(int piedIndex){
@@ -100,6 +106,7 @@ public class Chaise {
 	}
 
 	public double getMaxPosX(){
+
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
 			double posX=Pieds.get(i).getPosX();
@@ -108,8 +115,11 @@ public class Chaise {
 			}
 		}
 		return max;
+		//return maxPosX;
 	}
 	public double getMaxPosY(){
+
+
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
 			double posY=Pieds.get(i).getPosY();
@@ -118,7 +128,28 @@ public class Chaise {
 			}
 		}
 		return max;
+		//return maxPosY;
+
 	}
+
+	/*
+	public void calculateMaxPos(){
+		double maxX=0;
+		double maxY=0;
+		for(int i=0;i<Pieds.size();i++){
+			double posX=Pieds.get(i).getPosX();
+			double posY=Pieds.get(i).getPosX();
+			if(posX>maxX){
+				maxX=posX;
+			}
+			if(posY>maxY){
+				maxY=posY;
+			}
+		}
+		maxPosX=maxX;
+		maxPosY=maxY;
+	}
+	*/
 
 
 

@@ -1,7 +1,10 @@
 package gui;
 
+import com.fazecast.jSerialComm.SerialPort;
+
 import Calculation.Chaise;
 import Calculation.Pied;
+import serialComm.ComInterface;
 
 public class TestMainWindow {
 
@@ -15,10 +18,10 @@ public class TestMainWindow {
 		Pied p3=new Pied(0.0, 1.0, 3);
 		Pied p4=new Pied(1.0, 1.0, 4);
 
-		p1.setValue(2);
-		p2.setValue(2);
-		p3.setValue(5);
-		p4.setValue(1);
+		p1.setValue(5);
+		p2.setValue(5);
+		p3.setValue(2);
+		p4.setValue(2);
 
 		chaise.addPied(p1);
 		chaise.addPied(p2);
@@ -35,7 +38,11 @@ public class TestMainWindow {
 
 		win.setChaise(chaise);
 
-		win.panel.paintG(chaise.getGposX(), chaise.getGposY());
+		ComInterface cm=new ComInterface(SerialPort.getCommPort("COM10"), win.panel);
+		cm.start();
+
+
+		//win.panel.paintG(chaise.getGposX(), chaise.getGposY());
 
 		//win.panel.invalidate();
 		//win.panel.repaint();
