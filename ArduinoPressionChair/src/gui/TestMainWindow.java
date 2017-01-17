@@ -1,5 +1,10 @@
 package gui;
 
+import java.sql.Time;
+import java.util.Random;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+
 import com.fazecast.jSerialComm.SerialPort;
 
 import Calculation.Chaise;
@@ -8,7 +13,7 @@ import serialComm.ComInterface;
 
 public class TestMainWindow {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		MainWindow win=new MainWindow();
 
 		Chaise chaise=new Chaise();
@@ -38,14 +43,20 @@ public class TestMainWindow {
 
 		win.setChaise(chaise);
 
+
 		ComInterface cm=new ComInterface(SerialPort.getCommPort("COM10"), win.panel);
 		cm.start();
 
 
-		//win.panel.paintG(chaise.getGposX(), chaise.getGposY());
+		Random r=new Random();
+		for(int i=0;i<200;i++){
 
-		//win.panel.invalidate();
-		//win.panel.repaint();
+			String s=r.nextInt(1025)+";"+r.nextInt(1025)+";"+r.nextInt(1025)+";"+r.nextInt(1025);
+			cm.updatePanelWithData(s);
+
+			Thread.sleep(150);
+
+		}
 
 	}
 
