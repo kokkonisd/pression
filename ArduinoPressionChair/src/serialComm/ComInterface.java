@@ -288,6 +288,7 @@ public class ComInterface {
 					for(int i=0;i<dataBuffer.length;i++){
 						inputData=(int)dataBuffer[i];
 
+						//System.out.println(inputData);
 						//Si on a un STX
 						if(inputData==02){
 							recordData=true;
@@ -296,6 +297,7 @@ public class ComInterface {
 						else if(inputData==13){
 							recordData=false;
 							String rawData=Data.toString();
+							System.out.println(rawData);
 							updatePanelWithData(rawData);
 							Data.delete(0, Data.length());
 						}

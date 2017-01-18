@@ -44,10 +44,11 @@ public class TestMainWindow {
 		win.setChaise(chaise);
 
 
-		ComInterface cm=new ComInterface(SerialPort.getCommPort("COM10"), win.panel);
+		ComInterface cm=new ComInterface(SerialPort.getCommPort("COM1"), win.panel);
 		cm.start();
 
 
+		/*
 		Random r=new Random();
 		for(int i=0;i<200;i++){
 
@@ -57,6 +58,7 @@ public class TestMainWindow {
 			Thread.sleep(150);
 
 		}
+		*/
 
 	}
 
