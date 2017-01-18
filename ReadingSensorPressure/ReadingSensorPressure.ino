@@ -17,10 +17,12 @@ int sensorReading4;
 // constants
 // the first two store the default range of the load sensors
 // the last two store a set interval of values
-int MIN_DEFAULT = 0;
-int MAX_DEFAULT = 1023;
-int MIN_SET = 0;
-int MAX_SET = 5000;
+const int MIN_DEFAULT = 0;
+const int MAX_DEFAULT = 1023;
+const int MIN_SET = 0;
+const int MAX_SET = 5000;
+const int CODE_BEGIN = 2;
+const int CODE_END = 13;
 
 void setup(void) {
     Serial.begin(9600); // We'll send debugging information via the Serial monitor   
@@ -39,16 +41,16 @@ void loop(void) {
     sensorReading3 = map(sensorReading3, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
 
-    String s=((String)sensorReading1+";" + (String)sensorReading2 + ";" + (String)sensorReading3 + ";" + (String)sensorReading4);
-    //char *values=strcat(values,sensorReading1);
+    // put the values into a string
+    String s = (String) sensorReading1+";" + (String) sensorReading2 + ";" + (String) sensorReading3 + ";" + (String) sensorReading4;
     // send out the values
-    Serial.write(2);
-    for(int i=0;i<s.length();i++){
-      Serial.write((int)s.charAt(i));
-    }
-    Serial.write(13);
-
+    Serial.write(CODE_BEGIN);
     
+    for (int i=0; i < s.length(); i++) {
+      Serial.write(s.charAt(i));
+    }
+    
+    Serial.write(CODE_END);
 
-    delay (100);
+    delay(100);
 }
