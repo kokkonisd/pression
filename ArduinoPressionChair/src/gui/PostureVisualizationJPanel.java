@@ -16,7 +16,7 @@ public class PostureVisualizationJPanel extends JPanel {
 
 	private Chaise chaise;
 
-	public static final int circleDiameter=20;
+	public static final int circleDiameter=30;
 
 	public PostureVisualizationJPanel() {
 		this.chaise=new Chaise();

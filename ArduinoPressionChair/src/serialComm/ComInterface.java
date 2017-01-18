@@ -322,7 +322,7 @@ public class ComInterface {
 			int[] sensorValues=parseArduinoData(rawData);
 			panel.getChaise().setPiedsValuesFromIntArray(sensorValues);
 			panel.getChaise().calculateGpos();
-			panel.removeAll();
+			//panel.removeAll();
 			panel.repaint();
 		}
 
