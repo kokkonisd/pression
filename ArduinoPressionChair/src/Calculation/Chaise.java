@@ -7,17 +7,43 @@ public class Chaise {
 
 	ArrayList<Pied> Pieds;
 
-	double gposX,gposY;	//coordonnées du point G barycentre des masses de la chaise en fonction de ses pieds. relatif à 0.
+	double gposX=Double.NaN;
+	double gposY=Double.NaN;	//coordonnées du point G barycentre des masses de la chaise en fonction de ses pieds. relatif à 0.
+
 
 	public Chaise(){
 		Pieds=new ArrayList<>();
 	}
 
-	void addPied(Pied p){
+	/**
+	 * Crée une chaise avec autant n=piedsNumber pieds.
+	 * Les id de pieds vont de 0 à piedsNumber-1 dans l'arrayList Pieds.
+	 * @param piedsNumber
+	 */
+	public Chaise(int piedsNumber){
+		this();
+		for(int i=0;i<piedsNumber;i++){
+			addPied(new Pied(i));
+		}
+	}
+
+	public void addPied(Pied p){
 		Pieds.add(p);
 	}
 
-	void calculateGpos(){
+	public void removePied(Pied p){
+		Pieds.remove(p);
+	}
+
+	public void removePied(int index){
+		Pieds.remove(index);
+	}
+
+	Pied getPied(int piedIndex){
+		return Pieds.get(piedIndex);
+	}
+
+	public void calculateGpos(){
 
 		//Init of the total value to ponderate the final result
 		double totalValue=0;
@@ -66,6 +92,64 @@ public class Chaise {
 	public void setGposY(double gposY) {
 		this.gposY = gposY;
 	}
+
+	/**
+	 * Prends tout les Pieds de la liste Pieds de la chaise et attribut les valeurs
+	 * des capteurs aux pieds
+	 * @param piedsValues
+	 */
+	public void setPiedsValuesFromIntArray(int[] piedsValues){
+		for(int piedIndex=0;piedIndex<Pieds.size();piedIndex++){
+			int value=piedsValues[piedIndex];
+			Pieds.get(piedIndex).setValue(value);
+		}
+	}
+
+	public double getMaxPosX(){
+
+		double max=0;
+		for(int i=0;i<Pieds.size();i++){
+			double posX=Pieds.get(i).getPosX();
+			if(posX>max){
+				max=posX;
+			}
+		}
+		return max;
+		//return maxPosX;
+	}
+	public double getMaxPosY(){
+
+
+		double max=0;
+		for(int i=0;i<Pieds.size();i++){
+			double posY=Pieds.get(i).getPosY();
+			if(posY>max){
+				max=posY;
+			}
+		}
+		return max;
+		//return maxPosY;
+
+	}
+
+	/*
+	public void calculateMaxPos(){
+		double maxX=0;
+		double maxY=0;
+		for(int i=0;i<Pieds.size();i++){
+			double posX=Pieds.get(i).getPosX();
+			double posY=Pieds.get(i).getPosX();
+			if(posX>maxX){
+				maxX=posX;
+			}
+			if(posY>maxY){
+				maxY=posY;
+			}
+		}
+		maxPosX=maxX;
+		maxPosY=maxY;
+	}
+	*/
 
 
 

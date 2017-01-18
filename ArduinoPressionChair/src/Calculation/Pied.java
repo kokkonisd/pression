@@ -14,6 +14,12 @@ public class Pied {
 		this.sensorID=sensorID;
 	}
 
+	public Pied(int sensorID){
+		this.sensorID=sensorID;
+		this.posX=0;
+		this.posY=0;
+	}
+
 
 	public double getPosX() {
 		return posX;
