@@ -14,18 +14,24 @@ int sensorReading2;
 int sensorReading3;
 int sensorReading4;
 
-// constants
-// the first two store the default range of the load sensors
-// the last two store a set interval of values
+// --constants--
+// constants to set the default min and max values of the sensors
 const int MIN_DEFAULT = 0;
 const int MAX_DEFAULT = 1023;
+
+// constants to set a range to which to map the sensor values
 const int MIN_SET = 0;
 const int MAX_SET = 5000;
+
+// serial comm codes
 const int CODE_BEGIN = 2;
 const int CODE_END = 13;
 
+// serial comm speed
+const int COMM_SPEED = 9600;
+
 void setup(void) {
-    Serial.begin(9600); // We'll send debugging information via the Serial monitor   
+    Serial.begin(COMM_SPEED); // We'll send debugging information via the Serial monitor   
 }
 
 void loop(void) {
