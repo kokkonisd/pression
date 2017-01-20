@@ -6,8 +6,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,6 +30,7 @@ public class MainWindow extends JFrame {
 	private Chaise chaise;
 	PostureVisualizationJPanel panel;
 	SerialPort serialPort;
+	SerialPort[] serialPorts=SerialPort.getCommPorts();
 	ComInterface comInterface;
 
 	public MainWindow() throws HeadlessException {
@@ -37,6 +42,7 @@ public class MainWindow extends JFrame {
 		JPanel mainPanel=new JPanel(new GridLayout(1, 2));
 
 		ComConfigPanel configPanel=new ComConfigPanel(this);
+
 
 		mainPanel.add(panel);
 		mainPanel.add(configPanel);
@@ -51,22 +57,6 @@ public class MainWindow extends JFrame {
 
 	}
 
-
-
-	public MainWindow(GraphicsConfiguration arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public MainWindow(String arg0, GraphicsConfiguration arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-
-	public MainWindow(String arg0) throws HeadlessException {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
 
 
 
@@ -102,6 +92,88 @@ public class MainWindow extends JFrame {
 	}
 
 
+	public class ComConfigPanel extends JPanel {
+
+
+		public ComConfigPanel(final MainWindow mainwindow) {
+			super();
+
+			String[] comListNames=new String[serialPorts.length];
+			for(int i=0;i<serialPorts.length;i++){
+				comListNames[i]=serialPorts[i].getSystemPortName()+ "|"+ serialPorts[i].getDescriptivePortName();
+			}
+
+			final JComboBox<String> comCombobox=new JComboBox<>(comListNames);
+			add(comCombobox);
+
+
+			final JButton btnConnexion = new JButton("Connexion");
+			final JButton btnDeconnexion=new JButton("Deconnexion");
+
+			if(serialPorts.length==0){
+				btnConnexion.setEnabled(false);
+			}
+
+			btnDeconnexion.setEnabled(false);
+
+
+			btnConnexion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					comCombobox.setEnabled(false);
+
+					if(comInterface!=null){
+						comInterface.stop();
+						comInterface.setSerial(serialPorts[comCombobox.getSelectedIndex()]);
+					}
+					else{
+						comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
+					}
+
+					if(!comInterface.isOpen()){
+						comInterface.start();
+						if(comInterface.isOpen()){
+							btnConnexion.setText("Connecté");
+							btnDeconnexion.setEnabled(true);
+							btnConnexion.setEnabled(false);
+						}else{
+							btnConnexion.setText("Echec ouverture");
+							comCombobox.setEnabled(true);
+						}
+					}
+
+
+				}
+			});
+			add(btnConnexion);
+
+
+			btnDeconnexion.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(comInterface.stop()){
+						//openButton.setText(comInterface.getSystemPortName()+" Fermé");
+						//openButton.setIcon(statusOffline);
+						//openButton.setToolTipText("Réouvrir le port COM et réactiver l'écoute des données");
+						comCombobox.setEnabled(true);
+						btnConnexion.setEnabled(true);
+						btnConnexion.setText("Connexion");
+						btnDeconnexion.setEnabled(false);
+					}
+					else{
+						btnDeconnexion.setText("ECHEC FERMETURE");
+					}
+
+
+
+				}
+			});
+			add(btnDeconnexion);
+
+		}
+
+
+	}
 
 
 

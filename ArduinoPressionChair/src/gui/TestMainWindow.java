@@ -16,6 +16,7 @@ public class TestMainWindow {
 	public static void main(String[] args) throws InterruptedException {
 		MainWindow win=new MainWindow();
 
+
 		Chaise chaise=new Chaise();
 
 		Pied p1=new Pied(0.0, 0.0, 1);
@@ -43,22 +44,6 @@ public class TestMainWindow {
 
 		win.setChaise(chaise);
 
-
-		ComInterface cm=new ComInterface(SerialPort.getCommPort("COM1"), win.panel);
-		cm.start();
-
-
-		/*
-		Random r=new Random();
-		for(int i=0;i<200;i++){
-
-			String s=r.nextInt(1025)+";"+r.nextInt(1025)+";"+r.nextInt(1025)+";"+r.nextInt(1025);
-			cm.updatePanelWithData(s);
-
-			Thread.sleep(150);
-
-		}
-		*/
 
 	}
 

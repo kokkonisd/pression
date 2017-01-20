@@ -73,27 +73,30 @@ public class ComInterface {
 
 		//------------------------------Setter/Getters----------------------------
 
-		SerialPort getSerial() {
+		public SerialPort getSerial() {
 			return serial;
 		}
 
-		void setSerial(SerialPort serial) {
+		public void setSerial(SerialPort serial) {
 			this.serial = serial;
+			SystemName=serial.getSystemPortName();
+			DescriptivePortName=serial.getDescriptivePortName();
+			configurePort();
 		}
 
-		InputStream getSerialInputStream() {
+		public InputStream getSerialInputStream() {
 			return serialInputStream;
 		}
 
-		void setSerialInputStream(InputStream serialInputStream) {
+		public void setSerialInputStream(InputStream serialInputStream) {
 			this.serialInputStream = serialInputStream;
 		}
 
-		OutputStream getSerialOutputStream() {
+		public OutputStream getSerialOutputStream() {
 			return serialOutputStream;
 		}
 
-		void setSerialOutputStream(OutputStream serialOutputStream) {
+		public void setSerialOutputStream(OutputStream serialOutputStream) {
 			this.serialOutputStream = serialOutputStream;
 		}
 
