@@ -183,7 +183,7 @@ public class ComInterface {
 			for (int i = 0; i < data_chunks.length; i++) {
 				parsed_data[i] = Integer.parseInt(data_chunks[i]);
 			}
-			
+
 			// verify that we read all 4 sensors
 			if (parsed_data.length != 4) {
 				System.out.println("ERROR: parseArduinoData: incomplete data");
@@ -257,15 +257,34 @@ public class ComInterface {
 
 		public void write(String message) throws IOException, BadLocationException{
 			if(isOpen){
-				OutputStream serialOutputStream=serial.getOutputStream();
 				String dataMessage=message;
 				char[] data=dataMessage.toCharArray(); //Convertion de la chaine de caract�re en Tableau de characteres
 				for(int i=0;i<data.length;i++){
-					serialOutputStream.write((int)data[i]); //Envoi du message
+					write((int)data[i]); //Envoi du message
 				}
 			}
 		}
 
+		public void write(int data) throws IOException{
+			if(isOpen){
+				serial.getOutputStream().write(data);
+			}
+		}
+
+		public void write(byte data) throws IOException{
+			if(isOpen){
+				serial.getOutputStream().write(data);
+			}
+		}
+
+		public void write(byte[] data,int offset,int len) throws IOException{
+			if(isOpen){
+				serial.getOutputStream().write(data, offset, len);
+			}
+		}
+		public void write(char data) throws IOException{
+			write((int)data);
+		}
 
 
 
