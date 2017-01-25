@@ -34,8 +34,9 @@ const int COMM_SPEED = 9600;
 long time_start = millis();
 const int DELAY_MS = 100;
 
+
 // function to get sensor data
-int *getData(void) {
+void getData(int *data) {
     // read the analog input from the sensors
     sensorReading1 = analogRead(sensorAnalog1);
     sensorReading2 = analogRead(sensorAnalog2);
@@ -48,16 +49,14 @@ int *getData(void) {
     sensorReading3 = map(sensorReading3, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
 
-    int data[] = {sensorReading1, sensorReading2, sensorReading3, sensorReading4};
-
-    return data;
+    data[0] = sensorReading1;
+    data[1] = sensorReading2;
+    data[2] = sensorReading3;
+    data[3] = sensorReading4;
 }
 
 // function to write data to Serial
-void writeData(void) {
-  // get the sensor data
-  int *sensorData = getData(); 
-  
+void writeData(int *sensorData) {
   // put the values into a string
   String s = (String) sensorData[0]+";" + (String) sensorData[1] + ";" + (String) sensorData[2] + ";" + (String) sensorData[3];
   // send out the values
@@ -90,7 +89,9 @@ void loop(void) {
       // reset the timer
       time_start = time_now;
       // write the sensor data
-      writeData();
+      int sensorData[4];
+      getData(sensorData);
+      writeData(sensorData);
     }
   }
 }
