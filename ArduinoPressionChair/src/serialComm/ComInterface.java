@@ -305,6 +305,7 @@ public class ComInterface {
 						}
 						//Si on re�ois un CR caractere de fin
 						else if(inputData==13){
+
 							recordData=false;
 							String rawData=Data.toString();
 							System.out.println(rawData);
