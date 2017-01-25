@@ -172,7 +172,7 @@ public class ComInterface {
 		public static int[] parseArduinoData(String s) {
 
 			// bug testing, optional
-			if(s.equals("") || s.charAt(s.length() - 1) == ';') {
+			if (s.equals("") || s.charAt(s.length() - 1) == ';') {
 				System.out.println("ERROR: parseArduinoData: bad input (empty string or missing data)");
 				// return empty integer array
 				return new int[] {};
@@ -182,6 +182,13 @@ public class ComInterface {
 			int[] parsed_data = new int[data_chunks.length];
 			for (int i = 0; i < data_chunks.length; i++) {
 				parsed_data[i] = Integer.parseInt(data_chunks[i]);
+			}
+			
+			// verify that we read all 4 sensors
+			if (parsed_data.length != 4) {
+				System.out.println("ERROR: parseArduinoData: incomplete data");
+				// return empty integer array
+				return new int[] {};
 			}
 
 			return parsed_data;
@@ -296,7 +303,7 @@ public class ComInterface {
 						if(inputData==02){
 							recordData=true;
 						}
-						//Si on reçois un CR caractere de fin
+						//Si on reï¿½ois un CR caractere de fin
 						else if(inputData==13){
 							recordData=false;
 							String rawData=Data.toString();
@@ -304,7 +311,7 @@ public class ComInterface {
 							updatePanelWithData(rawData);
 							Data.delete(0, Data.length());
 						}
-						//Si on enregistre les données
+						//Si on enregistre les donnï¿½es
 						else if(recordData){
 							Data.append((char)inputData);
 						}
