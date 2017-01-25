@@ -30,11 +30,12 @@ const int CODE_END = 13;
 // serial comm speed
 const int COMM_SPEED = 9600;
 
-void setup(void) {
-    Serial.begin(COMM_SPEED); // We'll send debugging information via the Serial monitor   
-}
+// time stuff
+long time_start = millis();
+const int DELAY_MS = 100;
 
-void loop(void) {
+// function to get sensor data
+int *getData(void) {
     // read the analog input from the sensors
     sensorReading1 = analogRead(sensorAnalog1);
     sensorReading2 = analogRead(sensorAnalog2);
@@ -47,16 +48,50 @@ void loop(void) {
     sensorReading3 = map(sensorReading3, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
 
-    // put the values into a string
-    String s = (String) sensorReading1+";" + (String) sensorReading2 + ";" + (String) sensorReading3 + ";" + (String) sensorReading4;
-    // send out the values
-    Serial.write(CODE_BEGIN);
-    
-    for (int i=0; i < s.length(); i++) {
-      Serial.write(s.charAt(i));
-    }
-    
-    Serial.write(CODE_END);
+    int data[] = {sensorReading1, sensorReading2, sensorReading3, sensorReading4};
 
-    delay(100);
+    return data;
 }
+
+// function to write data to Serial
+void writeData(void) {
+  // get the sensor data
+  int *sensorData = getData(); 
+  
+  // put the values into a string
+  String s = (String) sensorData[0]+";" + (String) sensorData[1] + ";" + (String) sensorData[2] + ";" + (String) sensorData[3];
+  // send out the values
+  Serial.write(CODE_BEGIN);
+      
+  for (int i=0; i < s.length(); i++) {
+    Serial.write(s.charAt(i));
+  }
+      
+  Serial.write(CODE_END);
+}
+
+void setup(void) {
+    Serial.begin(COMM_SPEED); // We'll send debugging information via the Serial monitor
+}
+
+
+void loop(void) {
+  // set to true when testing without the sensors
+  bool testing = true;
+
+  // if bluetooth works or if we're testing
+  if (Serial.available() > 0 || testing) {
+    // get the current time
+    long time_now = millis();
+
+    // get the time difference
+    long dt = time_now - time_start;
+    if (dt >= DELAY_MS) {
+      // reset the timer
+      time_start = time_now;
+      // write the sensor data
+      writeData();
+    }
+  }
+}
+
