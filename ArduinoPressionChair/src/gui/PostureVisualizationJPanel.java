@@ -125,7 +125,7 @@ public class PostureVisualizationJPanel extends JPanel {
 	public int scaleY(double posY){
 		// this is exactly like scaleX
 		int height=getHeight()-circleDiameter-1;
-		int Yvalue=(int)(height*(posY/chaise.getMaxPosX()));
+		int Yvalue=(int)(height*(posY/chaise.getMaxPosY()));
 		return Yvalue;
 	}
 }
