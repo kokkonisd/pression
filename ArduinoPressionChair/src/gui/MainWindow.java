@@ -57,8 +57,8 @@ public class MainWindow extends JFrame {
 		// the second column contains the configuration elements
 		JPanel mainPanel=new JPanel(new GridLayout(1, 2));
 
-		// TODO comment
-		ComConfigPanel configPanel=new ComConfigPanel(this);
+		// make a new config panel
+		ConfigPanel configPanel=new ConfigPanel(this);
 
 		// add visualisation & config panels to main panel
 		mainPanel.add(panel);
@@ -107,10 +107,10 @@ public class MainWindow extends JFrame {
 
 
 	// Comms configuration panel class
-	public class ComConfigPanel extends JPanel {
+	public class ConfigPanel extends JPanel {
 
 		// class constructor, takes a MainWindow object as a parameter
-		public ComConfigPanel(final MainWindow mainwindow) {
+		public ConfigPanel(final MainWindow mainwindow) {
 			super();
 
 			// get the names of the available ports on the machine
@@ -160,7 +160,7 @@ public class MainWindow extends JFrame {
 						comInterface.start();
 						if(comInterface.isOpen()){
 							// set the button text to "connected"
-							btnConnexion.setText("Connecté");
+							btnConnexion.setText("Connect�");
 							// de-connection should be available
 							btnDeconnexion.setEnabled(true);
 							// connection should not be available
