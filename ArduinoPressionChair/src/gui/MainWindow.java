@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
@@ -10,17 +11,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 
 import com.fazecast.jSerialComm.SerialPort;
 
 import Calculation.Chaise;
+import Calculation.Pied;
 import serialComm.ComInterface;
 
 public class MainWindow extends JFrame {
@@ -35,7 +44,7 @@ public class MainWindow extends JFrame {
 	// Chaise object
 	private Chaise chaise;
 
-	// custom made panel containing the visualisation
+	// custom made panel containing the visualization
 	PostureVisualizationJPanel panel;
 
 	// vars to hold the port we use and the list of available ports
@@ -225,6 +234,113 @@ public class MainWindow extends JFrame {
 			});
 			// add the Arduino command button to the container (main window)
 			add(btnSendTextToArduino);
+			
+			
+			// testing chaise configuration
+			
+			final JButton btnConfigChaise = new JButton("Config Chaise");
+			
+			btnConfigChaise.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Chaise c = ChaiseConfigDialog();
+					if (c != null) {
+						setChaise(c);
+						panel.repaint();
+					}
+					
+				}
+			});
+			
+			add(btnConfigChaise);
 		}
+		
+		/**
+		 * Method to handle the configuration of the Chaise object
+		 * @return Chaise object to be used
+		 */
+		public Chaise ChaiseConfigDialog() {
+			// textfield for the number of pieds
+			JTextField piedsNum = new JTextField();
+			piedsNum.setColumns(5);
+			
+			// arraylist of textfields for the positions of the pieds
+			ArrayList<JTextField> piedsPos = new ArrayList<>();
+			
+			// chaise object to return (null by default)
+			Chaise newChaise = null;
+			
+			// panel for the pieds num dialog
+			JPanel piedsNumDialog = new JPanel();
+			piedsNumDialog.add(piedsNum);
+			
+			// panel for the pieds positions dialog
+			JPanel piedsPosDialog;
+			
+			// open a dialog window to get the number of pieds
+			int piedsNumResult = JOptionPane.showConfirmDialog(null, piedsNumDialog, "Nombre des pieds de la chaise",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+			
+			// if the user clicked OK
+			if (piedsNumResult == JOptionPane.OK_OPTION) {
+				// get the number of pieds
+				int pieds = Integer.parseInt(piedsNum.getText());
+				
+				// initialize the pieds positions panel
+				piedsPosDialog = new JPanel(new GridLayout(1, pieds));
+				
+				for (int i = 0; i < pieds; i++) {
+					// make a temporary panel to store the elements of one pied
+					JPanel tempPanel = new JPanel(new GridLayout(4, 1));
+					
+					// two textfields, one for the X pos and one for the Y pos
+					JTextField tempTextFieldX = new JTextField();
+					tempTextFieldX.setColumns(5);
+					JTextField tempTextFieldY = new JTextField();
+					tempTextFieldY.setColumns(5);
+					
+					// two labels, one for the X pos and one for the Y pos
+					JLabel tempLabelX = new JLabel("Pied " + (i + 1) + " X");
+					JLabel tempLabelY = new JLabel("Pied " + (i + 1) + " Y");
+					
+					// add the elements to the temp panel (in order)
+					tempPanel.add(tempLabelX);
+					tempPanel.add(tempTextFieldX);
+					tempPanel.add(tempLabelY);
+					tempPanel.add(tempTextFieldY);
+					
+					// add the textfields to the arraylist so we can get their values later
+					piedsPos.add(tempTextFieldX);
+					piedsPos.add(tempTextFieldY);
+					
+					// add the temp panel to the main pieds pos dialog
+					piedsPosDialog.add(tempPanel);
+				}
+				
+				// launch a dialog window to get the positions of the pieds
+				int piedsValuesResult = JOptionPane.showConfirmDialog(null, piedsPosDialog, "Positions des pieds",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+				
+				// if the user clicked OK
+				if (piedsValuesResult == JOptionPane.OK_OPTION) {
+					// make a new Chaise object
+					newChaise = new Chaise();
+					for (int i = 0; i < piedsPos.size(); i += 2) {
+						// get the positions of the pieds from the arraylist
+						double tempValX = Double.parseDouble(piedsPos.get(i).getText());
+						double tempValY = Double.parseDouble(piedsPos.get(i+1).getText());
+						
+						// make a new pied and add it to the Chaise object
+						Pied p = new Pied(tempValX, tempValY, i/2 + 1);
+						newChaise.addPied(p);
+					}
+				}
+			}
+			
+			// finally, return the chaise object (or null if the user cancelled out)
+			return newChaise;
+		}
+		
 	}
 }
