@@ -57,7 +57,7 @@ public class ComInterfaceManager {
 	public ComInterface[] ListComInterfaces;
 
 	/**
-	 * Nombre d'interfaces Com gérés par le manager
+	 * Nombre d'interfaces Com gï¿½rï¿½s par le manager
 	 */
 	public int length;
 
@@ -67,32 +67,36 @@ public class ComInterfaceManager {
 
 	public ComInterfaceManager() {
 		this.ListPorts=SerialPort.getCommPorts();
-		//this.ListPortsSystemName=new String[ListPorts.length]; //peut être utile mais là non, on desactive
+		//this.ListPortsSystemName=new String[ListPorts.length]; //peut ï¿½tre utile mais lï¿½ non, on desactive
 		//this.ListPortsDescriptiveName=new String[ListPorts.length];
 		this.ListComInterfaces=new ComInterface[ListPorts.length];
 		for(int i=0;i<ListPorts.length;i++){
 			//ListPortsSystemName[i]=ListPorts[i].getSystemPortName();
 			//ListPortsDescriptiveName[i]=ListPorts[i].getDescriptivePortName();
-			ListComInterfaces[i]=new ComInterface(ListPorts[i]);
+			
+			/* -- UNCOMMENT THIS IF THIS MODULE IS IN USE -- */
+			//ListComInterfaces[i]=new ComInterface(ListPorts[i]);
 		}
 		length=ListPorts.length;
 	}
 
 	public void reloadComInterfaceManager(){
 		this.ListPorts=SerialPort.getCommPorts();
-		//this.ListPortsSystemName=new String[ListPorts.length]; //peut être utile mais là non, on desactive
+		//this.ListPortsSystemName=new String[ListPorts.length]; //peut ï¿½tre utile mais lï¿½ non, on desactive
 		//this.ListPortsDescriptiveName=new String[ListPorts.length];
 		this.ListComInterfaces=new ComInterface[ListPorts.length];
 		for(int i=0;i<ListPorts.length;i++){
 			//ListPortsSystemName[i]=ListPorts[i].getSystemPortName();
 			//ListPortsDescriptiveName[i]=ListPorts[i].getDescriptivePortName();
-			ListComInterfaces[i]=new ComInterface(ListPorts[i]);
+			
+			/* -- UNCOMMENT THIS IF THIS MODULE IS IN USE -- */
+			//ListComInterfaces[i]=new ComInterface(ListPorts[i]);
 		}
 		length=ListPorts.length;
 	}
 
 	/**
-	 * Renvoi le port Com à partir de son nom, renvoi null si non trouvé
+	 * Renvoi le port Com ï¿½ partir de son nom, renvoi null si non trouvï¿½
 	 * @param SystemName
 	 * @return
 	 */
@@ -107,7 +111,7 @@ public class ComInterfaceManager {
 
 	/**
 	 * Renvoi la ComInterface du Port de nom systeme SystemName, getComInterface("COM7") renvoi la ComInterface du COM7
-	 * renvoi Null si l'interface n'est pas trouvé
+	 * renvoi Null si l'interface n'est pas trouvï¿½
 	 * @param SystemName
 	 * @return
 	 */

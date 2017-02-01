@@ -16,7 +16,6 @@ public class TestMainWindow {
 	public static void main(String[] args) throws InterruptedException {
 		MainWindow win=new MainWindow();
 
-
 		Chaise chaise=new Chaise();
 
 		Pied p1=new Pied(0.0, 0.0, 1);
@@ -34,7 +33,6 @@ public class TestMainWindow {
 		chaise.addPied(p3);
 		chaise.addPied(p4);
 
-
 		chaise.calculateGpos();
 		System.out.println(chaise.getGposX());
 		System.out.println(chaise.getGposY());
@@ -43,8 +41,5 @@ public class TestMainWindow {
 		System.out.println(chaise.getMaxPosY());
 
 		win.setChaise(chaise);
-
-
 	}
-
 }
