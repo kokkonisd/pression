@@ -28,20 +28,20 @@ public class MainWindow extends JFrame {
 	// window size in pixels
 	private final int WIDTH=500;
 	private final int HEIGHT=400;
-	
+
 	// window title
 	private final String AppTitle="Amazing Posture Detector";
-	
+
 	// Chaise object
 	private Chaise chaise;
-	
+
 	// custom made panel containing the visualisation
 	PostureVisualizationJPanel panel;
-	
+
 	// vars to hold the port we use and the list of available ports
 	SerialPort serialPort;
 	SerialPort[] serialPorts=SerialPort.getCommPorts();
-	
+
 	// custom made ComInterface
 	ComInterface comInterface;
 
@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
 
 		this.setContentPane(mainPanel);
 		//add(panel);
-		
+
 		// minimum screen size
 		this.setMinimumSize(new Dimension(300, 300));
 		// set the normal size
@@ -108,11 +108,11 @@ public class MainWindow extends JFrame {
 
 	// Comms configuration panel class
 	public class ComConfigPanel extends JPanel {
-		
+
 		// class constructor, takes a MainWindow object as a parameter
 		public ComConfigPanel(final MainWindow mainwindow) {
 			super();
-			
+
 			// get the names of the available ports on the machine
 			String[] comListNames=new String[serialPorts.length];
 			for(int i=0;i<serialPorts.length;i++){
@@ -127,7 +127,7 @@ public class MainWindow extends JFrame {
 			final JButton btnConnexion = new JButton("Connexion");
 			// de-connection button
 			final JButton btnDeconnexion=new JButton("Deconnexion");
-			
+
 			// test button to show that we can send data to the Arduino
 			final JButton btnSendTextToArduino=new JButton("Send Arduino Command");
 
@@ -139,12 +139,12 @@ public class MainWindow extends JFrame {
 			// if no connection is made, the de-connection button should be off (by default)
 			btnDeconnexion.setEnabled(false);
 
-			
+
 			btnConnexion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					// turn off the combobox when handling an action
 					comCombobox.setEnabled(false);
-					
+
 					if(comInterface!=null){
 						// stop the interface and start a new connection based on the selected port
 						comInterface.stop();
@@ -154,13 +154,13 @@ public class MainWindow extends JFrame {
 						comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
 					}
 
-					
+
 					if(!comInterface.isOpen()){
 						// start the connection
 						comInterface.start();
 						if(comInterface.isOpen()){
 							// set the button text to "connected"
-							btnConnexion.setText("Connect�");
+							btnConnexion.setText("Connecté");
 							// de-connection should be available
 							btnDeconnexion.setEnabled(true);
 							// connection should not be available
@@ -187,7 +187,7 @@ public class MainWindow extends JFrame {
 						//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
 						//openButton.setIcon(statusOffline);
 						//openButton.setToolTipText("R�ouvrir le port COM et r�activer l'�coute des donn�es");
-						
+
 						// if the connection is stopped, turn stuff on and off appropriately
 						comCombobox.setEnabled(true);
 						btnConnexion.setEnabled(true);
