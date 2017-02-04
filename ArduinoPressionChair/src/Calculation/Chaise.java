@@ -26,13 +26,13 @@ public class Chaise {
 	 * @param s : string of data communicated by the Arduino
 	 * @return : an one-dimensional integer array containing the indexed data.
 	 */
-	public static int[] parseArduinoData(String s) {
+	public static int[] parseArduinoData(String s) throws RuntimeException {
 
 		// bug testing, optional
 		if (s.equals("") || s.charAt(s.length() - 1) == ';') {
 			System.out.println("ERROR: parseArduinoData: bad input (empty string or missing data)");
-			// return empty integer array
-			return new int[] {};
+			throw new RuntimeException("bad input (empty string or missing data)");
+
 		}
 
 		String[] data_chunks = s.split(";");
@@ -43,9 +43,11 @@ public class Chaise {
 
 		// verify that we read all 4 sensors
 		if (parsed_data.length != 4) {
+
 			System.out.println("ERROR: parseArduinoData: incomplete data");
-			// return empty integer array
-			return new int[] {};
+			throw new RuntimeException("ERROR: parseArduinoData: incomplete data");
+
+
 		}
 
 		return parsed_data;
