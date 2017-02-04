@@ -26,7 +26,7 @@ public class Chaise {
 	 * @param s : string of data communicated by the Arduino
 	 * @return : an one-dimensional integer array containing the indexed data.
 	 */
-	public static int[] parseArduinoData(String s) throws RuntimeException {
+	public static int[] parseArduinoData(String s) throws RuntimeException,NumberFormatException{
 
 		// bug testing, optional
 		if (s.equals("") || s.charAt(s.length() - 1) == ';') {
