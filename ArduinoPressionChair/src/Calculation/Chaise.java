@@ -8,16 +8,56 @@ public class Chaise {
 	ArrayList<Pied> Pieds;
 
 	double gposX=Double.NaN;
-	double gposY=Double.NaN;	//coordonnées du point G barycentre des masses de la chaise en fonction de ses pieds. relatif à 0.
+	double gposY=Double.NaN;	//coordonnï¿½es du point G barycentre des masses de la chaise en fonction de ses pieds. relatif ï¿½ 0.
 
+
+	// --------- STATICS ---------
+	/**
+	 * Method to parse string data received from the Arduino by
+	 * serial communication. We capture the data in order, so
+	 * the values are stored in an one-dimensional integer array.
+	 *
+	 * The sensor IDs corresponding to these values are simply the indexes.
+	 * (eg: parsed_data[0] will contain the data coming from the sensor with ID = 0)
+	 *
+	 * The format of the string will be:
+	 * dataFromSensorID0;dataFromSensorID1;dataFromSensorID2 etc.
+	 *
+	 * @param s : string of data communicated by the Arduino
+	 * @return : an one-dimensional integer array containing the indexed data.
+	 */
+	public static int[] parseArduinoData(String s) {
+
+		// bug testing, optional
+		if (s.equals("") || s.charAt(s.length() - 1) == ';') {
+			System.out.println("ERROR: parseArduinoData: bad input (empty string or missing data)");
+			// return empty integer array
+			return new int[] {};
+		}
+
+		String[] data_chunks = s.split(";");
+		int[] parsed_data = new int[data_chunks.length];
+		for (int i = 0; i < data_chunks.length; i++) {
+			parsed_data[i] = Integer.parseInt(data_chunks[i]);
+		}
+
+		// verify that we read all 4 sensors
+		if (parsed_data.length != 4) {
+			System.out.println("ERROR: parseArduinoData: incomplete data");
+			// return empty integer array
+			return new int[] {};
+		}
+
+		return parsed_data;
+	}
 
 	public Chaise(){
 		Pieds=new ArrayList<>();
 	}
 
 	/**
-	 * Crée une chaise avec autant n=piedsNumber pieds.
-	 * Les id de pieds vont de 0 à piedsNumber-1 dans l'arrayList Pieds.
+	 * Crï¿½e une chaise avec autant n=piedsNumber pieds.
+	 * Les id de pieds vont de 0 ï¿½ piedsNumber-1 dans l'arrayList Pieds.
 	 * @param piedsNumber
 	 */
 	public Chaise(int piedsNumber){
@@ -149,7 +189,7 @@ public class Chaise {
 		maxPosX=maxX;
 		maxPosY=maxY;
 	}
-	*/
+	 */
 
 
 
