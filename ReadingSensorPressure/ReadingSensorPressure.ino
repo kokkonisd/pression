@@ -4,8 +4,8 @@
 
 #include <SoftwareSerial.h>
 
-#define RxD 6
-#define TxD 7
+#define RxD 2
+#define TxD 3
 
 //Empty int array for testing receiving 'A' char
 
@@ -87,6 +87,8 @@ void writeData(int *sensorData) {
 }
 
 void setup(void) {
+    pinMode(RxD,INPUT);
+    pinMode(TxD,OUTPUT);
     Serial.begin(COMM_SPEED_USB); // We'll send debugging information via the Serial monitor
     bluetoothSerial.begin(COMM_SPEED_BLUETOOTH);
 }
