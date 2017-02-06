@@ -288,7 +288,6 @@ public class ComInterface {
 
 
 
-
 	private class mSerialPortDataListener implements SerialPortDataListener{
 
 		boolean recordData=false;
@@ -302,6 +301,7 @@ public class ComInterface {
 
 		@Override
 		public void serialEvent(SerialPortEvent event){
+
 
 			//Si on n'est pas en train d'attendre des donn�es, on passe
 			if(event.getEventType()!=SerialPort.LISTENING_EVENT_DATA_AVAILABLE){
@@ -339,9 +339,9 @@ public class ComInterface {
 
 				}
 			}catch(Exception e){
-
+				e.printStackTrace();
 			}
-			//System.out.println("FIN FOR");
+
 		};
 
 

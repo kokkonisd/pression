@@ -38,7 +38,8 @@ const int CODE_BEGIN = 2;
 const int CODE_END = 13;
 
 // serial comm speed
-const int COMM_SPEED = 9600;
+const int COMM_SPEED_USB = 9600;
+const int COMM_SPEED_BLUETOOTH=9600;
 
 // time stuff
 long time_start = millis();
@@ -86,8 +87,8 @@ void writeData(int *sensorData) {
 }
 
 void setup(void) {
-    Serial.begin(COMM_SPEED); // We'll send debugging information via the Serial monitor
-    bluetoothSerial.begin(COMM_SPEED);
+    Serial.begin(COMM_SPEED_USB); // We'll send debugging information via the Serial monitor
+    bluetoothSerial.begin(COMM_SPEED_BLUETOOTH);
 }
 
 
