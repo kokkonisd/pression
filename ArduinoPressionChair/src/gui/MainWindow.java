@@ -258,6 +258,10 @@ public class MainWindow extends JFrame {
 			});
 			
 			add(btnCalibrateArea);
+			
+			final JLabel areaStatusLabel = new JLabel("");
+			
+			add(areaStatusLabel);
 		}
 		
 		/**
@@ -269,6 +273,8 @@ public class MainWindow extends JFrame {
 			JTextField piedsNum = new JTextField();
 			piedsNum.setColumns(5);
 			
+			JLabel piedsNumLabel = new JLabel("Nombre des pieds de la chaise");
+			
 			// arraylist of textfields for the positions of the pieds
 			ArrayList<JTextField> piedsPos = new ArrayList<>();
 			
@@ -277,6 +283,7 @@ public class MainWindow extends JFrame {
 			
 			// panel for the pieds num dialog
 			JPanel piedsNumDialog = new JPanel();
+			piedsNumDialog.add(piedsNumLabel);
 			piedsNumDialog.add(piedsNum);
 			
 			// panel for the pieds positions dialog

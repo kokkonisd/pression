@@ -1,11 +1,13 @@
 package Calculation;
 
-public class Pied {
+import java.io.Serializable;
+
+public class Pied implements Serializable {
 
 
 	private double posX,posY; //Vecteur position du pied
-	private double value=0;	//Valeur associée sur le pied
-	private int sensorID; //ID du sensor associé a ce pied
+	private double value=0;	//Valeur associï¿½e sur le pied
+	private int sensorID; //ID du sensor associï¿½ a ce pied
 
 
 	public Pied(double posx,double posy,int sensorID){
