@@ -1,15 +1,7 @@
 package gui;
 
-import java.sql.Time;
-import java.util.Random;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-
-import com.fazecast.jSerialComm.SerialPort;
-
 import Calculation.Chaise;
 import Calculation.Pied;
-import serialComm.ComInterface;
 
 public class TestMainWindow {
 

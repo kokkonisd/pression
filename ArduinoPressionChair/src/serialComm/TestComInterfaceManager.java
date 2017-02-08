@@ -2,8 +2,6 @@ package serialComm;
 
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-
 import serialComm.ComInterface;
 
 import UnitTesting.UnitTestModule;
