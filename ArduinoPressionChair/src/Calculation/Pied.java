@@ -6,7 +6,7 @@ public class Pied implements Serializable {
 
 
 	private double posX,posY; //Vecteur position du pied
-	private double value=0;	//Valeur associ�e sur le pied
+	private double value=0;	//Valeur associée sur le pied
 	private int sensorID; //ID du sensor associ� a ce pied
 
 
