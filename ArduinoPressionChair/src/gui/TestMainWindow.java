@@ -10,15 +10,15 @@ public class TestMainWindow {
 
 		Chaise chaise=new Chaise();
 
-		Pied p1=new Pied(1.0, 0.0, 1);
-		Pied p2=new Pied(3.0, 0.0, 2);
-		Pied p3=new Pied(0.0, 3.0, 3);
-		Pied p4=new Pied(4.0, 3.0, 4);
+		Pied p1=new Pied(0.0, 0.0, 1);
+		Pied p2=new Pied(1.0, 0.0, 2);
+		Pied p3=new Pied(0.0, 1.0, 3);
+		Pied p4=new Pied(1.0, 1.0, 4);
 
 		p1.setValue(5);
 		p2.setValue(5);
-		p3.setValue(2);
-		p4.setValue(2);
+		p3.setValue(5);
+		p4.setValue(5);
 
 		chaise.addPied(p1);
 		chaise.addPied(p2);

@@ -244,6 +244,20 @@ public class MainWindow extends JFrame {
 			});
 			
 			add(btnConfigChaise);
+		
+			final JButton btnCalibrateArea = new JButton("Calibrate Area");
+			
+			btnCalibrateArea.addActionListener(new ActionListener() {
+	
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					chaise.setAreaX(chaise.getGposX());
+					chaise.setAreaY(chaise.getGposY());
+					panel.repaint();
+				}
+			});
+			
+			add(btnCalibrateArea);
 		}
 		
 		/**
@@ -331,6 +345,5 @@ public class MainWindow extends JFrame {
 			// finally, return the chaise object (or null if the user cancelled out)
 			return newChaise;
 		}
-		
 	}
 }

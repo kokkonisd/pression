@@ -1,6 +1,8 @@
 package Calculation;
 import java.util.ArrayList;
 
+import gui.PostureVisualizationJPanel;
+
 
 public class Chaise {
 
@@ -10,7 +12,9 @@ public class Chaise {
 	double gposX=Double.NaN;
 	double gposY=Double.NaN;	//coordonn�es du point G barycentre des masses de la chaise en fonction de ses pieds. relatif � 0.
 
-
+	double areaX = Double.NaN;
+	double areaY = Double.NaN;
+	
 	// --------- STATICS ---------
 	/**
 	 * Method to parse string data received from the Arduino by
@@ -193,11 +197,19 @@ public class Chaise {
 	}
 	 */
 
-
-
-
-
-
-
-
+	public double getAreaX() {
+		return areaX;
+	}
+	
+	public double getAreaY() {
+		return areaY;
+	}
+	
+	public void setAreaX(double x) {
+		areaX = x;
+	}
+	
+	public void setAreaY(double y) {
+		areaY = y;
+	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -20,6 +21,9 @@ public class PostureVisualizationJPanel extends JPanel {
 	 * the circles drawn for the sensors & barycenter
 	 */
 	public static final int circleDiameter=30;
+	
+	// diameter of the green area around the barycenter
+	public static final int areaDiameter = circleDiameter * 4;
 
 	/**
 	 * Constructor method for the visualization panel
@@ -70,6 +74,11 @@ public class PostureVisualizationJPanel extends JPanel {
 		// we use this to calculate the center of a string of text
 		FontMetrics fm=g2d.getFontMetrics();
 
+		// draw the axes
+		g2d.setColor(Color.RED);
+		g2d.drawLine(0, (getHeight() - 1)/2, getWidth() - 1, (getHeight() - 1)/2);
+		g2d.drawLine((getWidth() - 1)/2, 0, (getWidth() - 1)/2, getHeight() - 1);
+		
 		g2d.setColor(Color.BLACK);
 
 		// draw all the Pieds children of the Chaise object
@@ -81,50 +90,82 @@ public class PostureVisualizationJPanel extends JPanel {
 			// set the positions to scale
 			int x=scaleX(posX);
 			int y=scaleY(posY);
+			
 			// draw the circles
-			int ovalCenterX=x+circleDiameter/2;
-			int ovalCenterY=y+circleDiameter/2;
-
 			/* calculate the center of the text showing the 
 			 * ID of the sensor - we need this to draw it inside the circle
 			 */
-			char[] chars=(pied.getSensorID()+"").toCharArray();
+			
+			//char[] chars=(pied.getSensorID()+"").toCharArray();
+			
 			String sensorIDStr=pied.getSensorID()+"";
 			int strwidth=fm.stringWidth(sensorIDStr);
 			int strHeight=fm.getHeight();
-			int stringStartX=ovalCenterX-strwidth/2;
-			int stringStartY=ovalCenterY+strHeight/2-fm.getDescent();
+			int stringStartX=x-strwidth/2;
+			int stringStartY=y+strHeight/2-fm.getDescent();
 
 			// actually draw the circle and text inside it
 			g2d.drawString(sensorIDStr, stringStartX, stringStartY);
-			g2d.drawOval(x, y, circleDiameter, circleDiameter);
+			drawCenteredCircle(g2d, x, y, circleDiameter, false);
 		}
 
-		// draw the G point (barycenter)
-		g2d.fillOval(scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, circleDiameter);
-
-	}
-
-	// --- methods to set the scale of the drawing ---
-	public int scaleX(double posX){
-		/* set the width to be the width of the screen minus one
-		 * (this is because of JPanel, so it must be hard-coded)
-		 * 
-		 * then, also subtract one diameter of a circle since we
-		 * want to "move the end of the screen" a diameter back
-		 * so that we don't draw circles outside of the screen
-		 */
-		int width=getWidth()-circleDiameter-1;
+		// draw the area around the G point (barycenter)
+		g2d.setColor(new Color(0.0f, 0.7f, 0.0f, 0.7f));
+		drawCenteredCircle(g2d, scaleX(chaise.getAreaX()), scaleY(chaise.getAreaY()), areaDiameter, true);
 		
-		// simply multiply the ratio of posX/maxPosX by the width
-		int Xvalue=(int)(width*(posX/chaise.getMaxPosX()));
-		return Xvalue;
-	}
+		// set the drawing color back to black
+		g2d.setColor(Color.BLACK);
+		// draw the G point (barycenter)
+		drawCenteredCircle(g2d, scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, true);
 
-	public int scaleY(double posY){
-		// this is exactly like scaleX
-		int height=getHeight()-circleDiameter-1;
-		int Yvalue=(int)(height*(posY/chaise.getMaxPosY()));
-		return Yvalue;
+	}
+	
+	/**
+	 * Method that draws a circle from a given center point
+	 * (instead of drawing it from the top left)
+	 * 
+	 * @param g : Graphics2D object
+	 * @param x : x coordinate of the center
+	 * @param y : y coordinate of the center
+	 * @param d : the diameter of the circle
+	 * @param fill : true if we want to fill the circle, false if we just want the outline
+	 */
+	private void drawCenteredCircle(Graphics2D g, int x, int y, int d, boolean fill) {
+		if (fill) {
+			g.fillOval((x - d / 2), (y - d / 2), d, d);
+		} else {
+			g.drawOval((x - d / 2), (y - d / 2), d, d);
+		}
+	}
+	
+	/**
+	 * Method to scale a position on the X axis
+	 * 
+	 * @param gX : given X coordinate
+	 * @return scaledX : the scaled position
+	 */
+	public int scaleX(double gX) {
+		// Actual width is 1 pixel shorter, so we have to cut it out
+		// We also cut out 2 radiuses (= a diameter) of a circle
+		int width = getWidth() - 1 - circleDiameter;
+		
+		// the coordinate is scaled down, then moved by a radius
+		int scaledX = (int) (gX * width / chaise.getMaxPosX() + circleDiameter/2);
+		
+		return scaledX;
+	}
+	
+	/**
+	 * Method to scale a position on the Y axis
+	 * 
+	 * @param gY : given Y coordinate
+	 * @return scaledY : the scaled position
+	 */
+	public int scaleY(double gY) {
+		int height = getHeight() - 1 - circleDiameter;
+		
+		int scaledY = (int) (gY * height / chaise.getMaxPosY() + circleDiameter/2);
+		
+		return scaledY;
 	}
 }
