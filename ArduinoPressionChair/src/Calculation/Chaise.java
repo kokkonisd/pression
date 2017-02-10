@@ -15,7 +15,7 @@ public class Chaise implements Serializable {
 
 	double areaX = Double.NaN;
 	double areaY = Double.NaN;
-	
+
 	// --------- STATICS ---------
 	/**
 	 * Method to parse string data received from the Arduino by
@@ -152,6 +152,8 @@ public class Chaise implements Serializable {
 		}
 	}
 
+
+	//Update to improve performance (not recalculate maxposx or maxposy until a pied has changed
 	public double getMaxPosX(){
 
 		double max=0;
@@ -201,15 +203,15 @@ public class Chaise implements Serializable {
 	public double getAreaX() {
 		return areaX;
 	}
-	
+
 	public double getAreaY() {
 		return areaY;
 	}
-	
+
 	public void setAreaX(double x) {
 		areaX = x;
 	}
-	
+
 	public void setAreaY(double y) {
 		areaY = y;
 	}
