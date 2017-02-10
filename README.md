@@ -2,9 +2,9 @@
 ### Projet PeiP2
 ---
 
-An arduino project about correcting siting posture. 
-It will use 50kg load sensors placed under chair feet coupled with HX711 amplifiers to retrieve data from the load sensors.
-This data will then be acquired by an Arduino and sent via Serial communication to a Java program on PC which determines the actual posture based on load sensors values.
+An arduino project about correcting one's sitting posture. 
+It uses 50kg load sensors placed under the legs of a chair coupled with HX711 amplifiers to retrieve data from the load sensors.
+This data will then be read by an Arduino and sent via serial communication and/or Bluetooth to a Java desktop app (or an Android app) which determines the quality of the posture based on the values of the load sensors.
 
 
 ---
