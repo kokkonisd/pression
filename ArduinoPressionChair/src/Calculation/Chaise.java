@@ -15,6 +15,9 @@ public class Chaise implements Serializable {
 
 	double areaX = Double.NaN;
 	double areaY = Double.NaN;
+	
+	double maxPosX = Double.NaN;
+	double maxPosY = Double.NaN;
 
 	// --------- STATICS ---------
 	/**
@@ -76,14 +79,20 @@ public class Chaise implements Serializable {
 
 	public void addPied(Pied p){
 		Pieds.add(p);
+		calculateMaxPosX();
+		calculateMaxPosY();
 	}
 
 	public void removePied(Pied p){
 		Pieds.remove(p);
+		calculateMaxPosX();
+		calculateMaxPosY();
 	}
 
 	public void removePied(int index){
 		Pieds.remove(index);
+		calculateMaxPosX();
+		calculateMaxPosY();
 	}
 
 	Pied getPied(int piedIndex){
@@ -122,6 +131,8 @@ public class Chaise implements Serializable {
 
 	public void setPieds(ArrayList<Pied> pieds) {
 		Pieds = pieds;
+		calculateMaxPosX();
+		calculateMaxPosY();
 	}
 
 	public double getGposX() {
@@ -154,8 +165,8 @@ public class Chaise implements Serializable {
 
 
 	//Update to improve performance (not recalculate maxposx or maxposy until a pied has changed
-	public double getMaxPosX(){
-
+	
+	private void calculateMaxPosX() {
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
 			double posX=Pieds.get(i).getPosX();
@@ -163,12 +174,11 @@ public class Chaise implements Serializable {
 				max=posX;
 			}
 		}
-		return max;
-		//return maxPosX;
+		
+		maxPosX = max;
 	}
-	public double getMaxPosY(){
-
-
+	
+	private void calculateMaxPosY() {
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
 			double posY=Pieds.get(i).getPosY();
@@ -176,9 +186,16 @@ public class Chaise implements Serializable {
 				max=posY;
 			}
 		}
-		return max;
-		//return maxPosY;
-
+		
+		maxPosY = max;
+	}
+	
+	public double getMaxPosX(){
+		return maxPosX;
+	}
+	
+	public double getMaxPosY(){
+		return maxPosY;
 	}
 
 	/*

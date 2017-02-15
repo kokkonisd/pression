@@ -117,14 +117,6 @@ public class PostureVisualizationJPanel extends JPanel {
 		g2d.setColor(Color.BLACK);
 		// draw the G point (barycenter)
 		drawCenteredCircle(g2d, scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, true);
-		
-		// check if the barycenter is inside the green area TODO
-		if (((chaise.getGposX() - circleDiameter/2 >= chaise.getAreaX() - areaDiameter/2) &&
-				(chaise.getGposX() + circleDiameter/2 <= chaise.getAreaX() + areaDiameter/2) &&
-				((chaise.getGposY() - circleDiameter/2 >= chaise.getAreaY() - areaDiameter/2) &&
-				(chaise.getGposY() + circleDiameter/2 <= chaise.getAreaY() + areaDiameter/2)))) {
-			
-		}
 
 	}
 	
