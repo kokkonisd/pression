@@ -32,6 +32,11 @@ public class TestMainWindow {
 		System.out.println(chaise.getMaxPosX());
 		System.out.println(chaise.getMaxPosY());
 
+		// initialize deadzone
+		chaise.setDeadzoneRadius(0.3);
+		chaise.setDeadzoneX(chaise.getGposX());
+		chaise.setDeadzoneY(chaise.getDeadzoneY());
+		
 		win.setChaise(chaise);
 	}
 }

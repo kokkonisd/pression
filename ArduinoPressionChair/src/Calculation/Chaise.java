@@ -13,8 +13,9 @@ public class Chaise implements Serializable {
 	double gposX=Double.NaN;
 	double gposY=Double.NaN;	//coordonn�es du point G barycentre des masses de la chaise en fonction de ses pieds. relatif � 0.
 
-	double areaX = Double.NaN;
-	double areaY = Double.NaN;
+	double deadzoneX = Double.NaN;
+	double deadzoneY = Double.NaN;
+	double deadzoneR = Double.NaN;
 	
 	double maxPosX = Double.NaN;
 	double maxPosY = Double.NaN;
@@ -217,19 +218,27 @@ public class Chaise implements Serializable {
 	}
 	 */
 
-	public double getAreaX() {
-		return areaX;
+	public double getDeadzoneX() {
+		return deadzoneX;
 	}
 
-	public double getAreaY() {
-		return areaY;
+	public double getDeadzoneY() {
+		return deadzoneY;
 	}
 
-	public void setAreaX(double x) {
-		areaX = x;
+	public void setDeadzoneX(double x) {
+		deadzoneX = x;
 	}
 
-	public void setAreaY(double y) {
-		areaY = y;
+	public void setDeadzoneY(double y) {
+		deadzoneY = y;
+	}
+	
+	public void setDeadzoneRadius(double ratio) {
+		deadzoneR = ratio / 2 * Math.min(getMaxPosX(), getMaxPosY());
+	}
+	
+	public double getDeadzoneRadius() {
+		return deadzoneR;
 	}
 }

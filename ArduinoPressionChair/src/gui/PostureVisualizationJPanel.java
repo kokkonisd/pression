@@ -21,9 +21,6 @@ public class PostureVisualizationJPanel extends JPanel {
 	 * the circles drawn for the sensors & barycenter
 	 */
 	public static final int circleDiameter=30;
-	
-	// diameter of the green area around the barycenter
-	public static final int areaDiameter = circleDiameter * 4;
 
 	/**
 	 * Constructor method for the visualization panel
@@ -109,9 +106,12 @@ public class PostureVisualizationJPanel extends JPanel {
 			drawCenteredCircle(g2d, x, y, circleDiameter, false);
 		}
 
-		// draw the area around the G point (barycenter)
+		// draw the deadzone around the G point (barycenter)
 		g2d.setColor(new Color(0.0f, 0.7f, 0.0f, 0.7f));
-		drawCenteredCircle(g2d, scaleX(chaise.getAreaX()), scaleY(chaise.getAreaY()), areaDiameter, true);
+		// the deadzone should be scaled based on the shape of the screen
+		int rx = scaleX(chaise.getDeadzoneX()) - scaleX(chaise.getDeadzoneX() - chaise.getDeadzoneRadius());
+		int ry = scaleY(chaise.getDeadzoneY()) - scaleY(chaise.getDeadzoneY() - chaise.getDeadzoneRadius());
+		drawCenteredOval(g2d, scaleX(chaise.getDeadzoneX()), scaleY(chaise.getDeadzoneY()), rx, ry);
 		
 		// set the drawing color back to black
 		g2d.setColor(Color.BLACK);
@@ -136,6 +136,10 @@ public class PostureVisualizationJPanel extends JPanel {
 		} else {
 			g.drawOval((x - d / 2), (y - d / 2), d, d);
 		}
+	}
+	
+	private void drawCenteredOval(Graphics2D g, int x, int y, int rx, int ry) {
+		g.fillOval(x - rx, y - ry, rx * 2, ry * 2);
 	}
 	
 	/**

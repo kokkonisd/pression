@@ -14,7 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -245,23 +248,37 @@ public class MainWindow extends JFrame {
 			
 			add(btnConfigChaise);
 		
-			final JButton btnCalibrateArea = new JButton("Calibrate Area");
+			// controls for calibrating the deadzone
+			final JButton btnCalibrateDeadzone = new JButton("Calibrate Deadzone");
 			
-			btnCalibrateArea.addActionListener(new ActionListener() {
+			btnCalibrateDeadzone.addActionListener(new ActionListener() {
 	
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					chaise.setAreaX(chaise.getGposX());
-					chaise.setAreaY(chaise.getGposY());
+					chaise.setDeadzoneX(chaise.getGposX());
+					chaise.setDeadzoneY(chaise.getGposY());
 					panel.repaint();
 				}
 			});
 			
-			add(btnCalibrateArea);
+			add(btnCalibrateDeadzone);
 			
-			final JLabel areaStatusLabel = new JLabel("");
+			final JLabel deadzoneStatusLabel = new JLabel("");
 			
-			add(areaStatusLabel);
+			add(deadzoneStatusLabel);
+			
+			// slider to control the radius of the deadzone
+			final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 30);
+			
+			deadzoneRadiusSlider.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent arg0) {
+					chaise.setDeadzoneRadius(deadzoneRadiusSlider.getValue() / 100.0);
+					panel.repaint();
+				}
+			});
+			add(deadzoneRadiusSlider);
 		}
 		
 		/**
