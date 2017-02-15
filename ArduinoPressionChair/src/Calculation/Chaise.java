@@ -16,7 +16,7 @@ public class Chaise implements Serializable {
 	double deadzoneX = Double.NaN;
 	double deadzoneY = Double.NaN;
 	double deadzoneR = Double.NaN;
-	
+
 	double maxPosX = Double.NaN;
 	double maxPosY = Double.NaN;
 
@@ -166,7 +166,7 @@ public class Chaise implements Serializable {
 
 
 	//Update to improve performance (not recalculate maxposx or maxposy until a pied has changed
-	
+
 	private void calculateMaxPosX() {
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
@@ -175,10 +175,10 @@ public class Chaise implements Serializable {
 				max=posX;
 			}
 		}
-		
+
 		maxPosX = max;
 	}
-	
+
 	private void calculateMaxPosY() {
 		double max=0;
 		for(int i=0;i<Pieds.size();i++){
@@ -187,14 +187,14 @@ public class Chaise implements Serializable {
 				max=posY;
 			}
 		}
-		
+
 		maxPosY = max;
 	}
-	
+
 	public double getMaxPosX(){
 		return maxPosX;
 	}
-	
+
 	public double getMaxPosY(){
 		return maxPosY;
 	}
@@ -233,12 +233,32 @@ public class Chaise implements Serializable {
 	public void setDeadzoneY(double y) {
 		deadzoneY = y;
 	}
-	
+
 	public void setDeadzoneRadius(double ratio) {
 		deadzoneR = ratio / 2 * Math.min(getMaxPosX(), getMaxPosY());
 	}
-	
+
 	public double getDeadzoneRadius() {
 		return deadzoneR;
 	}
+
+	public boolean isGinDeadzone(){
+		if(gposX==Double.NaN
+				|| gposY==Double.NaN
+				|| deadzoneX == Double.NaN
+				|| deadzoneY == Double.NaN
+				|| deadzoneR == Double.NaN){
+
+			throw new RuntimeException("One of the values is NaN");
+		}
+
+		double deltaX=gposX-deadzoneX;
+		double deltaY=gposY-deadzoneY;
+		if(deltaX*deltaX + deltaY*deltaY<=deadzoneR){
+			return true;
+		}
+		return false;
+
+	}
 }
+
