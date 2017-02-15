@@ -6,12 +6,19 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,6 +27,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -49,7 +58,7 @@ public class MainWindow extends JFrame {
 	// custom made ComInterface
 	ComInterface comInterface;
 
-	public MainWindow() throws HeadlessException {
+	public MainWindow() throws HeadlessException, ClassNotFoundException, IOException {
 		super();
 
 		// initialize the Chaise and visualization panel objects
@@ -114,7 +123,7 @@ public class MainWindow extends JFrame {
 	public class ConfigPanel extends JPanel {
 
 		// class constructor, takes a MainWindow object as a parameter
-		public ConfigPanel(final MainWindow mainwindow) {
+		public ConfigPanel(final MainWindow mainwindow) throws IOException, ClassNotFoundException {
 			super();
 
 			// get the names of the available ports on the machine
@@ -291,6 +300,55 @@ public class MainWindow extends JFrame {
 	                BorderFactory.createEmptyBorder(0,0,10,0));
 	        Font font = new Font("Serif", Font.ITALIC, 15);
 	        deadzoneRadiusSlider.setFont(font);
+	        
+	        // Saving the Chaise Object
+	        final JButton saveChaiseBtn = new JButton("Save Chaise");
+	        
+	        saveChaiseBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						FileOutputStream fout = new FileOutputStream("chaise_1.ser");
+						ObjectOutputStream oos = new ObjectOutputStream(fout);
+						oos.writeObject(chaise);
+						oos.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+	        
+	        add(saveChaiseBtn);
+	        
+	        // file chooser used to load the chaise object
+	        final JFileChooser loadChaise = new JFileChooser();
+	        loadChaise.setFileFilter(new FileNameExtensionFilter("Serialized Objects", "ser"));
+	        
+	        // button that triggers the file chooser
+	        final JButton chooseChaiseBtn = new JButton("Load Chaise");
+	        chooseChaiseBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					int returnVal = loadChaise.showOpenDialog(MainWindow.this);
+			        if(returnVal == JFileChooser.APPROVE_OPTION) {
+			        	System.out.println("Loading chaise...");
+			        	String filename = loadChaise.getSelectedFile().getName();
+			        	FileInputStream fin;
+						try {
+							fin = new FileInputStream(filename);
+							ObjectInputStream ois = new ObjectInputStream(fin);
+				    		setChaise((Chaise) ois.readObject());
+				    		ois.close();
+				    		panel.repaint();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			        }
+				}
+			});
+	        
+	        add(chooseChaiseBtn);
 		}
 		
 		/**

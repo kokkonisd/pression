@@ -1,11 +1,14 @@
 package gui;
 
+import java.awt.HeadlessException;
+import java.io.IOException;
+
 import Calculation.Chaise;
 import Calculation.Pied;
 
 public class TestMainWindow {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, HeadlessException, ClassNotFoundException, IOException {
 		MainWindow win=new MainWindow();
 
 		Chaise chaise=new Chaise();
