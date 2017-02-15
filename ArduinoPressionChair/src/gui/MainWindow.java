@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -279,6 +281,16 @@ public class MainWindow extends JFrame {
 				}
 			});
 			add(deadzoneRadiusSlider);
+			
+			// set labels on the slider
+			deadzoneRadiusSlider.setMajorTickSpacing(20);
+			deadzoneRadiusSlider.setMinorTickSpacing(5);
+			deadzoneRadiusSlider.setPaintTicks(true);
+			deadzoneRadiusSlider.setPaintLabels(true);
+			deadzoneRadiusSlider.setBorder(
+	                BorderFactory.createEmptyBorder(0,0,10,0));
+	        Font font = new Font("Serif", Font.ITALIC, 15);
+	        deadzoneRadiusSlider.setFont(font);
 		}
 		
 		/**
