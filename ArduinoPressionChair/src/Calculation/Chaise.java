@@ -254,7 +254,7 @@ public class Chaise implements Serializable {
 
 		double deltaX=gposX-deadzoneX;
 		double deltaY=gposY-deadzoneY;
-		if(deltaX*deltaX + deltaY*deltaY<=deadzoneR){
+		if((deltaX*deltaX + deltaY*deltaY)<=(deadzoneR*deadzoneR)){
 			return true;
 		}
 		return false;
