@@ -8,12 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -27,7 +27,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -302,35 +301,58 @@ public class MainWindow extends JFrame {
 	        deadzoneRadiusSlider.setFont(font);
 	        
 	        // Saving the Chaise Object
+	        
+	        // File chooser to save tha chaise object, starts in current directory
+	        final JFileChooser saveChaise = new JFileChooser(new File(System.getProperty("user.dir")));
+	        // Button to launch file chooser
 	        final JButton saveChaiseBtn = new JButton("Save Chaise");
 	        
+	        // Action handler for the button
 	        saveChaiseBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					try {
-						FileOutputStream fout = new FileOutputStream("chaise_1.ser");
-						ObjectOutputStream oos = new ObjectOutputStream(fout);
-						oos.writeObject(chaise);
-						oos.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					int returnVal = saveChaise.showSaveDialog(MainWindow.this);
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			        	System.out.println("Saving chaise...");
+			        	// get the filename chosen by the user
+			        	String file = saveChaise.getSelectedFile().getName();
+			        	// take off the file ending that the user may have put
+			        	file = file.split(Pattern.quote("."))[0];
+			        	
+			        	// make sure we're not overriding a file
+			        	File f = new File(file + ".ser");
+			        	if(f.exists() && !f.isDirectory()) { 
+			        	    int result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
+			        	    if (result == 0) {
+			        	    	try {
+									// apply .ser extension
+									FileOutputStream fout = new FileOutputStream(file + ".ser");
+									ObjectOutputStream oos = new ObjectOutputStream(fout);
+									oos.writeObject(chaise);
+									oos.close();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+			        	    }
+			        	}
+			        }
 				}
 			});
 	        
 	        add(saveChaiseBtn);
 	        
 	        // file chooser used to load the chaise object
-	        final JFileChooser loadChaise = new JFileChooser();
+	        // file chooser will open in current directory
+	        final JFileChooser loadChaise = new JFileChooser(new File(System.getProperty("user.dir")));
 	        loadChaise.setFileFilter(new FileNameExtensionFilter("Serialized Objects", "ser"));
 	        
 	        // button that triggers the file chooser
-	        final JButton chooseChaiseBtn = new JButton("Load Chaise");
-	        chooseChaiseBtn.addActionListener(new ActionListener() {
+	        final JButton loadChaiseBtn = new JButton("Load Chaise");
+	        loadChaiseBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					int returnVal = loadChaise.showOpenDialog(MainWindow.this);
-			        if(returnVal == JFileChooser.APPROVE_OPTION) {
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			        	System.out.println("Loading chaise...");
 			        	String filename = loadChaise.getSelectedFile().getName();
 			        	FileInputStream fin;
@@ -340,15 +362,16 @@ public class MainWindow extends JFrame {
 				    		setChaise((Chaise) ois.readObject());
 				    		ois.close();
 				    		panel.repaint();
+				    		// reset the radius slider to the value of the chaise we just loaded
+				    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRadius() * 200));
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 			        }
 				}
 			});
 	        
-	        add(chooseChaiseBtn);
+	        add(loadChaiseBtn);
 		}
 		
 		/**

@@ -1,8 +1,7 @@
 package Calculation;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import gui.PostureVisualizationJPanel;
 
 
 public class Chaise implements Serializable {
