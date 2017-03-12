@@ -168,12 +168,12 @@ void loop(void) {
   // get the time difference
   long dt = time_now - time_start;
   if (dt >= DELAY_MS) {
-    // reset the timer
-    time_start = time_now;
     // write the sensor data
     int sensorData[4];
     getData(sensorData);
     writeData(sensorData);
+    // reset the timer after doing the work
+    time_start = time_now;
   }
   
   // Is there any data to be read on USB serial port ?
@@ -182,6 +182,9 @@ void loop(void) {
     char valueChar=(char)value;
     if(valueChar=='A'){
       writeData(zeroSensorValues);
+      sensor1.tare();
+      sensor2.tare();
+      sensor3.tare();
     }
     
   }
