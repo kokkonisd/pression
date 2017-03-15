@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.HeadlessException;
+import java.io.File;
 import java.io.IOException;
 
 import Calculation.Chaise;
@@ -51,7 +52,5 @@ public class TestMainWindow {
 		*/
 
 		win.setChaise(chaise);
-		System.out.println("--");
-		chaise.saveChaise(System.out);
 	}
 }

@@ -320,18 +320,14 @@ public class MainWindow extends JFrame {
 			        	path = path.split(Pattern.quote("."))[0];
 			        	
 			        	// make sure we're not overriding a file
-			        	File f = new File(path + ".ser");
+			        	File f = new File(path + ".txt");
 			        	int result = 0;
 			        	if(f.exists() && !f.isDirectory()) { 
 			        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
 			        	}
 			        	if (result == 0) {
 			        		try {
-			        			// apply .ser extension
-			        			FileOutputStream fout = new FileOutputStream(f);
-			        			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			        			oos.writeObject(chaise);
-			        			oos.close();
+			        			chaise.saveChaise(f);
 			        		} catch (Exception e) {
 			        			e.printStackTrace();
 			        		}
@@ -345,7 +341,7 @@ public class MainWindow extends JFrame {
 	        // file chooser used to load the chaise object
 	        // file chooser will open in current directory
 	        final JFileChooser loadChaise = new JFileChooser(new File(System.getProperty("user.dir")));
-	        loadChaise.setFileFilter(new FileNameExtensionFilter("Serialized Objects", "ser"));
+	        loadChaise.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
 	        
 	        // button that triggers the file chooser
 	        final JButton loadChaiseBtn = new JButton("Load Chaise");
@@ -355,13 +351,10 @@ public class MainWindow extends JFrame {
 					int returnVal = loadChaise.showOpenDialog(MainWindow.this);
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			        	System.out.println("Loading chaise...");
-			        	String filename = loadChaise.getSelectedFile().getAbsolutePath();
-			        	FileInputStream fin;
+			        	String path = loadChaise.getSelectedFile().getAbsolutePath();
+			        	File fin = new File(path);
 						try {
-							fin = new FileInputStream(filename);
-							ObjectInputStream ois = new ObjectInputStream(fin);
-				    		setChaise((Chaise) ois.readObject());
-				    		ois.close();
+							chaise.loadChaise(fin);
 				    		panel.repaint();
 				    		// reset the radius slider to the value of the chaise we just loaded
 				    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRadius() * 200));

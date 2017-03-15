@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 
 public class Chaise implements Serializable {
@@ -298,16 +300,39 @@ public class Chaise implements Serializable {
 		out.close();
 	}
 	
-	public Chaise loadChaise(FileInputStream in) throws IOException {
-		Chaise c;
-		c.setGposX(Double.parseDouble(s));
+	public void loadChaise(Scanner sc) throws IOException {
+		String line = sc.nextLine();
+		line = line.substring(1, line.length() - 1);
+		String[] c_elements = line.split(Pattern.quote("|"));
+		setGposX(Double.parseDouble(c_elements[0]));
+		setGposY(Double.parseDouble(c_elements[1]));
+		setDeadzoneX(Double.parseDouble(c_elements[2]));
+		setDeadzoneY(Double.parseDouble(c_elements[3]));
+		setDeadzoneRadius(Double.parseDouble(c_elements[4]) * 2);
+		
+		ArrayList<Pied> pieds = new ArrayList<>();
+		while (sc.hasNextLine()) {
+			Pied p;
+			line = sc.nextLine();
+			line = line.substring(1, line.length() - 1);
+			String[] p_elements = line.split(Pattern.quote("|"));
+			p = new Pied(Integer.parseInt(p_elements[3]));
+			p.setPosX(Double.parseDouble(p_elements[0]));
+			p.setPosY(Double.parseDouble(p_elements[1]));
+			p.setValue(Double.parseDouble(p_elements[2]));
+			
+			pieds.add(p);
+		}
+		
+		setPieds(pieds);
 	}
 	
-	public Chaise loadChaise(File fin) throws IOException {
+	public void loadChaise(File fin) throws IOException {
 		InputStream in = new FileInputStream(fin);
-		Chaise c = loadChaise(in);
+		Scanner sc = new Scanner(in);
+		loadChaise(sc);
+		sc.close();
 		in.close();
-		return c;
 	}
 }
 
