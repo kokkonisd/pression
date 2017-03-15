@@ -1,5 +1,8 @@
 package Calculation;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -258,6 +261,31 @@ public class Chaise implements Serializable {
 		}
 		return false;
 
+	}
+	
+	// === METHODS TO SAVE & LOAD CHAISE ===
+	public void saveChaise(OutputStream out) throws IOException {
+		StringBuilder chaiseBuilder = new StringBuilder();
+		String separator = "|";
+		
+		chaiseBuilder.append("{").append(gposX).append(separator)
+			.append(gposY).append(separator).append(deadzoneX)
+			.append(separator).append(deadzoneY).append(separator)
+			.append(deadzoneR).append("}").append("\n");
+		
+		for (int i = 0; i < Pieds.size(); i++) {
+			Pied pied = Pieds.get(i);
+			chaiseBuilder.append("{").append(pied.getPosX()).append(separator)
+				.append(pied.getPosY()).append(separator).append(pied.getValue())
+				.append(separator).append(pied.getSensorID()).append("}").append("\n");
+		}
+		
+		char[] outChars = chaiseBuilder.toString().toCharArray();
+		byte[] outBytes = new byte[outChars.length];
+		for (int i = 0; i < outChars.length; i++) {
+			outBytes[i] = (byte) outChars[i];
+		}
+		out.write(outBytes);
 	}
 }
 

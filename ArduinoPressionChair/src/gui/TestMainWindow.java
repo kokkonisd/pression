@@ -51,5 +51,7 @@ public class TestMainWindow {
 		*/
 
 		win.setChaise(chaise);
+		System.out.println("--");
+		chaise.saveChaise(System.out);
 	}
 }
