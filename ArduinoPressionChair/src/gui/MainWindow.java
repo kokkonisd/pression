@@ -316,11 +316,12 @@ public class MainWindow extends JFrame {
 			        	System.out.println("Saving chaise...");
 			        	// get the filename chosen by the user
 			        	String file = saveChaise.getSelectedFile().getName();
+			        	String path = saveChaise.getSelectedFile().getAbsolutePath();
 			        	// take off the file ending that the user may have put
-			        	file = file.split(Pattern.quote("."))[0];
+			        	path = path.split(Pattern.quote("."))[0];
 			        	
 			        	// make sure we're not overriding a file
-			        	File f = new File(file + ".ser");
+			        	File f = new File(path + ".ser");
 			        	int result = 0;
 			        	if(f.exists() && !f.isDirectory()) { 
 			        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
@@ -355,7 +356,7 @@ public class MainWindow extends JFrame {
 					int returnVal = loadChaise.showOpenDialog(MainWindow.this);
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			        	System.out.println("Loading chaise...");
-			        	String filename = loadChaise.getSelectedFile().getName();
+			        	String filename = loadChaise.getSelectedFile().getAbsolutePath();
 			        	FileInputStream fin;
 						try {
 							fin = new FileInputStream(filename);
