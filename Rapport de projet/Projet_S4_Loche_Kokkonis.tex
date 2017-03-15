@@ -45,28 +45,65 @@ De nos jours, de nombreuses personnes souffrent du mal de dos dut à une mauvais
 Au cours de la lecture de ce rapport, vous pourrez en apprendre plus sur notre proposition de réalisation de ce projet. En effet, vous découvrirez comment nous avons choisis de répondre à ce problème.
 
 \chapter{Le matériel et Arduino}
+\label{chap:arduino}
+
+Construire un correcteur de posture assise a nécessité de trouver un moyen de récupérer les informations de l'assise de l'utilisateur. Nous avons choisi de suivre la proposition de M.Beaufils qui était d'utiliser des capteurs positionnés sous les pieds d'une chaise. Ces capteurs permettent de déterminer la répartition des masses sur les 4 pieds d'une chaise et donc indirectement la qualité de l'assise de l'utilisateur. Il a été nécessaire d'utiliser un dispositif capable de mesurer les valeurs rapportées par ces capteurs. Notre choix se porte sur la proposition de M.Beaufils qui est d'utiliser un  micro-contrôleur Arduino Uno auquel sont connecté les capteurs de forces. 
+
+Les premières séances de travail ont été consacré à des recherches sur les capteurs de forces (leurs caractéristiques et comment il fonctionnent). 
+
+Nous avons appris pendant nos recherches que les capteurs de forces sont des résistances variables. La valeur de leur résistance varie en fonction de la force appliquée. Il existe cependant des capteurs pour lesquels la variation de résistances en fonction de la force appliquée est de l'ordre du Ohm $\Omega$ (typiquement des FSR, Force Sensitive Resistor) et d'autres pour lesquels la variation est de l'ordre du $\mu \Omega$ ou $\mathrm{m} \Omega$.
+
+Un micro-contrôleur comme un Arduino possèdes des entrées sur lesquels il peut lire des valeurs de tensions par rapport à la masse. En effet, les pins allant de A0 à A5 sont des entrées analogiques sur lesquels on peut connecter une tension de 0 à 5V mesurable par l'Arduino. 
+
+Avec un capteur qui se comporte comme une résistance variable, on peut confectionner un montage diviseur de tension permettant d'obtenir une tension mesurable par l'Arduino. Ce montage revient à connecter une résistance de valeur connue (on a choisit R1=10k$\Omega$) en série avec la résistance R variable du capteur et mesurer la tension aux bornes de la résistance connue.  En appliquant une tension de 5V fournie par l'Arduino au diviseur de tension, on a donc la relation suivante:
+
+\begin{equation}
+\label{eqn:fsr_resistor}
+U_{Capteur}= \frac{R_1}{ R + R_1} U_{Arduino} 
+\end{equation}
+ 
+ Avec $U_{Capteur}$ la tension entre la masse et le pin A0 de l'Arduino et $U_{Arduino}=5V$.
+ 
+Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliqué et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eqn:fsr_resistor}).
+
+Nous avons pu expérimenter avec des montages composé de 3 potentiomètres et d'un FSR connectés à l'Arduino pour faire des tests et apprendre à manipuler les données recueillies.
+
+Nous nous sommes vite rendu compte qu'utiliser des FSR pour mesurer la répartition des masses sous les pieds d'une chaise ne serait pas adapté. En effet, le capteur sature au delà d'une pression de 2kg et nous arrivions à faire saturer le capteur avec nos doigts.
+
+Dans un premier temps cette solution nous a convenus pendant que nous développions le microgiciel de l'Arduino et les application PC et Android que nous vous présenterons par la suite dans le chapitre \ref{chap:Application}. La figure \ref{fig:arduino_v0} présente le montage que nous avons utilisé jusqu'à la séance 6 de travail.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=0.6]{image/Arduino_v0.jpg}
+\end{center}
+\caption{3 potentiomètres et une résistance de force connectés à un Arduino Uno}
+\label{fig:arduino_v0}
+\end{figure}
+
+
 
 \chapter{Application}
+\label{chap:Application}
 
 Pour gérer les données fournies par les load sensors, nous devons construire une application qui visualise la posture assise de l'utilisateur. Pour le développement de cette application, nous avons choisi \texttt{Java} comme langage de programmation, car il est conforme avec cette tâche, et il nous est accessible à travers notre cursus académique; en réalité, tous les deux nous l'avions déjà utilisé, aussi bien pour les projets PeiP de la première année, que pour des projets personnels.
 
 Pour mieux organiser notre workflow et afin d'avoir accès aux versions précédentes de notre logiciel, nous avons utilisé \texttt{git} comme \textit{VCS} (logiciel de contrôle des versions). Suite à la création d'un dépôt sur \texttt{GitHub}, nous avons pu synchroniser nos fichiers locaux, gérés par \texttt{git}, sur le dépôt en ligne. Cela permet de mettre en jour le projet, et \guillemotleft\ télécharger \guillemotright\ les changements qu'on y fait, avec une seule commande.
 
-Pour que notre application soit plus fonctionnelle, nous avons décidé de la construire pour le PC, mais aussi pour l'Android, de manière que l'utilisateur puisse consulter le correcteur de posture depuis son ordinateur ou son téléphone portable, selon sa préférence.
+Pour que notre application soit plus fonctionnelle, nous avons décidé de mettre en place une version PC et Android. De cette manière, on permet à l'utilisateur,selon sa préférence, de consulter le correcteur de posture depuis son ordinateur ou son téléphone portable.
 
 Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme : il y a une partie dédiée à la visualisation de la chaise, et une autre partie dédiée à la configuration (qu'elle concerne la chaise ou bien la visualisation). 
 
 Dans la partie visualisation, le schème choisi représente tout d'abord les pieds de la chaise, symbolisés par des cercles auxquels s'associe un nombre, qui correspond au ID de chaque load sensor. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins du panel de visualisation, et portant des nombres 1, 2, 3 et 4. 
 
-Le schème de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule :
+Le schèma de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule :
 
-$$\vec{OG} = \frac{1}{M} \sum \vec{OG_i} \cdot m_i$$
+$$\vec{OG} = \frac{1}{M} \sum \vec{OA_i} \cdot m_i$$
 
-où $O$ est l'origine, $G$ est le barycentre, $M$ est la somme des masses associés aux pieds, $i$ est le nombre des pieds et $G_i$ et $m_i$ sont respectivement la position et la masse du pied $i$.
+où $O$ est l'origine, $G$ est le barycentre, $M$ est la somme des masses associés aux pieds, $i$ est le nombre des pieds et $A_i$ et $m_i$ sont respectivement la position et la masse du pied $i$.
 
 Le centre de gravité est représenté par un cercle noir, qui se déplace dans le panel de visualisation suivant les changements de la posture assise de l'utilisateur.
 
-Finalement, le schème comprend aussi la deadzone, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
+Finalement, le schèma comprend aussi la deadzone, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
 
 En somme, le schème choisi permet les manipulations suivantes :
 \begin{itemize}
@@ -77,7 +114,7 @@ En somme, le schème choisi permet les manipulations suivantes :
 \end{itemize}
 
 
-Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0); cela veut dire que les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini). Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas on doit faire un \guillemotleft\ pair \guillemotright\  afin de pouvoir se connecter), ce qui est préférable, soit par USB. Finalement, on doit s'asseoir correctement, afin de calibrer l'application. On clique alors sur \guillemotleft\ tar \guillemotright\ , puis sur \guillemotleft\ calibrer \guillemotright\  pour calibrer la position de la deadzone. Une fois qu'on l'a calibrée, la deadzone est placée dans la position considérée comme \guillemotleft\ optimale \guillemotright\ . Finalement on peut modifier sa taille selon nos préférences. 
+Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0); cela veut dire que les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini). Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas on doit faire un \guillemotleft\ pair \guillemotright\  afin de pouvoir se connecter), ce qui est préférable, soit par USB. Finalement, on doit s'asseoir correctement, afin de calibrer l'application. On clique alors sur \guillemotleft\ tare \guillemotright\ , puis sur \guillemotleft\ calibrer \guillemotright\  pour calibrer la position de la deadzone. Une fois qu'on l'a calibrée, la deadzone est placée dans la position considérée comme \guillemotleft\ optimale \guillemotright\ . Finalement on peut modifier sa taille selon nos préférences. 
 
 Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne. En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré. Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
 
