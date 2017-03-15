@@ -103,7 +103,7 @@ public class PostureVisualizationJPanel extends JPanel {
 
 			// actually draw the circle and text inside it
 			g2d.drawString(sensorIDStr, stringStartX, stringStartY);
-			drawCenteredCircle(g2d, x, y, circleDiameter, false);
+			drawCenteredCircle(g2d, x, y, circleDiameter, Color.BLACK, false);
 		}
 
 		// draw the deadzone around the G point (barycenter)
@@ -116,7 +116,11 @@ public class PostureVisualizationJPanel extends JPanel {
 		// set the drawing color back to black
 		g2d.setColor(Color.BLACK);
 		// draw the G point (barycenter)
-		drawCenteredCircle(g2d, scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, true);
+		if (chaise.isGinDeadzone()) {
+			drawCenteredCircle(g2d, scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, Color.BLACK, true);
+		} else {
+			drawCenteredCircle(g2d, scaleX(chaise.getGposX()), scaleY(chaise.getGposY()), circleDiameter, Color.RED, true);
+		}
 
 	}
 	
@@ -130,12 +134,15 @@ public class PostureVisualizationJPanel extends JPanel {
 	 * @param d : the diameter of the circle
 	 * @param fill : true if we want to fill the circle, false if we just want the outline
 	 */
-	private void drawCenteredCircle(Graphics2D g, int x, int y, int d, boolean fill) {
+	private void drawCenteredCircle(Graphics2D g, int x, int y, int d, Color color, boolean fill) {
+		Color tempcol = g.getColor();
+		g.setColor(color);
 		if (fill) {
 			g.fillOval((x - d / 2), (y - d / 2), d, d);
 		} else {
 			g.drawOval((x - d / 2), (y - d / 2), d, d);
 		}
+		g.setColor(tempcol);
 	}
 	
 	private void drawCenteredOval(Graphics2D g, int x, int y, int rx, int ry) {
