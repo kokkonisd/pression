@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include "HX711.h"
+#include <math.h>
 
 //Rx pin to receive data from Bluetooth shield
 //Tx pin to transmit data to Bluetooth shield
@@ -24,10 +25,17 @@
 #define DOUT3 8
 #define CLK3 9
 
+//HX711 n4
+//DOUT -> D10
+//CLK -> D11
+#define DOUT4 10
+#define CLK4 11
+
 //Defining HX711 amps
 HX711 sensor1(DOUT1,CLK1);
 HX711 sensor2(DOUT2,CLK2);
 HX711 sensor3(DOUT3,CLK3);
+HX711 sensor4(DOUT4,CLK4);
 
 
 //Empty int array for testing receiving 'A' char
@@ -38,12 +46,13 @@ const int zeroSensorValues[]={0,0,0,0};
 int sensorReading1;
 int sensorReading2;
 int sensorReading3;
+int sensorReading4;
 
 
 // --constants--
 // constants to set the default min and max values of the sensors
 const int MIN_DEFAULT = 0;
-const int MAX_DEFAULT = 1023;
+const int MAX_DEFAULT = 5000;
 
 // constants to set a range to which to map the sensor values
 const int MIN_SET = 0;
@@ -77,17 +86,18 @@ void getData(int *data) {
     sensorReading1=sensor1.get_units();
     sensorReading2=sensor2.get_units();
     sensorReading3=sensor3.get_units();
+    sensorReading4=sensor4.get_units();
 
     // map the values to the set range
     sensorReading1 = map(sensorReading1, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading2 = map(sensorReading2, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading3 = map(sensorReading3, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
-    //sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
+    sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
 
-    data[0] = sensorReading1;
-    data[1] = sensorReading2;
-    data[2] = sensorReading3;
-    data[3] = 0;
+    data[0] = abs(sensorReading1);
+    data[1] = abs(sensorReading2);
+    data[2] = abs(sensorReading3);
+    data[3] = abs(sensorReading4);
 }
 
 // function to write data to Serial
@@ -125,6 +135,8 @@ void setup(void) {
   Serial.print(";");
   Serial.print(sensor3.read());      // print a raw reading from the ADC
   Serial.println(";");
+  Serial.print(sensor4.read());      // print a raw reading from the ADC
+  Serial.println(";");
 
   Serial.print("read average: \t\t");
   Serial.print(sensor1.read_average(20));      // print average of 20 raw reading from the ADC
@@ -132,6 +144,9 @@ void setup(void) {
   Serial.print(sensor2.read_average(20));      // print average raw reading from the ADC
   Serial.print(";");
   Serial.println(sensor3.read_average(20));      // print a raw reading from the ADC
+  Serial.print(";");
+  Serial.print(sensor4.read());      // print a raw reading from the ADC
+  Serial.println(";");
 
   Serial.print("get value: \t\t");
   Serial.print(sensor1.get_value(5));   // print the average of 5 readings from the ADC minus the tare weight (not set yet)
@@ -139,6 +154,8 @@ void setup(void) {
   Serial.print(sensor2.get_value(5));
   Serial.print(";");
   Serial.print(sensor3.get_value(5));
+  Serial.println(";");
+  Serial.print(sensor4.get_value(5));
   Serial.println(";");
 
   Serial.print("get units: \t\t");
@@ -148,15 +165,19 @@ void setup(void) {
   Serial.print(";");
   Serial.print(sensor3.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
   Serial.println(";");
+  Serial.print(sensor4.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
+  Serial.println(";");
             // by the SCALE parameter (not set yet)
 
   sensor1.set_scale(1240.f);                      // this value is obtained by calibrating the scale with known weights; see the README for details
   sensor2.set_scale(1240.f);
   sensor3.set_scale(1240.f);
+  sensor4.set_scale(1240.f);
 
   sensor1.tare();
   sensor2.tare();
   sensor3.tare();
+  sensor4.tare();
 }
 
 void loop(void) {
@@ -185,6 +206,7 @@ void loop(void) {
       sensor1.tare();
       sensor2.tare();
       sensor3.tare();
+      sensor4.tare();
     }
     
   }
