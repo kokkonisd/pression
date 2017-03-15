@@ -321,19 +321,20 @@ public class MainWindow extends JFrame {
 			        	
 			        	// make sure we're not overriding a file
 			        	File f = new File(file + ".ser");
+			        	int result = 0;
 			        	if(f.exists() && !f.isDirectory()) { 
-			        	    int result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
-			        	    if (result == 0) {
-			        	    	try {
-									// apply .ser extension
-									FileOutputStream fout = new FileOutputStream(file + ".ser");
-									ObjectOutputStream oos = new ObjectOutputStream(fout);
-									oos.writeObject(chaise);
-									oos.close();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-			        	    }
+			        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
+			        	}
+			        	if (result == 0) {
+			        		try {
+			        			// apply .ser extension
+			        			FileOutputStream fout = new FileOutputStream(f);
+			        			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			        			oos.writeObject(chaise);
+			        			oos.close();
+			        		} catch (Exception e) {
+			        			e.printStackTrace();
+			        		}
 			        	}
 			        }
 				}
