@@ -48,6 +48,40 @@ Au cours de la lecture de ce rapport, vous pourrez en apprendre plus sur notre p
 
 \chapter{Application}
 
+Pour gérer les données fournies par les load sensors, nous devons construire une application qui visualise la posture assise de l'utilisateur. Pour le développement de cette application, nous avons choisi \texttt{Java} comme langage de programmation, car il est conforme avec cette tâche, et il nous est accessible à travers notre cursus académique; en réalité, tous les deux nous l'avions déjà utilisé, aussi bien pour les projets PeiP de la première année, que pour des projets personnels.
+
+Pour mieux organiser notre workflow et afin d'avoir accès aux versions précédentes de notre logiciel, nous avons utilisé \texttt{git} comme \textit{VCS} (logiciel de contrôle des versions). Suite à la création d'un dépôt sur \texttt{GitHub}, nous avons pu synchroniser nos fichiers locaux, gérés par \texttt{git}, sur le dépôt en ligne. Cela permet de mettre en jour le projet, et \guillemotleft\ télécharger \guillemotright\ les changements qu'on y fait, avec une seule commande.
+
+Pour que notre application soit plus fonctionnelle, nous avons décidé de la construire pour le PC, mais aussi pour l'Android, de manière que l'utilisateur puisse consulter le correcteur de posture depuis son ordinateur ou son téléphone portable, selon sa préférence.
+
+Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme : il y a une partie dédiée à la visualisation de la chaise, et une autre partie dédiée à la configuration (qu'elle concerne la chaise ou bien la visualisation). 
+
+Dans la partie visualisation, le schème choisi représente tout d'abord les pieds de la chaise, symbolisés par des cercles auxquels s'associe un nombre, qui correspond au ID de chaque load sensor. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins du panel de visualisation, et portant des nombres 1, 2, 3 et 4. 
+
+Le schème de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule :
+
+$$\vec{OG} = \frac{1}{M} \sum \vec{OG_i} \cdot m_i$$
+
+où $O$ est l'origine, $G$ est le barycentre, $M$ est la somme des masses associés aux pieds, $i$ est le nombre des pieds et $G_i$ et $m_i$ sont respectivement la position et la masse du pied $i$.
+
+Le centre de gravité est représenté par un cercle noir, qui se déplace dans le panel de visualisation suivant les changements de la posture assise de l'utilisateur.
+
+Finalement, le schème comprend aussi la deadzone, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
+
+En somme, le schème choisi permet les manipulations suivantes :
+\begin{itemize}
+\item Modifier le nombre et les positions des pieds de la chaise;
+\item Modifier la position et la taille de la deadzone;
+\item Sauvegarder la chaise;
+\item Utiliser une chaise déjà enregistrée.
+\end{itemize}
+
+
+Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0); cela veut dire que les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini). Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas on doit faire un \guillemotleft\ pair \guillemotright\  afin de pouvoir se connecter), ce qui est préférable, soit par USB. Finalement, on doit s'asseoir correctement, afin de calibrer l'application. On clique alors sur \guillemotleft\ tar \guillemotright\ , puis sur \guillemotleft\ calibrer \guillemotright\  pour calibrer la position de la deadzone. Une fois qu'on l'a calibrée, la deadzone est placée dans la position considérée comme \guillemotleft\ optimale \guillemotright\ . Finalement on peut modifier sa taille selon nos préférences. 
+
+Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne. En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré. Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
+
+
 %% === COMPTES RENDUS ===
 \weeklyreport{11/01/2017}{Rapport seance 1}
 \weeklyreport{18/01/2017}{Rapport seance 2}

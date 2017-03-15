@@ -1,7 +1,11 @@
 package Calculation;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -286,6 +290,24 @@ public class Chaise implements Serializable {
 			outBytes[i] = (byte) outChars[i];
 		}
 		out.write(outBytes);
+	}
+	
+	public void saveChaise(File fout) throws IOException {
+		OutputStream out = new FileOutputStream(fout);
+		saveChaise(out);
+		out.close();
+	}
+	
+	public Chaise loadChaise(FileInputStream in) throws IOException {
+		Chaise c;
+		c.setGposX(Double.parseDouble(s));
+	}
+	
+	public Chaise loadChaise(File fin) throws IOException {
+		InputStream in = new FileInputStream(fin);
+		Chaise c = loadChaise(in);
+		in.close();
+		return c;
 	}
 }
 
