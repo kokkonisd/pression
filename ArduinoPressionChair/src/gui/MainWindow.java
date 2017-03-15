@@ -315,7 +315,6 @@ public class MainWindow extends JFrame {
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			        	System.out.println("Saving chaise...");
 			        	// get the filename chosen by the user
-			        	String file = saveChaise.getSelectedFile().getName();
 			        	String path = saveChaise.getSelectedFile().getAbsolutePath();
 			        	// take off the file ending that the user may have put
 			        	path = path.split(Pattern.quote("."))[0];
