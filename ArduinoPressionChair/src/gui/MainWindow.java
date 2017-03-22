@@ -61,6 +61,12 @@ public class MainWindow extends JFrame {
 
 	// custom made ComInterface
 	ComInterface comInterface;
+	
+	/* J objects to be used in saving/loading the chaise object */
+	// file chooser to load/save chaise
+    final JFileChooser chaiseChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+    // slider to control the radius of the deadzone
+ 	final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
 
 	public MainWindow() throws HeadlessException, ClassNotFoundException, IOException {
 		super();
@@ -71,7 +77,7 @@ public class MainWindow extends JFrame {
 		
 		// MENU
 		JMenuBar menuBar;
-		JMenu menu, submenu;
+		JMenu menu;
 		JMenuItem menuItem;
 		
 		// Create the menu bar
@@ -79,7 +85,6 @@ public class MainWindow extends JFrame {
 		
 		// Build the first menu
 		menu = new JMenu("File");
-		//menu.setMnemonic(KeyEvent.VK_A);
 		menu.getAccessibleContext().setAccessibleDescription("File menu");
 		menuBar.add(menu);
 		
@@ -91,7 +96,7 @@ public class MainWindow extends JFrame {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//btnSaveChaiseHandler();
+				btnSaveChaiseHandler(chaiseChooser);
 			}
 		});
 		
@@ -103,7 +108,7 @@ public class MainWindow extends JFrame {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("load clicked");
+				btnLoadChaiseHandler(chaiseChooser, deadzoneRadiusSlider);
 			}
 		});
 		
@@ -255,9 +260,6 @@ public class MainWindow extends JFrame {
 			
 			add(deadzoneStatusLabel);
 			
-			// slider to control the radius of the deadzone
-			final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 30);
-			
 			deadzoneRadiusSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
@@ -277,250 +279,217 @@ public class MainWindow extends JFrame {
 	                BorderFactory.createEmptyBorder(0,0,10,0));
 	        Font font = new Font("Serif", Font.ITALIC, 15);
 	        deadzoneRadiusSlider.setFont(font);
-	        
-	        // Saving the Chaise Object
-	        
-	        // File chooser to save tha chaise object, starts in current directory
-	        final JFileChooser saveChaise = new JFileChooser(new File(System.getProperty("user.dir")));
-	        // Button to launch file chooser
-	        final JButton btnSaveChaise = new JButton("Save Chaise");
-	        
-	        // Action handler for the button
-	        btnSaveChaise.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					btnSaveChaiseHandler(saveChaise);
-				}
-			});
-	        // add the button
-	        add(btnSaveChaise);
-	        
-	        // file chooser used to load the chaise object
-	        // file chooser will open in current directory
-	        final JFileChooser loadChaise = new JFileChooser(new File(System.getProperty("user.dir")));
-	        loadChaise.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
-	        
-	        // button that triggers the file chooser
-	        final JButton btnLoadChaise = new JButton("Load Chaise");
-	        btnLoadChaise.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					btnLoadChaiseHandler(loadChaise, deadzoneRadiusSlider);
-				}
-			});
-	        
-	        add(btnLoadChaise);
 		}
+	}
+	
+	/**
+	 * Method to handle the configuration of the Chaise object
+	 * @return Chaise object to be used
+	 */
+	public Chaise ChaiseConfigDialog() {
+		// textfield for the number of pieds
+		JTextField piedsNum = new JTextField();
+		piedsNum.setColumns(5);
 		
-		/**
-		 * Method to handle the configuration of the Chaise object
-		 * @return Chaise object to be used
-		 */
-		public Chaise ChaiseConfigDialog() {
-			// textfield for the number of pieds
-			JTextField piedsNum = new JTextField();
-			piedsNum.setColumns(5);
+		JLabel piedsNumLabel = new JLabel("Nombre des pieds de la chaise");
+		
+		// arraylist of textfields for the positions of the pieds
+		ArrayList<JTextField> piedsPos = new ArrayList<>();
+		
+		// chaise object to return (null by default)
+		Chaise newChaise = null;
+		
+		// panel for the pieds num dialog
+		JPanel piedsNumDialog = new JPanel();
+		piedsNumDialog.add(piedsNumLabel);
+		piedsNumDialog.add(piedsNum);
+		
+		// panel for the pieds positions dialog
+		JPanel piedsPosDialog;
+		
+		// open a dialog window to get the number of pieds
+		int piedsNumResult = JOptionPane.showConfirmDialog(null, piedsNumDialog, "Nombre des pieds de la chaise",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+		
+		// if the user clicked OK
+		if (piedsNumResult == JOptionPane.OK_OPTION) {
+			// get the number of pieds
+			int pieds = Integer.parseInt(piedsNum.getText());
 			
-			JLabel piedsNumLabel = new JLabel("Nombre des pieds de la chaise");
+			// initialize the pieds positions panel
+			piedsPosDialog = new JPanel(new GridLayout(1, pieds));
 			
-			// arraylist of textfields for the positions of the pieds
-			ArrayList<JTextField> piedsPos = new ArrayList<>();
+			for (int i = 0; i < pieds; i++) {
+				// make a temporary panel to store the elements of one pied
+				JPanel tempPanel = new JPanel(new GridLayout(4, 1));
+				
+				// two textfields, one for the X pos and one for the Y pos
+				JTextField tempTextFieldX = new JTextField();
+				tempTextFieldX.setColumns(5);
+				JTextField tempTextFieldY = new JTextField();
+				tempTextFieldY.setColumns(5);
+				
+				// two labels, one for the X pos and one for the Y pos
+				JLabel tempLabelX = new JLabel("Pied " + (i + 1) + " X");
+				JLabel tempLabelY = new JLabel("Pied " + (i + 1) + " Y");
+				
+				// add the elements to the temp panel (in order)
+				tempPanel.add(tempLabelX);
+				tempPanel.add(tempTextFieldX);
+				tempPanel.add(tempLabelY);
+				tempPanel.add(tempTextFieldY);
+				
+				// add the textfields to the arraylist so we can get their values later
+				piedsPos.add(tempTextFieldX);
+				piedsPos.add(tempTextFieldY);
+				
+				// add the temp panel to the main pieds pos dialog
+				piedsPosDialog.add(tempPanel);
+			}
 			
-			// chaise object to return (null by default)
-			Chaise newChaise = null;
-			
-			// panel for the pieds num dialog
-			JPanel piedsNumDialog = new JPanel();
-			piedsNumDialog.add(piedsNumLabel);
-			piedsNumDialog.add(piedsNum);
-			
-			// panel for the pieds positions dialog
-			JPanel piedsPosDialog;
-			
-			// open a dialog window to get the number of pieds
-			int piedsNumResult = JOptionPane.showConfirmDialog(null, piedsNumDialog, "Nombre des pieds de la chaise",
+			// launch a dialog window to get the positions of the pieds
+			int piedsValuesResult = JOptionPane.showConfirmDialog(null, piedsPosDialog, "Positions des pieds",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 			
 			// if the user clicked OK
-			if (piedsNumResult == JOptionPane.OK_OPTION) {
-				// get the number of pieds
-				int pieds = Integer.parseInt(piedsNum.getText());
-				
-				// initialize the pieds positions panel
-				piedsPosDialog = new JPanel(new GridLayout(1, pieds));
-				
-				for (int i = 0; i < pieds; i++) {
-					// make a temporary panel to store the elements of one pied
-					JPanel tempPanel = new JPanel(new GridLayout(4, 1));
+			if (piedsValuesResult == JOptionPane.OK_OPTION) {
+				// make a new Chaise object
+				newChaise = new Chaise();
+				for (int i = 0; i < piedsPos.size(); i += 2) {
+					// get the positions of the pieds from the arraylist
+					double tempValX = Double.parseDouble(piedsPos.get(i).getText());
+					double tempValY = Double.parseDouble(piedsPos.get(i+1).getText());
 					
-					// two textfields, one for the X pos and one for the Y pos
-					JTextField tempTextFieldX = new JTextField();
-					tempTextFieldX.setColumns(5);
-					JTextField tempTextFieldY = new JTextField();
-					tempTextFieldY.setColumns(5);
-					
-					// two labels, one for the X pos and one for the Y pos
-					JLabel tempLabelX = new JLabel("Pied " + (i + 1) + " X");
-					JLabel tempLabelY = new JLabel("Pied " + (i + 1) + " Y");
-					
-					// add the elements to the temp panel (in order)
-					tempPanel.add(tempLabelX);
-					tempPanel.add(tempTextFieldX);
-					tempPanel.add(tempLabelY);
-					tempPanel.add(tempTextFieldY);
-					
-					// add the textfields to the arraylist so we can get their values later
-					piedsPos.add(tempTextFieldX);
-					piedsPos.add(tempTextFieldY);
-					
-					// add the temp panel to the main pieds pos dialog
-					piedsPosDialog.add(tempPanel);
-				}
-				
-				// launch a dialog window to get the positions of the pieds
-				int piedsValuesResult = JOptionPane.showConfirmDialog(null, piedsPosDialog, "Positions des pieds",
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-				
-				// if the user clicked OK
-				if (piedsValuesResult == JOptionPane.OK_OPTION) {
-					// make a new Chaise object
-					newChaise = new Chaise();
-					for (int i = 0; i < piedsPos.size(); i += 2) {
-						// get the positions of the pieds from the arraylist
-						double tempValX = Double.parseDouble(piedsPos.get(i).getText());
-						double tempValY = Double.parseDouble(piedsPos.get(i+1).getText());
-						
-						// make a new pied and add it to the Chaise object
-						Pied p = new Pied(tempValX, tempValY, i/2 + 1);
-						newChaise.addPied(p);
-					}
+					// make a new pied and add it to the Chaise object
+					Pied p = new Pied(tempValX, tempValY, i/2 + 1);
+					newChaise.addPied(p);
 				}
 			}
-			
-			// finally, return the chaise object (or null if the user cancelled out)
-			return newChaise;
 		}
 		
-		public void btnConnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
-			// turn off the combobox when handling an action
-			comCombobox.setEnabled(false);
+		// finally, return the chaise object (or null if the user cancelled out)
+		return newChaise;
+	}
+	
+	public void btnConnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
+		// turn off the combobox when handling an action
+		comCombobox.setEnabled(false);
 
-			if(comInterface!=null){
-				// stop the interface and start a new connection based on the selected port
-				comInterface.stop();
-				comInterface.setSerial(serialPorts[comCombobox.getSelectedIndex()]);
+		if(comInterface!=null){
+			// stop the interface and start a new connection based on the selected port
+			comInterface.stop();
+			comInterface.setSerial(serialPorts[comCombobox.getSelectedIndex()]);
+		}else{
+			// if there's nothing to stop, just start the connection
+			comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
+		}
+
+
+		if(!comInterface.isOpen()){
+			// start the connection
+			comInterface.start();
+			if(comInterface.isOpen()){
+				// set the button text to "connected"
+				btnConnexion.setText("Connect�");
+				// de-connection should be available
+				btnDeconnexion.setEnabled(true);
+				// connection should not be available
+				btnConnexion.setEnabled(false);
 			}else{
-				// if there's nothing to stop, just start the connection
-				comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
-			}
-
-
-			if(!comInterface.isOpen()){
-				// start the connection
-				comInterface.start();
-				if(comInterface.isOpen()){
-					// set the button text to "connected"
-					btnConnexion.setText("Connect�");
-					// de-connection should be available
-					btnDeconnexion.setEnabled(true);
-					// connection should not be available
-					btnConnexion.setEnabled(false);
-				}else{
-					// the port cannot open
-					btnConnexion.setText("Echec ouverture");
-					comCombobox.setEnabled(true);
-				}
-			}
-		}
-		
-		public void btnDeconnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
-			if(comInterface.stop()){
-				//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
-				//openButton.setIcon(statusOffline);
-				//openButton.setToolTipText("R�ouvrir le port COM et r�activer l'�coute des donn�es");
-
-				// if the connection is stopped, turn stuff on and off appropriately
+				// the port cannot open
+				btnConnexion.setText("Echec ouverture");
 				comCombobox.setEnabled(true);
-				btnConnexion.setEnabled(true);
-				btnConnexion.setText("Connexion");
-				btnDeconnexion.setEnabled(false);
-			}else{
-				// there's a problem when closing the connection
-				btnDeconnexion.setText("ECHEC FERMETURE");
 			}
 		}
+	}
 	
-		public void btnSendTextToArduinoHandler() {
-			if(comInterface==null){
-				return;
-			}
-			else if(!comInterface.isOpen()){
-				return;
-			}
-			else{
-				try {
-					comInterface.write('A');
-				} catch (IOException e) {
-					// there's a problem when sending the command
-					e.printStackTrace();
-				}
+	public void btnDeconnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
+		if(comInterface.stop()){
+			//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
+			//openButton.setIcon(statusOffline);
+			//openButton.setToolTipText("R�ouvrir le port COM et r�activer l'�coute des donn�es");
+
+			// if the connection is stopped, turn stuff on and off appropriately
+			comCombobox.setEnabled(true);
+			btnConnexion.setEnabled(true);
+			btnConnexion.setText("Connexion");
+			btnDeconnexion.setEnabled(false);
+		}else{
+			// there's a problem when closing the connection
+			btnDeconnexion.setText("ECHEC FERMETURE");
+		}
+	}
+
+	public void btnSendTextToArduinoHandler() {
+		if(comInterface==null){
+			return;
+		}
+		else if(!comInterface.isOpen()){
+			return;
+		}
+		else{
+			try {
+				comInterface.write('A');
+			} catch (IOException e) {
+				// there's a problem when sending the command
+				e.printStackTrace();
 			}
 		}
-		
-		public void btnConfigChaiseHandler() {
-			Chaise c = ChaiseConfigDialog();
-			if (c != null) {
-				setChaise(c);
-				panel.repaint();
-			}
-		}
+	}
 	
-		public void btnCalibrateDeadzoneHandler() {
-			chaise.setDeadzoneX(chaise.getGposX());
-			chaise.setDeadzoneY(chaise.getGposY());
+	public void btnConfigChaiseHandler() {
+		Chaise c = ChaiseConfigDialog();
+		if (c != null) {
+			setChaise(c);
 			panel.repaint();
 		}
-	
-		public void btnSaveChaiseHandler(JFileChooser saveChaise) {
-			int returnVal = saveChaise.showSaveDialog(MainWindow.this);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	        	System.out.println("Saving chaise...");
-	        	// get the filename chosen by the user
-	        	String path = saveChaise.getSelectedFile().getAbsolutePath();
-	        	// take off the file ending that the user may have put
-	        	path = path.split(Pattern.quote("."))[0];
-	        	
-	        	// make sure we're not overriding a file
-	        	File f = new File(path + ".txt");
-	        	int result = 0;
-	        	if(f.exists() && !f.isDirectory()) { 
-	        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
-	        	}
-	        	if (result == 0) {
-	        		try {
-	        			chaise.saveChaise(f);
-	        		} catch (Exception e) {
-	        			e.printStackTrace();
-	        		}
-	        	}
-	        }
-		}
-	
-		public void btnLoadChaiseHandler(JFileChooser loadChaise, JSlider deadzoneRadiusSlider) {
-			int returnVal = loadChaise.showOpenDialog(MainWindow.this);
-	        if (returnVal == JFileChooser.APPROVE_OPTION) {
-	        	System.out.println("Loading chaise...");
-	        	String path = loadChaise.getSelectedFile().getAbsolutePath();
-	        	File fin = new File(path);
-				try {
-					chaise.loadChaise(fin);
-		    		panel.repaint();
-		    		// reset the radius slider to the value of the chaise we just loaded
-		    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRatio() * 100));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        }
-		}
+	}
+
+	public void btnCalibrateDeadzoneHandler() {
+		chaise.setDeadzoneX(chaise.getGposX());
+		chaise.setDeadzoneY(chaise.getGposY());
+		panel.repaint();
+	}
+
+	public void btnSaveChaiseHandler(JFileChooser saveChaise) {
+		int returnVal = saveChaise.showSaveDialog(MainWindow.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        	System.out.println("Saving chaise...");
+        	// get the filename chosen by the user
+        	String path = saveChaise.getSelectedFile().getAbsolutePath();
+        	// take off the file ending that the user may have put
+        	path = path.split(Pattern.quote("."))[0];
+        	
+        	// make sure we're not overriding a file
+        	File f = new File(path + ".txt");
+        	int result = 0;
+        	if(f.exists() && !f.isDirectory()) { 
+        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
+        	}
+        	if (result == 0) {
+        		try {
+        			chaise.saveChaise(f);
+        		} catch (Exception e) {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+	}
+
+	public void btnLoadChaiseHandler(JFileChooser loadChaise, JSlider deadzoneRadiusSlider) {
+		int returnVal = loadChaise.showOpenDialog(MainWindow.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        	System.out.println("Loading chaise...");
+        	String path = loadChaise.getSelectedFile().getAbsolutePath();
+        	File fin = new File(path);
+			try {
+				chaise.loadChaise(fin);
+	    		panel.repaint();
+	    		// reset the radius slider to the value of the chaise we just loaded
+	    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRatio() * 100));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
 	}
 }
