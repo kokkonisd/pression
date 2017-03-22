@@ -24,6 +24,7 @@ public class Chaise implements Serializable {
 	double deadzoneX = Double.NaN;
 	double deadzoneY = Double.NaN;
 	double deadzoneR = Double.NaN;
+	double deadzoneRatio = Double.NaN;
 
 	double maxPosX = Double.NaN;
 	double maxPosY = Double.NaN;
@@ -242,12 +243,21 @@ public class Chaise implements Serializable {
 		deadzoneY = y;
 	}
 
-	public void setDeadzoneRadius(double ratio) {
-		deadzoneR = ratio / 2 * Math.min(getMaxPosX(), getMaxPosY());
+	private void setDeadzoneRadius() {
+		deadzoneR = deadzoneRatio / 2 * Math.min(getMaxPosX(), getMaxPosY());
 	}
 
 	public double getDeadzoneRadius() {
 		return deadzoneR;
+	}
+	
+	public void setDeadzoneRatio(double ratio) {
+		deadzoneRatio = ratio;
+		setDeadzoneRadius();
+	}
+	
+	public double getDeadzoneRatio() {
+		return deadzoneRatio;
 	}
 
 	public boolean isGinDeadzone(){
@@ -274,10 +284,9 @@ public class Chaise implements Serializable {
 		StringBuilder chaiseBuilder = new StringBuilder();
 		String separator = "|";
 		
-		chaiseBuilder.append("{").append(gposX).append(separator)
-			.append(gposY).append(separator).append(deadzoneX)
+		chaiseBuilder.append("{").append(deadzoneX)
 			.append(separator).append(deadzoneY).append(separator)
-			.append(deadzoneR).append("}").append("\n");
+			.append(deadzoneRatio).append("}").append("\n");
 		
 		for (int i = 0; i < Pieds.size(); i++) {
 			Pied pied = Pieds.get(i);
@@ -304,11 +313,6 @@ public class Chaise implements Serializable {
 		String line = sc.nextLine();
 		line = line.substring(1, line.length() - 1);
 		String[] c_elements = line.split(Pattern.quote("|"));
-		setGposX(Double.parseDouble(c_elements[0]));
-		setGposY(Double.parseDouble(c_elements[1]));
-		setDeadzoneX(Double.parseDouble(c_elements[2]));
-		setDeadzoneY(Double.parseDouble(c_elements[3]));
-		setDeadzoneRadius(Double.parseDouble(c_elements[4]) * 2);
 		
 		ArrayList<Pied> pieds = new ArrayList<>();
 		while (sc.hasNextLine()) {
@@ -325,6 +329,12 @@ public class Chaise implements Serializable {
 		}
 		
 		setPieds(pieds);
+		
+		setDeadzoneX(Double.parseDouble(c_elements[0]));
+		setDeadzoneY(Double.parseDouble(c_elements[1]));
+		setDeadzoneRatio(Double.parseDouble(c_elements[2]));
+		
+		calculateGpos();
 	}
 	
 	public void loadChaise(File fin) throws IOException {

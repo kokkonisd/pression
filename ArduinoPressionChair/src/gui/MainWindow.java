@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,10 +22,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -63,7 +68,47 @@ public class MainWindow extends JFrame {
 		// initialize the Chaise and visualization panel objects
 		chaise=new Chaise();
 		panel=new PostureVisualizationJPanel(chaise);
-
+		
+		// MENU
+		JMenuBar menuBar;
+		JMenu menu, submenu;
+		JMenuItem menuItem;
+		
+		// Create the menu bar
+		menuBar = new JMenuBar();
+		
+		// Build the first menu
+		menu = new JMenu("File");
+		//menu.setMnemonic(KeyEvent.VK_A);
+		menu.getAccessibleContext().setAccessibleDescription("File menu");
+		menuBar.add(menu);
+		
+		// save chaise menu item
+		menuItem = new JMenuItem("Save chaise");
+		menuItem.getAccessibleContext().setAccessibleDescription("Save chaise");
+		menu.add(menuItem);
+		
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//btnSaveChaiseHandler();
+			}
+		});
+		
+		// load chaise menu item
+		menuItem = new JMenuItem("Load chaise");
+		menuItem.getAccessibleContext().setAccessibleDescription("Load chaise");
+		menu.add(menuItem);
+		
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("load clicked");
+			}
+		});
+		
+		this.setJMenuBar(menuBar);
+		
 		// make a new panel that has 1 row and 2 columns
 		// the first column contains the visualization
 		// the second column contains the configuration elements
@@ -75,7 +120,8 @@ public class MainWindow extends JFrame {
 		// add visualisation & config panels to main panel
 		mainPanel.add(panel);
 		mainPanel.add(configPanel);
-
+		
+		
 		this.setContentPane(mainPanel);
 		//add(panel);
 
@@ -215,7 +261,7 @@ public class MainWindow extends JFrame {
 			deadzoneRadiusSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
-					chaise.setDeadzoneRadius(deadzoneRadiusSlider.getValue() / 100.0);
+					chaise.setDeadzoneRatio(deadzoneRadiusSlider.getValue() / 100.0);
 					panel.repaint();
 				}
 			});
@@ -237,17 +283,17 @@ public class MainWindow extends JFrame {
 	        // File chooser to save tha chaise object, starts in current directory
 	        final JFileChooser saveChaise = new JFileChooser(new File(System.getProperty("user.dir")));
 	        // Button to launch file chooser
-	        final JButton saveChaiseBtn = new JButton("Save Chaise");
+	        final JButton btnSaveChaise = new JButton("Save Chaise");
 	        
 	        // Action handler for the button
-	        saveChaiseBtn.addActionListener(new ActionListener() {
+	        btnSaveChaise.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					btnSaveChaiseHandler(saveChaise);
 				}
 			});
 	        // add the button
-	        add(saveChaiseBtn);
+	        add(btnSaveChaise);
 	        
 	        // file chooser used to load the chaise object
 	        // file chooser will open in current directory
@@ -255,15 +301,15 @@ public class MainWindow extends JFrame {
 	        loadChaise.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
 	        
 	        // button that triggers the file chooser
-	        final JButton loadChaiseBtn = new JButton("Load Chaise");
-	        loadChaiseBtn.addActionListener(new ActionListener() {
+	        final JButton btnLoadChaise = new JButton("Load Chaise");
+	        btnLoadChaise.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					btnLoadChaiseHandler(loadChaise, deadzoneRadiusSlider);
 				}
 			});
 	        
-	        add(loadChaiseBtn);
+	        add(btnLoadChaise);
 		}
 		
 		/**
@@ -470,7 +516,7 @@ public class MainWindow extends JFrame {
 					chaise.loadChaise(fin);
 		    		panel.repaint();
 		    		// reset the radius slider to the value of the chaise we just loaded
-		    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRadius() * 200));
+		    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRatio() * 100));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
