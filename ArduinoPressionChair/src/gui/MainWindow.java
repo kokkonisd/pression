@@ -154,37 +154,7 @@ public class MainWindow extends JFrame {
 
 			btnConnexion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					// turn off the combobox when handling an action
-					comCombobox.setEnabled(false);
-
-					if(comInterface!=null){
-						// stop the interface and start a new connection based on the selected port
-						comInterface.stop();
-						comInterface.setSerial(serialPorts[comCombobox.getSelectedIndex()]);
-					}else{
-						// if there's nothing to stop, just start the connection
-						comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
-					}
-
-
-					if(!comInterface.isOpen()){
-						// start the connection
-						comInterface.start();
-						if(comInterface.isOpen()){
-							// set the button text to "connected"
-							btnConnexion.setText("Connect�");
-							// de-connection should be available
-							btnDeconnexion.setEnabled(true);
-							// connection should not be available
-							btnConnexion.setEnabled(false);
-						}else{
-							// the port cannot open
-							btnConnexion.setText("Echec ouverture");
-							comCombobox.setEnabled(true);
-						}
-					}
-
-
+					btnConnectionHandler(comCombobox, btnConnexion, btnDeconnexion);
 				}
 			});
 			// add the connection button to the container (main window)
@@ -192,85 +162,47 @@ public class MainWindow extends JFrame {
 
 
 			btnDeconnexion.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(comInterface.stop()){
-						//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
-						//openButton.setIcon(statusOffline);
-						//openButton.setToolTipText("R�ouvrir le port COM et r�activer l'�coute des donn�es");
-
-						// if the connection is stopped, turn stuff on and off appropriately
-						comCombobox.setEnabled(true);
-						btnConnexion.setEnabled(true);
-						btnConnexion.setText("Connexion");
-						btnDeconnexion.setEnabled(false);
-					}else{
-						// there's a problem when closing the connection
-						btnDeconnexion.setText("ECHEC FERMETURE");
-					}
+					btnDeconnectionHandler(comCombobox, btnConnexion, btnDeconnexion);
 				}
 			});
 			// add the connection button to the container (main window)
 			add(btnDeconnexion);
 
+			
 			btnSendTextToArduino.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					if(comInterface==null){
-						return;
-					}
-					else if(!comInterface.isOpen()){
-						return;
-					}
-					else{
-						try {
-							comInterface.write('A');
-						} catch (IOException e) {
-							// there's a problem when sending the command
-							e.printStackTrace();
-						}
-					}
-
+					btnSendTextToArduinoHandler();
 				}
 			});
 			// add the Arduino command button to the container (main window)
 			add(btnSendTextToArduino);
 			
 			
-			// testing chaise configuration
-			
+			// setting the chaise configuration
 			final JButton btnConfigChaise = new JButton("Config Chaise");
 			
 			btnConfigChaise.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Chaise c = ChaiseConfigDialog();
-					if (c != null) {
-						setChaise(c);
-						panel.repaint();
-					}
-					
+					btnConfigChaiseHandler();
 				}
 			});
-			
+			// add the button
 			add(btnConfigChaise);
 		
 			// controls for calibrating the deadzone
 			final JButton btnCalibrateDeadzone = new JButton("Calibrate Deadzone");
 			
 			btnCalibrateDeadzone.addActionListener(new ActionListener() {
-	
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					chaise.setDeadzoneX(chaise.getGposX());
-					chaise.setDeadzoneY(chaise.getGposY());
-					panel.repaint();
+					btnCalibrateDeadzoneHandler();
 				}
 			});
-			
+			// add the button
 			add(btnCalibrateDeadzone);
 			
 			final JLabel deadzoneStatusLabel = new JLabel("");
@@ -281,13 +213,13 @@ public class MainWindow extends JFrame {
 			final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 30);
 			
 			deadzoneRadiusSlider.addChangeListener(new ChangeListener() {
-				
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
 					chaise.setDeadzoneRadius(deadzoneRadiusSlider.getValue() / 100.0);
 					panel.repaint();
 				}
 			});
+			// add the slider
 			add(deadzoneRadiusSlider);
 			
 			// set labels on the slider
@@ -311,31 +243,10 @@ public class MainWindow extends JFrame {
 	        saveChaiseBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					int returnVal = saveChaise.showSaveDialog(MainWindow.this);
-			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			        	System.out.println("Saving chaise...");
-			        	// get the filename chosen by the user
-			        	String path = saveChaise.getSelectedFile().getAbsolutePath();
-			        	// take off the file ending that the user may have put
-			        	path = path.split(Pattern.quote("."))[0];
-			        	
-			        	// make sure we're not overriding a file
-			        	File f = new File(path + ".txt");
-			        	int result = 0;
-			        	if(f.exists() && !f.isDirectory()) { 
-			        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
-			        	}
-			        	if (result == 0) {
-			        		try {
-			        			chaise.saveChaise(f);
-			        		} catch (Exception e) {
-			        			e.printStackTrace();
-			        		}
-			        	}
-			        }
+					btnSaveChaiseHandler(saveChaise);
 				}
 			});
-	        
+	        // add the button
 	        add(saveChaiseBtn);
 	        
 	        // file chooser used to load the chaise object
@@ -348,20 +259,7 @@ public class MainWindow extends JFrame {
 	        loadChaiseBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					int returnVal = loadChaise.showOpenDialog(MainWindow.this);
-			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			        	System.out.println("Loading chaise...");
-			        	String path = loadChaise.getSelectedFile().getAbsolutePath();
-			        	File fin = new File(path);
-						try {
-							chaise.loadChaise(fin);
-				    		panel.repaint();
-				    		// reset the radius slider to the value of the chaise we just loaded
-				    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRadius() * 200));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-			        }
+					btnLoadChaiseHandler(loadChaise, deadzoneRadiusSlider);
 				}
 			});
 	        
@@ -455,6 +353,128 @@ public class MainWindow extends JFrame {
 			
 			// finally, return the chaise object (or null if the user cancelled out)
 			return newChaise;
+		}
+		
+		public void btnConnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
+			// turn off the combobox when handling an action
+			comCombobox.setEnabled(false);
+
+			if(comInterface!=null){
+				// stop the interface and start a new connection based on the selected port
+				comInterface.stop();
+				comInterface.setSerial(serialPorts[comCombobox.getSelectedIndex()]);
+			}else{
+				// if there's nothing to stop, just start the connection
+				comInterface=new ComInterface(serialPorts[comCombobox.getSelectedIndex()], panel);
+			}
+
+
+			if(!comInterface.isOpen()){
+				// start the connection
+				comInterface.start();
+				if(comInterface.isOpen()){
+					// set the button text to "connected"
+					btnConnexion.setText("Connect�");
+					// de-connection should be available
+					btnDeconnexion.setEnabled(true);
+					// connection should not be available
+					btnConnexion.setEnabled(false);
+				}else{
+					// the port cannot open
+					btnConnexion.setText("Echec ouverture");
+					comCombobox.setEnabled(true);
+				}
+			}
+		}
+		
+		public void btnDeconnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
+			if(comInterface.stop()){
+				//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
+				//openButton.setIcon(statusOffline);
+				//openButton.setToolTipText("R�ouvrir le port COM et r�activer l'�coute des donn�es");
+
+				// if the connection is stopped, turn stuff on and off appropriately
+				comCombobox.setEnabled(true);
+				btnConnexion.setEnabled(true);
+				btnConnexion.setText("Connexion");
+				btnDeconnexion.setEnabled(false);
+			}else{
+				// there's a problem when closing the connection
+				btnDeconnexion.setText("ECHEC FERMETURE");
+			}
+		}
+	
+		public void btnSendTextToArduinoHandler() {
+			if(comInterface==null){
+				return;
+			}
+			else if(!comInterface.isOpen()){
+				return;
+			}
+			else{
+				try {
+					comInterface.write('A');
+				} catch (IOException e) {
+					// there's a problem when sending the command
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void btnConfigChaiseHandler() {
+			Chaise c = ChaiseConfigDialog();
+			if (c != null) {
+				setChaise(c);
+				panel.repaint();
+			}
+		}
+	
+		public void btnCalibrateDeadzoneHandler() {
+			chaise.setDeadzoneX(chaise.getGposX());
+			chaise.setDeadzoneY(chaise.getGposY());
+			panel.repaint();
+		}
+	
+		public void btnSaveChaiseHandler(JFileChooser saveChaise) {
+			int returnVal = saveChaise.showSaveDialog(MainWindow.this);
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	        	System.out.println("Saving chaise...");
+	        	// get the filename chosen by the user
+	        	String path = saveChaise.getSelectedFile().getAbsolutePath();
+	        	// take off the file ending that the user may have put
+	        	path = path.split(Pattern.quote("."))[0];
+	        	
+	        	// make sure we're not overriding a file
+	        	File f = new File(path + ".txt");
+	        	int result = 0;
+	        	if(f.exists() && !f.isDirectory()) { 
+	        		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
+	        	}
+	        	if (result == 0) {
+	        		try {
+	        			chaise.saveChaise(f);
+	        		} catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	        	}
+	        }
+		}
+	
+		public void btnLoadChaiseHandler(JFileChooser loadChaise, JSlider deadzoneRadiusSlider) {
+			int returnVal = loadChaise.showOpenDialog(MainWindow.this);
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	        	System.out.println("Loading chaise...");
+	        	String path = loadChaise.getSelectedFile().getAbsolutePath();
+	        	File fin = new File(path);
+				try {
+					chaise.loadChaise(fin);
+		    		panel.repaint();
+		    		// reset the radius slider to the value of the chaise we just loaded
+		    		deadzoneRadiusSlider.setValue((int) (chaise.getDeadzoneRadius() * 200));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        }
 		}
 	}
 }
