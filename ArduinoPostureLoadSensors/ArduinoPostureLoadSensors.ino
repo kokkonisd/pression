@@ -202,11 +202,11 @@ void loop(void) {
     int value=Serial.read();
     char valueChar=(char)value;
     if(valueChar=='A'){
-      writeData(zeroSensorValues);
       sensor1.tare();
       sensor2.tare();
       sensor3.tare();
       sensor4.tare();
+      writeData(zeroSensorValues);
     }
     
   }
@@ -218,6 +218,10 @@ void loop(void) {
 
       //If we receive an 'A' character, then send sensorValues of 0 to see on the visualization program the dot moving
       //This shows that we can receive values via Bluetooth or Serial
+      sensor1.tare();
+      sensor2.tare();
+      sensor3.tare();
+      sensor4.tare();
       writeData(zeroSensorValues);
     }
   }
