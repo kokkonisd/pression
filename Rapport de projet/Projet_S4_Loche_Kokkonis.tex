@@ -40,11 +40,43 @@
 
 \chapter*{Introduction}
 
-De nos jours, de nombreuses personnes souffrent du mal de dos dut à une mauvaise posture assise. En effet, il suffit de se rendre dans une salle de cours pleine d'étudiants pour constater que beaucoup d'entre eux sont mal assis. C'est pourquoi, nous avons choisi de travailler sur le projet du développement d'un correcteur de posture assise proposé par M.Beaufils. La proposition de M. Beaufils a été de construire ce dispositif à partir d'un Arduino Uno et des capteurs de forces placés sous les pieds d'une chaise. 
+De nos jours, de nombreuses personnes souffrent du mal de dos dut à une mauvaise posture assise. En effet, il suffit de se rendre dans une salle de cours pleine d'étudiants pour constater que beaucoup d'entre eux sont mal assis. C'est pourquoi, nous avons choisi de travailler sur le projet de développement d'un correcteur de posture assise proposé par M.Beaufils. La proposition de M. Beaufils a été de construire ce dispositif à partir d'un Arduino Uno et des capteurs de forces placés sous les pieds d'une chaise. 
 
-Au cours de la lecture de ce rapport, vous pourrez en apprendre plus sur notre proposition de réalisation de ce projet. En effet, vous découvrirez comment nous avons choisis de répondre à ce problème.
+Le but de ce rapport va donc être de vous aider à comprendre comment on peut exploiter des capteurs de forces et un dispositif de type micro-contrôleur pour déterminer la qualité de l'assise. 
 
-\chapter{Le matériel et Arduino}
+Ce projet s'articulant sur deux grands axes, matériel et logiciel, nous aborderons ces deux thématiques.
+Nous discuterons, dans un premier temps, comment il est possible de déterminer la posture d'une personne. Nous en profiterons pour passer en revue les étapes de réalisation d'un dispositif capable de réaliser cette fonction. Pour illustrer brièvement cette partie, nous parlerons de capteurs de forces, de micro-contrôleur et de circuits électriques permettant d'implémenter cette fonction.
+
+Dans un second temps, nous parlerons de l'aspect logiciel de ce projet venant se greffer sur le dispositif matériel. Pour vous donner un avant-goût du contenu de cette partie, nous aborderons la programmation du micro-contrôleur, et l'élaboration d'une application PC et Android permettant la visualisation des données des capteurs de manière compréhensible pour l'utilisateur.
+Nous discuterons de l'organisation du développement informatique, et vous parlerons des outils que nous avons utilisés.
+
+
+Comme vous l'avez compris, ce rapport vous permettra d'avoir le loisir de découvrir notre projet. Vous comprendrez alors le choix du matériel utilisé, la solution logicielle que nous proposons et les contraintes de réalisations aussi bien logicielles que matérielles auxquelles nous avons dut faire face.
+
+
+\textbf{Transisition:} Sans plus attendre, entrons dans le vif du sujet en commençant par répondre à la question :
+
+\begin{center}
+\textit{Comment déterminer la posture assise d'une personne ? }
+\end{center}
+
+\chapter{Un correcteur de posture assise ? Qu'est ce que c'est ?}
+\label{chap:correcteur posture}
+
+Un correcteur de posture assise, telle que nous l'interprétons dans ce projet, est un dispositif qui permet à l'utilisateur de savoir s'il est bien assis où non. Il y a donc deux questions qui se posent assez naturellement:
+
+\begin{enumerate}
+\item Comment détermine-t-on la posture d'une personne ?
+\item Comment montrer à l'utilisateur la qualité de son assise ?
+\end{enumerate}
+
+Ce chapitre du rapport sera consacré à la réponse que nous proposons à la première question et le chapitre suivant sera consacré à la seconde question.
+
+\section{Déterminer la posture d'une personne}
+
+
+
+\section{Le matériel et Arduino}
 \label{chap:arduino}
 
 Construire un correcteur de posture assise a nécessité de trouver un moyen de récupérer les informations de l'assise de l'utilisateur. Nous avons choisi de suivre la proposition de M.Beaufils qui était d'utiliser des capteurs positionnés sous les pieds d'une chaise. Ces capteurs permettent de déterminer la répartition des masses sur les 4 pieds d'une chaise et donc indirectement la qualité de l'assise de l'utilisateur. Il a été nécessaire d'utiliser un dispositif capable de mesurer les valeurs rapportées par ces capteurs. Notre choix se porte sur la proposition de M.Beaufils qui est d'utiliser un  micro-contrôleur Arduino Uno auquel sont connecté les capteurs de forces. 
@@ -64,7 +96,7 @@ U_{Capteur}= \frac{R_1}{ R + R_1} U_{Arduino}
  
  Avec $U_{Capteur}$ la tension entre la masse et le pin A0 de l'Arduino et $U_{Arduino}=5V$.
  
-Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliqué et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eqn:fsr_resistor}).
+Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliquée et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eqn:fsr_resistor}).
 
 Nous avons pu expérimenter avec des montages composé de 3 potentiomètres et d'un FSR connectés à l'Arduino pour faire des tests et apprendre à manipuler les données recueillies.
 
