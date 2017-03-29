@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -7,18 +8,23 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,6 +73,9 @@ public class MainWindow extends JFrame {
     final JFileChooser chaiseChooser = new JFileChooser(new File(System.getProperty("user.dir")));
     // slider to control the radius of the deadzone
  	final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+ 	
+ 	// boolean to check wether the documentation window is open or closed
+ 	private boolean isDocClosed = true;
 
 	public MainWindow() throws HeadlessException, ClassNotFoundException, IOException {
 		super();
@@ -77,21 +86,24 @@ public class MainWindow extends JFrame {
 		
 		// MENU
 		JMenuBar menuBar;
-		JMenu menu;
+		JMenu menuFile, menuHelp;
 		JMenuItem menuItem;
 		
 		// Create the menu bar
 		menuBar = new JMenuBar();
 		
-		// Build the first menu
-		menu = new JMenu("File");
-		menu.getAccessibleContext().setAccessibleDescription("File menu");
-		menuBar.add(menu);
+		// Build the menus
+		menuFile = new JMenu("File");
+		menuHelp = new JMenu("Help");
+		menuFile.getAccessibleContext().setAccessibleDescription("File menu");
+		menuHelp.getAccessibleContext().setAccessibleDescription("Help menu");
+		menuBar.add(menuFile);
+		menuBar.add(menuHelp);
 		
 		// save chaise menu item
 		menuItem = new JMenuItem("Save chaise");
 		menuItem.getAccessibleContext().setAccessibleDescription("Save chaise");
-		menu.add(menuItem);
+		menuFile.add(menuItem);
 		
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -103,12 +115,31 @@ public class MainWindow extends JFrame {
 		// load chaise menu item
 		menuItem = new JMenuItem("Load chaise");
 		menuItem.getAccessibleContext().setAccessibleDescription("Load chaise");
-		menu.add(menuItem);
+		menuFile.add(menuItem);
 		
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnLoadChaiseHandler(chaiseChooser, deadzoneRadiusSlider);
+			}
+		});
+		
+		// documentation menu item
+		menuItem = new JMenuItem("Documentation");
+		menuItem.getAccessibleContext().setAccessibleDescription("Documentation");
+		menuHelp.add(menuItem);
+		
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (isDocClosed) {
+					try {
+						showDoc();
+						isDocClosed = false;
+					} catch (IOException e1) {
+						System.out.println("ERROR: Could not show documentation.");
+					}
+				}
 			}
 		});
 		
@@ -371,6 +402,12 @@ public class MainWindow extends JFrame {
 		return newChaise;
 	}
 	
+	/**
+	 * Method to handle the connection to the Arduino
+	 * @param comCombobox
+	 * @param btnConnexion
+	 * @param btnDeconnexion
+	 */
 	public void btnConnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
 		// turn off the combobox when handling an action
 		comCombobox.setEnabled(false);
@@ -390,7 +427,7 @@ public class MainWindow extends JFrame {
 			comInterface.start();
 			if(comInterface.isOpen()){
 				// set the button text to "connected"
-				btnConnexion.setText("Connect�");
+				btnConnexion.setText("Connecté");
 				// de-connection should be available
 				btnDeconnexion.setEnabled(true);
 				// connection should not be available
@@ -403,6 +440,12 @@ public class MainWindow extends JFrame {
 		}
 	}
 	
+	/**
+	 * Method to handle the deconnection from the Arduino
+	 * @param comCombobox
+	 * @param btnConnexion
+	 * @param btnDeconnexion
+	 */
 	public void btnDeconnectionHandler(JComboBox comCombobox, JButton btnConnexion, JButton btnDeconnexion) {
 		if(comInterface.stop()){
 			//openButton.setText(comInterface.getSystemPortName()+" Ferm�");
@@ -420,6 +463,10 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	/**
+	 * Method to send a command to the Arduino
+	 * (in this case, it's the "tare" command)
+	 */
 	public void btnSendTextToArduinoHandler() {
 		if(comInterface==null){
 			return;
@@ -437,6 +484,9 @@ public class MainWindow extends JFrame {
 		}
 	}
 	
+	/**
+	 * Method to launch the chaise configuration procedure
+	 */
 	public void btnConfigChaiseHandler() {
 		Chaise c = ChaiseConfigDialog();
 		if (c != null) {
@@ -445,12 +495,19 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	/**
+	 * Method to calibrate the position of the deadzone
+	 */
 	public void btnCalibrateDeadzoneHandler() {
 		chaise.setDeadzoneX(chaise.getGposX());
 		chaise.setDeadzoneY(chaise.getGposY());
 		panel.repaint();
 	}
 
+	/**
+	 * Method to handle chaise saving
+	 * @param saveChaise
+	 */
 	public void btnSaveChaiseHandler(JFileChooser saveChaise) {
 		int returnVal = saveChaise.showSaveDialog(MainWindow.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -476,6 +533,11 @@ public class MainWindow extends JFrame {
         }
 	}
 
+	/**
+	 * Method to handle chaise loading
+	 * @param loadChaise
+	 * @param deadzoneRadiusSlider
+	 */
 	public void btnLoadChaiseHandler(JFileChooser loadChaise, JSlider deadzoneRadiusSlider) {
 		int returnVal = loadChaise.showOpenDialog(MainWindow.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -491,5 +553,35 @@ public class MainWindow extends JFrame {
 				e.printStackTrace();
 			}
         }
+	}
+
+	/**
+	 * Method to show the documentation
+	 * @throws IOException
+	 */
+	private void showDoc() throws IOException {
+		// get the path to the documentation html
+		String path = System.getProperty("user.dir");
+		Path pathToUrl = Paths.get(path + "/doc_html/doc_fr.html");
+		
+		// create a new pane with the url of the documentation
+	    JEditorPane editorPane = new JEditorPane(pathToUrl.toUri().toURL().toString());
+	    editorPane.setEditable(false);
+
+	    // create a new JFrame to host the html
+	    JFrame frame = new JFrame();
+	    frame.getContentPane().add(editorPane, BorderLayout.CENTER);
+	    frame.setSize(300, 300);
+	    frame.setVisible(true);
+	    
+	    // add a handler so that isDocClosed is set to true when the user quits the doc
+	    frame.addWindowListener(new WindowAdapter()
+	    {
+	        public void windowClosing(WindowEvent e)
+	        {
+	            // doc closes
+	        	isDocClosed = true;
+	        }
+	    });
 	}
 }
