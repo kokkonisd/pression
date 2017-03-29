@@ -73,8 +73,49 @@ Un correcteur de posture assise, telle que nous l'interprétons dans ce projet, 
 Ce chapitre du rapport sera consacré à la réponse que nous proposons à la première question et le chapitre suivant sera consacré à la seconde question.
 
 \section{Déterminer la posture d'une personne}
+\label{chap:posture_determination}
+
+Pour déterminer la position assise d'une personne, nous avons proposé de récupérer les informations des forces appliqués aux niveau des pieds de la chaise. 
+
+L'idée ici est d'utiliser la projection du centre de masse sur le sol pour déterminer la qualité de l'assise. 
+
+\begin{center}
+\textit{Comment ça marche concrètement ? Pourquoi mesure-t-on la force au niveau des pieds de la chaise ?} 
+\end{center}
+
+Lorsque l'on est assis sur une chaise, on exerce une force (le poids) qui est transférée au sol par les pieds de celle-ci. En effet, la force totale appliquée sur la chaise est répartie intégralement sur les pieds. Chaque pieds applique au niveau du sol une fraction de la force totale. La fraction de la force vue au niveau des pieds change en fonction de l'assise. 
+
+Ces fractions changent car le point d'application de la force totale sur le plateau de la chaise change en fonction de l'assise. En fait, il est lié à la position du centre de masse projeté sur la chaise. 
+
+En connaissant la position de chaque pieds par rapport à un point et en connaissant la valeur de la force appliquée à chaque pieds, on peut trouver la position du barycentre des forces (ie. la position de la force totale et donc celle du centre de masse). 
+
+Voici les raisons qui ont motivés l'utilisation des forces appliqués au niveau du sol pour déterminer la qualité de l'assise.
+
+Ici on considères le poids (c'est à dire les forces liés à la masse). Le barycentre des forces obtenus correspond donc au centre de masse. 
+Justement ici, la position du centre de masse est caractéristique de la position.
+
+Par la suite nos calculs se feront en 2 dimensions dans le plan du sol. En effet, on assimile les pieds de la chaise à des points sur ce plan. On place un point $O$ origine du repère dans le plan. 
+
+Pour chaque pieds de la chaise on définit les grandeurs suivantes:
+
+\begin{enumerate}
+\item un numéro $i$
+\item un point du plan $A_i=(x,y)$ avec $x,y$ ses coordonnées
+\item une valeur de force notée $m_i$ (par analogie à la masse)
+\item un vecteur position $\vec{OA_i}$ représentant la position du point par rapport au point $O$
+\end{enumerate}
+
+Alors on peut trouver $\vec{OG}$, vecteur position du barycentre des forces, par la formule suivante:
 
 
+$$\vec{OG} = \frac{1}{M} \sum \vec{OA_i} \cdot m_i$$
+
+où $O$ est l'origine (point de référence), $G$ est le barycentre, $M=\sum_i m_i$ est la somme des masses associés aux pieds, $i$ est le nombre des pieds et $A_i$ et $m_i$ sont respectivement la position et la masse du pied $i$.
+
+
+Parler de la physique, formules math et logique
+
+Transition: On sait qu'on a besoin de recuperer les forces sous les pieds de la chaise. Donc on va voir comment le faire avec un arduino.
 
 \section{Le matériel et Arduino}
 \label{chap:arduino}
