@@ -1,5 +1,6 @@
 \documentclass{polytech/polytech}
 
+
 %-----------Configuration du rapport-----------------
 
 \schooldepartment{peip}
@@ -83,20 +84,39 @@ L'idée ici est d'utiliser la projection du centre de masse sur le sol pour dét
 \textit{Comment ça marche concrètement ? Pourquoi mesure-t-on la force au niveau des pieds de la chaise ?} 
 \end{center}
 
-Lorsque l'on est assis sur une chaise, on exerce une force (le poids) qui est transférée au sol par les pieds de celle-ci. En effet, la force totale appliquée sur la chaise est répartie intégralement sur les pieds. Chaque pieds applique au niveau du sol une fraction de la force totale. La fraction de la force vue au niveau des pieds change en fonction de l'assise. 
+Lorsque l'on est assis sur une chaise, on exerce une force (le poids) qui est transférée au sol par les pieds de celle-ci. En effet, la force totale appliquée sur la chaise est répartie intégralement sur les pieds.
+% Chaque pieds applique au niveau du sol une fraction de la force totale.
+La répartition des forces n'est pas homogène et dépend de l'assise. C'est essentiellement ce principe que nous utilisons pour déterminer la qualité de l'assise d'une personne. C'est cette hétérogénéité dans la répartition des masses que nous allons quantifier.
 
-Ces fractions changent car le point d'application de la force totale sur le plateau de la chaise change en fonction de l'assise. En fait, il est lié à la position du centre de masse projeté sur la chaise. 
+La figure \ref{fig:illustr_chaise_forces} illustre la répartition des forces pour différentes assises.
 
-En connaissant la position de chaque pieds par rapport à un point et en connaissant la valeur de la force appliquée à chaque pieds, on peut trouver la position du barycentre des forces (ie. la position de la force totale et donc celle du centre de masse). 
+%La fraction de la force vue au niveau des pieds change donc en fonction de l'assise. 
 
-Voici les raisons qui ont motivés l'utilisation des forces appliqués au niveau du sol pour déterminer la qualité de l'assise.
+%Ces fractions changent car la position du point d'application de la force totale sur le plateau de la chaise change en fonction de l'assise. En fait, il est lié à la position du centre de masse projeté sur la chaise. 
 
-Ici on considères le poids (c'est à dire les forces liés à la masse). Le barycentre des forces obtenus correspond donc au centre de masse. 
+%Vous pouvez voir sur la figure \ref{fig:illustr_chaise_forces} une illustration de la proposition faite précédemment.
+
+\begin{figure}[htbp]
+ICI PLACER ILLUSTRATION DES FORCES APPLIQU\'ES A LA CHAISE
+\caption{Illustration de la projection de la résultante des forces appliqués à la chaise vue au niveau des pieds de celle-ci}
+\label{fig:illustr_chaise_forces}
+\end{figure}
+
+En pratique, on ne connais pas l'emplacement du point d'application de la force sur le plateau de la chaise. Or c'est déterminer sa position qui permet de définir la qualité de l'assise. Une bonne assise donnera une répartition des masses donnée et donc une position de la force totale donnée.
+
+
+%On ne connais donc pas l'emplacement de la force totale mais on cherche à la déterminer à partir des valeurs des forces mesurées au niveau des pieds.
+Cependant, connaissant la position de chaque pieds, et connaissant la valeur de la force appliquée à chaque pied, on peut trouver la position du barycentre des forces (c'est à dire, la position de la force totale et donc celle du centre de masse). 
+
+Nous allons donc voir comment nous avons réalisé les calculs permettant de résoudre ce problème.
+
+%Voici les raisons qui ont motivés l'utilisation des forces appliqués au niveau du sol pour déterminer la qualité de l'assise.
+Ici on considère le poids (c'est à dire les forces liés à la masse). Le barycentre des forces obtenus correspond donc au centre de masse. 
 Justement ici, la position du centre de masse est caractéristique de la position.
 
-Par la suite nos calculs se feront en 2 dimensions dans le plan du sol. En effet, on assimile les pieds de la chaise à des points sur ce plan. On place un point $O$ origine du repère dans le plan. 
+Par la suite, nos calculs se feront en 2 dimensions dans le plan du sol. En effet, on assimile les pieds de la chaise à des points de plan. On place un point $O$ origine du repère dans le plan. 
 
-Pour chaque pieds de la chaise on définit les grandeurs suivantes:
+Pour chaque pieds de la chaise on associe les grandeurs suivantes:
 
 \begin{enumerate}
 \item un numéro $i$
@@ -105,17 +125,41 @@ Pour chaque pieds de la chaise on définit les grandeurs suivantes:
 \item un vecteur position $\vec{OA_i}$ représentant la position du point par rapport au point $O$
 \end{enumerate}
 
-Alors on peut trouver $\vec{OG}$, vecteur position du barycentre des forces, par la formule suivante:
+L'idée ici est de représenter la chaise dans le plan du sol. 
 
 
-$$\vec{OG} = \frac{1}{M} \sum \vec{OA_i} \cdot m_i$$
-
-où $O$ est l'origine (point de référence), $G$ est le barycentre, $M=\sum_i m_i$ est la somme des masses associés aux pieds, $i$ est le nombre des pieds et $A_i$ et $m_i$ sont respectivement la position et la masse du pied $i$.
+\begin{figure}[htbp]
 
 
-Parler de la physique, formules math et logique
 
-Transition: On sait qu'on a besoin de recuperer les forces sous les pieds de la chaise. Donc on va voir comment le faire avec un arduino.
+\caption{Représentation de la chaise dans le plan du sol}
+\label{fig:schem_plan_sol_math}
+\end{figure}
+
+Alors, on peut trouver $\vec{OG}$, vecteur position du barycentre des forces, par la formule \eqref{eq:centre_gravite}  suivante:
+
+\begin{equation}
+\label{eq:centre_gravite_vectorielle}
+\vec{OG} = \frac{1}{M} \sum_i m_i  \cdot \vec{OA_i} =   \frac{1}{\sum_i m_i} \sum_i m_i  \cdot \vec{OA_i} 
+\end{equation}
+
+Avec $G$ qui est le point du barycentre, $M=\sum_i m_i$ est la somme des forces associés aux pieds.
+
+L'équation \eqref{eq:centre_gravite_vectorielle} est vectorielle c'est à dire qu'elle est valide pour les coordonnées $(x,y)$ point $G$.
+
+C'est à dire qu'on a les relations \eqref{eq:centre_gravite_cartesienne}.
+
+\begin{equation}
+\label{eq:centre_gravite_cartesienne}
+x_G = \frac{1}{M} \sum_i m_i  \cdot x_{A_i} \Leftrightarrow  y_G = \frac{1}{M} \sum_i m_i  \cdot y_{A_i}
+\end{equation}
+
+On peut donc retrouver la position du centre de masse d'une personne assise sur une chaise rien qu'en connaissant la valeur des forces appliqués à chaque pieds de celle-ci.
+
+
+
+
+\textbf{Transition:} On sait qu'on a besoin de recuperer les forces sous les pieds de la chaise. Donc on va voir comment le faire avec un arduino.
 
 \section{Le matériel et Arduino}
 \label{chap:arduino}
@@ -131,13 +175,13 @@ Un micro-contrôleur comme un Arduino possèdes des entrées sur lesquels il peu
 Avec un capteur qui se comporte comme une résistance variable, on peut confectionner un montage diviseur de tension permettant d'obtenir une tension mesurable par l'Arduino. Ce montage revient à connecter une résistance de valeur connue (on a choisit R1=10k$\Omega$) en série avec la résistance R variable du capteur et mesurer la tension aux bornes de la résistance connue.  En appliquant une tension de 5V fournie par l'Arduino au diviseur de tension, on a donc la relation suivante:
 
 \begin{equation}
-\label{eqn:fsr_resistor}
+\label{eq:fsr_resistor}
 U_{Capteur}= \frac{R_1}{ R + R_1} U_{Arduino} 
 \end{equation}
  
  Avec $U_{Capteur}$ la tension entre la masse et le pin A0 de l'Arduino et $U_{Arduino}=5V$.
  
-Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliquée et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eqn:fsr_resistor}).
+Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliquée et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eq:fsr_resistor}).
 
 Nous avons pu expérimenter avec des montages composé de 3 potentiomètres et d'un FSR connectés à l'Arduino pour faire des tests et apprendre à manipuler les données recueillies.
 
