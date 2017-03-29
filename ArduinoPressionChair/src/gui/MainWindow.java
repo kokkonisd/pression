@@ -1,21 +1,14 @@
 package gui;
 
-import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,7 +17,6 @@ import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,10 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -73,9 +63,6 @@ public class MainWindow extends JFrame {
     final JFileChooser chaiseChooser = new JFileChooser(new File(System.getProperty("user.dir")));
     // slider to control the radius of the deadzone
  	final JSlider deadzoneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
- 	
- 	// boolean to check wether the documentation window is open or closed
- 	private boolean isDocClosed = true;
 
 	public MainWindow() throws HeadlessException, ClassNotFoundException, IOException {
 		super();
@@ -124,21 +111,34 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
-		// documentation menu item
-		menuItem = new JMenuItem("Documentation");
-		menuItem.getAccessibleContext().setAccessibleDescription("Documentation");
+		// documentation (en) menu item
+		menuItem = new JMenuItem("Documentation (français)");
+		menuItem.getAccessibleContext().setAccessibleDescription("Documentation FR");
+		menuHelp.add(menuItem);
+
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					showDoc("fr");
+				} catch (IOException e1) {
+					System.out.println("ERROR: Could not show documentation.");
+				}
+			}
+		});
+		
+		// documentation (en) menu item
+		menuItem = new JMenuItem("Documentation (english)");
+		menuItem.getAccessibleContext().setAccessibleDescription("Documentation EN");
 		menuHelp.add(menuItem);
 		
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isDocClosed) {
-					try {
-						showDoc();
-						isDocClosed = false;
-					} catch (IOException e1) {
-						System.out.println("ERROR: Could not show documentation.");
-					}
+				try {
+					showDoc("en");
+				} catch (IOException e1) {
+					System.out.println("ERROR: Could not show documentation.");
 				}
 			}
 		});
@@ -559,29 +559,13 @@ public class MainWindow extends JFrame {
 	 * Method to show the documentation
 	 * @throws IOException
 	 */
-	private void showDoc() throws IOException {
-		// get the path to the documentation html
+	private void showDoc(String lang) throws IOException {
+		// get the path to the documentation pdf
 		String path = System.getProperty("user.dir");
-		Path pathToUrl = Paths.get(path + "/doc_html/doc_fr.html");
+		Path pathToUrl = Paths.get(path + "/doc_pdf/doc_" + lang + ".pdf");
 		
-		// create a new pane with the url of the documentation
-	    JEditorPane editorPane = new JEditorPane(pathToUrl.toUri().toURL().toString());
-	    editorPane.setEditable(false);
-
-	    // create a new JFrame to host the html
-	    JFrame frame = new JFrame();
-	    frame.getContentPane().add(editorPane, BorderLayout.CENTER);
-	    frame.setSize(300, 300);
-	    frame.setVisible(true);
-	    
-	    // add a handler so that isDocClosed is set to true when the user quits the doc
-	    frame.addWindowListener(new WindowAdapter()
-	    {
-	        public void windowClosing(WindowEvent e)
-	        {
-	            // doc closes
-	        	isDocClosed = true;
-	        }
-	    });
+		// open the pdf
+		File doc = new File(pathToUrl.toString());
+		Desktop.getDesktop().open(doc);
 	}
 }
