@@ -48,6 +48,9 @@ int sensorReading2;
 int sensorReading3;
 int sensorReading4;
 
+//
+int sensorOffset=10;
+
 
 // --constants--
 // constants to set the default min and max values of the sensors
@@ -89,15 +92,17 @@ void getData(int *data) {
     sensorReading4=sensor4.get_units();
 
     // map the values to the set range
+    /*
     sensorReading1 = map(sensorReading1, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading2 = map(sensorReading2, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading3 = map(sensorReading3, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
     sensorReading4 = map(sensorReading4, MIN_DEFAULT, MAX_DEFAULT, MIN_SET, MAX_SET);
+    */
 
-    data[0] = abs(sensorReading1);
-    data[1] = abs(sensorReading2);
-    data[2] = abs(sensorReading3);
-    data[3] = abs(sensorReading4);
+    data[0] = abs(sensorReading1)+sensorOffset;
+    data[1] = abs(sensorReading2)+sensorOffset;
+    data[2] = abs(sensorReading3)+sensorOffset;
+    data[3] = abs(sensorReading4)+sensorOffset;
 }
 
 // function to write data to Serial
@@ -134,7 +139,7 @@ void setup(void) {
   Serial.print(sensor2.read());      // print a raw reading from the ADC
   Serial.print(";");
   Serial.print(sensor3.read());      // print a raw reading from the ADC
-  Serial.println(";");
+  Serial.print(";");
   Serial.print(sensor4.read());      // print a raw reading from the ADC
   Serial.println(";");
 
@@ -143,7 +148,7 @@ void setup(void) {
   Serial.print(";");
   Serial.print(sensor2.read_average(20));      // print average raw reading from the ADC
   Serial.print(";");
-  Serial.println(sensor3.read_average(20));      // print a raw reading from the ADC
+  Serial.print(sensor3.read_average(20));      // print a raw reading from the ADC
   Serial.print(";");
   Serial.print(sensor4.read());      // print a raw reading from the ADC
   Serial.println(";");
@@ -154,7 +159,7 @@ void setup(void) {
   Serial.print(sensor2.get_value(5));
   Serial.print(";");
   Serial.print(sensor3.get_value(5));
-  Serial.println(";");
+  Serial.print(";");
   Serial.print(sensor4.get_value(5));
   Serial.println(";");
 
@@ -164,7 +169,7 @@ void setup(void) {
   Serial.print(sensor2.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
   Serial.print(";");
   Serial.print(sensor3.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
-  Serial.println(";");
+  Serial.print(";");
   Serial.print(sensor4.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
   Serial.println(";");
             // by the SCALE parameter (not set yet)
