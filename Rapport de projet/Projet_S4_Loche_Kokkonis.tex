@@ -1,5 +1,5 @@
 \documentclass{polytech/polytech}
-
+\usepackage{tikz}
 
 %-----------Configuration du rapport-----------------
 
@@ -88,7 +88,7 @@ Lorsque l'on est assis sur une chaise, on exerce une force (le poids) qui est tr
 % Chaque pieds applique au niveau du sol une fraction de la force totale.
 La répartition des forces n'est pas homogène et dépend de l'assise. C'est essentiellement ce principe que nous utilisons pour déterminer la qualité de l'assise d'une personne. C'est cette hétérogénéité dans la répartition des masses que nous allons quantifier.
 
-La figure \ref{fig:illustr_chaise_forces} illustre la répartition des forces pour différentes assises.
+La figure \ref{fig:illustr_chaise_forces}  illustre la répartition des forces pour différentes assises.
 
 %La fraction de la force vue au niveau des pieds change donc en fonction de l'assise. 
 
@@ -129,9 +129,25 @@ L'idée ici est de représenter la chaise dans le plan du sol.
 
 
 \begin{figure}[htbp]
+\begin{center}
+\begin{tikzpicture}
+\coordinate (O) at (0,0);
+\coordinate (A1) at (0.5,0.5);
+\coordinate (A2) at (0.5,2);
+\coordinate (A3) at (2,0.5);
+\coordinate (A4) at (2,2);
 
-
-
+\draw[->] (-1,0) -- (3,0);
+\draw (3,0) node[right] {$x$};
+\draw [->] (0,-1) -- (0,3);
+\draw (0,3) node[above] {$y$};
+\draw (O) node[below left] {$O$} node{$\bullet$};
+\draw (A1) node[below right] {$A_1$} node{$\bullet$};
+\draw (A2) node[above right] {$A_2$} node{$\bullet$};
+\draw (A3) node[below right] {$A_3$} node{$\bullet$};
+\draw (A4) node[above right] {$A_4$} node{$\bullet$};
+\end{tikzpicture}
+\end{center}
 \caption{Représentation de la chaise dans le plan du sol}
 \label{fig:schem_plan_sol_math}
 \end{figure}

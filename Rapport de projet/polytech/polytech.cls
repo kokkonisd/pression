@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\def\polytechfileversion{2.1.13}
-\def\polytechfiledate{2016/12/14}
+\def\polytechfileversion{2.2.4}
+\def\polytechfiledate{2017/03/28}
 \ProvidesClass{polytech/polytech}[\polytechfiledate\space Polytech document class by Sebastien Aupetit <aupetit@univ-tours.fr>, V\polytechfileversion]
 
 %###
@@ -334,8 +334,8 @@ $cleanup_includes_generated = 1;
 % replace \chapter definition to automatically register unnumbered chapter in toc and set heading marks
 % need to be before hyperref
 \RenewDocumentCommand{\chapter}{som}{%  
-  \csuse{FloatBarrier}% flush floats before a new chapter
   \booltrue{polytech@allownewpagesection}%
+  \csuse{FloatBarrier}% flush floats before a new chapter
   \boolfalse{polytech@ref@section}%
   \booltrue{polytech@ref@inchapter}%
   \polytech@chapter%
@@ -369,9 +369,9 @@ $cleanup_includes_generated = 1;
   \let\polytech@newpage@oldpart\part
   
   \RenewDocumentCommand{\part}{som}{%
+    \booltrue{polytech@allownewpagesection}%
     \csuse{FloatBarrier}% flush floats before a new part
     \boolfalse{polytech@ref@section}%
-    \booltrue{polytech@allownewpagesection}%
     \IfBooleanTF{#1}{% starred
       \polytech@newpage@oldpart*{#3}%
     }{%
