@@ -212,7 +212,7 @@ L'idée, pour savoir si une personne est mal assise, est d'enregistrer la positi
 \section{Le matériel et Arduino}
 \label{chap:arduino}
 
-Construire un correcteur de posture assise a nécessité de trouver un moyen de récupérer les informations de l'assise de l'utilisateur. Nous avons choisi de suivre la proposition de M.Beaufils qui était d'utiliser des capteurs positionnés sous les pieds d'une chaise. Ces capteurs permettent de déterminer la répartition des masses sur les 4 pieds d'une chaise et donc indirectement la qualité de l'assise de l'utilisateur. Il a été nécessaire d'utiliser un dispositif capable de mesurer les valeurs rapportées par ces capteurs. Notre choix se porte sur la proposition de M.Beaufils qui est d'utiliser un  micro-contrôleur Arduino Uno auquel sont connecté les capteurs de forces. 
+Construire un correcteur de posture assise a nécessité de trouver un moyen de récupérer les informations de l'assise de l'utilisateur. On a vu dans la section \ref{chap:posture_determination} pourquoi cela est utile. Nous avons choisi de suivre la proposition de M.Beaufils qui était d'utiliser des capteurs positionnés sous les pieds d'une chaise. Il a été nécessaire d'utiliser un dispositif capable de mesurer les valeurs rapportées par ces capteurs. Notre choix se porte sur la proposition de M.Beaufils qui est d'utiliser un  micro-contrôleur Arduino Uno auquel sont connecté les capteurs de forces. 
 
 Les premières séances de travail ont été consacré à des recherches sur les capteurs de forces (leurs caractéristiques et comment il fonctionnent). 
 
@@ -229,13 +229,13 @@ U_{Capteur}= \frac{R_1}{ R + R_1} U_{Arduino}
  
  Avec $U_{Capteur}$ la tension entre la masse et le pin A0 de l'Arduino et $U_{Arduino}=5V$.
  
-Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliquée et 5V lorsque le capteur est écrasé au maximum (d'après la formule \eqref{eq:fsr_resistor}).
+Au démarrage du projet nous n'avions aucune connaissance concernant les capteurs et l'Arduino. Nous avons donc expérimenté avec un capteur de force de type FSR et des potentiomètres pour simuler des capteurs dont la résistance varie selon la charge. Nous nous sommes rendu compte que le FSR est un capteur qui a une résistance presque infinie au repos et qui tend vers 0 lorsque le capteur est écrasé au maximum par une force. Nous avons alors constaté que l'Arduino peut lire des valeurs de tension entre 0V lorsqu'aucune force n'est appliquée et 5V lorsque le capteur est écrasé au maximum (ce qui vérifie l'équation \eqref{eq:fsr_resistor}).
 
 Nous avons pu expérimenter avec des montages composé de 3 potentiomètres et d'un FSR connectés à l'Arduino pour faire des tests et apprendre à manipuler les données recueillies.
 
-Nous nous sommes vite rendu compte qu'utiliser des FSR pour mesurer la répartition des masses sous les pieds d'une chaise ne serait pas adapté. En effet, le capteur sature au delà d'une pression de 2kg et nous arrivions à faire saturer le capteur avec nos doigts.
+Nous nous sommes vite rendu compte qu'utiliser des FSR pour mesurer la répartition des masses sous les pieds d'une chaise ne serait pas adapté. En effet, le capteur sature au delà d'une pression de 2kg. Il est tout à fait possible de faire saturer le capteur avec nos doigts.
 
-Dans un premier temps cette solution nous a convenus pendant que nous développions le microgiciel de l'Arduino et les application PC et Android que nous vous présenterons par la suite dans le chapitre \ref{chap:Application}. La figure \ref{fig:arduino_v0} présente le montage que nous avons utilisé jusqu'à la séance 6 de travail.
+Dans un premier temps cette solution nous a convenus pendant que nous développions le microgiciel de l'Arduino et les applications PC et Android que nous vous présenterons par la suite dans le chapitre \ref{chap:Application}. La figure \ref{fig:arduino_v0} présente le montage que nous avons utilisé jusqu'à la séance 6 de travail.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -245,8 +245,38 @@ Dans un premier temps cette solution nous a convenus pendant que nous développi
 \label{fig:arduino_v0}
 \end{figure}
 
+En parallèle du développement logiciel, nous avons recherché une alternative aux FSR pour connaître la force sous les pieds de la chaise. 
 
+Nous avons appris qu'il existe des capteurs appelés \textit{cellule de charge} permettant de mesurer très précisément une force. En effet, les cellules de charges sont des capteurs utilisés dans les pèses-personnes électroniques et des balances électroniques. Certains sont tellement précis qu'ils sont utilisés en laboratoire pour mesurer les quantités de produits chimique avec une précision de l'ordre du milligramme.
 
+Nous allons vous expliquer comment ils fonctionnent et comment nous les avons utilisé pour se projet.
+
+Le fonctionnement d'une cellule de charge se base sur la capacité qu'ont les conducteurs électriques à voir leur résistance changer lorsqu'ils sont déformés. Les conducteurs réalisant cette fonction s'appellent des jauges de contrainte (ou \textit{strain gauge} en anglais). Le principe est d'utiliser un matériau déformable et de fixer une ou plusieurs jauge de contrainte sur celui-ci au niveau des zones de déformation. Ainsi les jauges de contraintes vont suivre la déformation du matériau et changer de résistance. La figure \ref{fig:load_cell_sparkfun} illustre ces propos en montrant comment on la déformation d'un morceau de métal déforme aussi les jauges de contraintes (petit morceau de fil conducteur en zig-zag).
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1]{image/load_cell.jpg}
+\end{center}
+\caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE: SPARKFUN.COM}
+\label{fig:load_cell_sparkfun}
+\end{figure}
+
+Au niveau des zones de compression la résistance est plus faible et au niveau des zone de tensions (ou d'étirement) elle est plus grande.
+
+En effet, on a la formule de la résistance $R$ avec $\rho$ la résistivité du matériau conducteur, $l$ sa longueur et $S$ sa section: 
+
+\begin{equation}
+R= \rho \frac{l}{S}
+\end{equation}
+
+Si la jauge de contrainte est compressée, sa longueur $l$ diminue et sa section $S$ augmente. On a donc $R$ qui diminue.
+
+Au contraire, si la jauge de contrainte est étirée, la longueur $l$ augmente et sa section $S$ diminue. On peut imagine un élastique qu'on étire, il s'amincit et s'allonge lorsqu'on l'étire.  On a donc $R$ qui augmente.
+
+Seulement, vous l'aurez compris, les allongements et modifications de la section des jauges de contraintes sont très faibles si matériau sur lequel est construit la cellule de charge se déforme peu. Ces variations se produisent à une échelle du nanomètre et les variations de résistances résultantes sont donc de l'ordre du $m\Omega$ ou du $\mu\Omega$. Ce sont de ces capteurs que nous parlions au début de cette section du rapport.
+
+Avec un Arduino, on ne peut pas mesurer les variations de résistances avec un simple montage diviseur de tension. Il est alors nécessaire d'introduire un montage appelé le pont de WheatStone permettant de transformer la mesure de la résistance en une mesure de tension. Cependant, malgré le pouvoir amplificateur
+du pont WheatStone, les variations de tensions sont trop faibles (de l'ordre du $mV$) pour être mesurés directement par l'Arduino. Il a donc été nécessaire en plus du pont de WheatStone d'utiliser un amplificateur pour cellule de charge.
 \chapter{Application}
 \label{chap:Application}
 
