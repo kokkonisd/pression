@@ -85,32 +85,26 @@ L'idée ici est d'utiliser la projection du centre de masse sur le sol pour dét
 \end{center}
 
 Lorsque l'on est assis sur une chaise, on exerce une force (le poids) qui est transférée au sol par les pieds de celle-ci. En effet, la force totale appliquée sur la chaise est répartie intégralement sur les pieds.
-% Chaque pieds applique au niveau du sol une fraction de la force totale.
+
 La répartition des forces n'est pas homogène et dépend de l'assise. C'est essentiellement ce principe que nous utilisons pour déterminer la qualité de l'assise d'une personne. C'est cette hétérogénéité dans la répartition des masses que nous allons quantifier.
 
 La figure \ref{fig:illustr_chaise_forces}  illustre la répartition des forces pour différentes assises.
 
-%La fraction de la force vue au niveau des pieds change donc en fonction de l'assise. 
-
-%Ces fractions changent car la position du point d'application de la force totale sur le plateau de la chaise change en fonction de l'assise. En fait, il est lié à la position du centre de masse projeté sur la chaise. 
-
-%Vous pouvez voir sur la figure \ref{fig:illustr_chaise_forces} une illustration de la proposition faite précédemment.
-
 \begin{figure}[htbp]
-ICI PLACER ILLUSTRATION DES FORCES APPLIQU\'ES A LA CHAISE
-\caption{Illustration de la projection de la résultante des forces appliqués à la chaise vue au niveau des pieds de celle-ci}
+\begin{center}
+\includegraphics[scale=1]{image/Chaise_forces_homo.jpg}
+\includegraphics[scale=1]{image/Chaise_forces_hetero.jpg}
+\end{center}
+\caption{Illustration de la projection de la résultante des forces appliqués à la chaise vue au niveau des pieds de celle-ci pour deux position assises différentes}
 \label{fig:illustr_chaise_forces}
 \end{figure}
 
-En pratique, on ne connais pas l'emplacement du point d'application de la force sur le plateau de la chaise. Or c'est déterminer sa position qui permet de définir la qualité de l'assise. Une bonne assise donnera une répartition des masses donnée et donc une position de la force totale donnée.
+En pratique, on ne connais pas l'emplacement du point d'application de la force sur le plateau de la chaise. Or c'est déterminer sa position qui permet de définir la qualité de l'assise. Une bonne assise donnera une répartition des masses donnée et donc une position de la force totale donnée. Par exemple dans la figure \ref{fig:illustr_chaise_forces}, l'image de gauche correspond à quelqu'un qui serait assis bien droit au centre de la chaise tandis que l'image de droite correspond à quelqu'un assis (ou penché) du coté gauche de la chaise.
 
-
-%On ne connais donc pas l'emplacement de la force totale mais on cherche à la déterminer à partir des valeurs des forces mesurées au niveau des pieds.
 Cependant, connaissant la position de chaque pieds, et connaissant la valeur de la force appliquée à chaque pied, on peut trouver la position du barycentre des forces (c'est à dire, la position de la force totale et donc celle du centre de masse). 
 
 Nous allons voir comment résoudre ce problème. Nous rappelons que le but est de déterminer la position du centre de masse, caractéristique de la posture.
 
-%Voici les raisons qui ont motivés l'utilisation des forces appliqués au niveau du sol pour déterminer la qualité de l'assise.
 Ici on considère le poids (c'est à dire les forces liés à la masse). Le barycentre des forces obtenus correspond donc au centre de masse. 
 Par la suite, nos calculs se feront en 2 dimensions dans le plan du sol. En effet, on assimile les pieds de la chaise à des points du plan. On place un point $O$ origine du repère dans le plan. 
 
@@ -195,13 +189,14 @@ On peut donc retrouver la position du centre de masse d'une personne assise sur 
 \draw (A2) node[below] {$A_2,m_2$} node{$\bullet$};
 \draw (A3) node[above] {$A_3,m_3$} node{$\bullet$};
 \draw (A4) node[above] {$A_4,m_4$} node{$\bullet$};
-\draw (G) node[above right] {$G,M$} node{$\bullet$};
 
 \draw [-] [dashed] (G) -- (xG);
 \draw [-] [dashed] (G) -- (yG);
 
 \draw (xG) node[below] {$x_G$} node{$.$};
 \draw (yG) node[left] {$y_G$} node{$.$};
+
+\draw (G) node[above right] {$G,M$} node[blue]{$\bullet$};
 \end{tikzpicture}
 \end{center}
 \caption{Exemple de la position du centre de masse $G$ avec les valeurs de forces $m_i$ réparties de façon hétérogène sur les points $A_i$ }
@@ -209,6 +204,8 @@ On peut donc retrouver la position du centre de masse d'une personne assise sur 
 \end{figure}
 
 Nous avons donc évoqué toutes les raisons qui ont motivé le choix de mesurer des forces au niveau des pieds d'une chaise pour déterminer la position d'une personne.
+
+L'idée, pour savoir si une personne est mal assise, est d'enregistrer la position du centre de masse lorsque la personne est bien assise. On peut ensuite comparer la position à un instant $t$ quelconque pour savoir si la personne est bien assise.
 
 \textbf{Transition:} On sait maintenant que l'essentiel du projet consiste à acquérir la valeur des forces sous les pieds de la chaise. La partie suivante de ce rapport sera donc consacré à la réalisation de cette acquisition à l'aide de capteurs de forces et d'un Arduino.
 
