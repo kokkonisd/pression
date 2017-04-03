@@ -10,3 +10,6 @@ Rapport\ de\ projet/*.run.xml
 Rapport\ de\ projet/*.synctex.gz
 Rapport\ de\ projet/*.tex.bak
 Rapport\ de\ projet/*.toc
+Rapport\ de\ projet/*.lof
+Rapport\ de\ projet/*.dvi
+Rapport\ de\ projet/*.out.ps
