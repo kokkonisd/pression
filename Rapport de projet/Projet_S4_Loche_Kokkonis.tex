@@ -275,9 +275,40 @@ Au contraire, si la jauge de contrainte est étirée, la longueur $l$ augmente e
 
 Seulement, vous l'aurez compris, les allongements et modifications de la section des jauges de contraintes sont très faibles si matériau sur lequel est construit la cellule de charge se déforme peu. Ces variations se produisent à une échelle du nanomètre et les variations de résistances résultantes sont donc de l'ordre du $m\Omega$ ou du $\mu\Omega$. Ce sont de ces capteurs que nous parlions au début de cette section du rapport.
 
-Avec un Arduino, on ne peut pas mesurer les variations de résistances avec un simple montage diviseur de tension. Il est alors nécessaire d'introduire un montage appelé le pont de WheatStone permettant de transformer la mesure de la résistance en une mesure de tension. Cependant, malgré le pouvoir amplificateur
+Avec un Arduino, on ne peut pas mesurer les variations de résistances avec un simple montage diviseur de tension. Il est alors nécessaire d'introduire un montage appelé le pont de WheatStone permettant de transformer la mesure de la résistance en une mesure de tension (cf. figure \ref{fig:wheatstone_bridge}). Cependant, malgré le pouvoir amplificateur
 du pont WheatStone, les variations de tensions sont trop faibles (de l'ordre du $mV$) pour être mesurés directement par l'Arduino. Il a donc été nécessaire en plus du pont de WheatStone d'utiliser un amplificateur pour cellule de charge.
 
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1]{image/wheatstone_bridge.jpg}
+\end{center}
+\caption{Schéma d'un pont de Wheatstone avec $V_{EX}$ la tension d'alimentation et $V_O$ la tension de sortie SOURCE:NATIONAL INSTRUMENT}
+\label{fig:wheatstone_bridge}
+\end{figure}
+
+Jérémy a réussi à récupérer les cellules de charges d'un pèse personne électronique. Ceux-ci sont connecté en demi pont de Wheatstone et utilisent seulement 2 jauges de contraintes. La figure \ref{fig:load_sensor} à quoi ressemble ces capteurs. Ceci veut dire que ces capteurs fournissent seulement les résistance $R_1$ et $R_2$ dans la figure \ref{fig:wheatstone_bridge}. Sur ces capteurs, les valeurs  de $R_1$ et $R_2$ sont d'environ 1$k\Omega$.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.2]{image/load_sensor.jpg}
+\end{center}
+\caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE:ELECTRONIC STACK EXCHANGE}
+\label{fig:load_sensor}
+\end{figure}
+
+Par la suite, le défi a été de réaliser 4 ponts de Wheatstone en couplant chaque cellules de charges à 2 résistances de 1$k\Omega$. Typiquement, on a placé 2 résistances fixes de $1k\Omega$ au niveau de $R_4$ et $R_3$.  On a pu ensuite connecter ces cellules de charges à des amplificateurs HX711 (cf. figure \ref{fig:load_sensor_connected}) pour obtenir un signal compatible avec l'Arduino.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.2]{image/load_sensor_connected.jpg}
+\end{center}
+\caption{4 cellules de charges en demi-pont connectées à l'Arduino en utilisant des amplis HX711}
+\label{fig:load_sensor_connected}
+\end{figure}
+
+ En effet, les amplificateurs prennent un pont de wheatstone en entrée. On a donc connecté nos ponts de Wheatstone complet a l'amplificateur HX711 et connecté les amplis à l'Arduino au niveau des pins digitales. Les HX711 fournissent $V_{EX}$ et analysent $V_O$. L'amplificateur va d'une part amplifier le signal (la tension $V_O$) du pont mais aussi le convertir en signal numérique (digital) directement lisible par l'Arduino. Lors de la programmation de l'Arduino, nous avons donc utilisé une librairie permettant de contrôler et analyser les données de l'amplificateur HX711.
+
+Nous avons désormais fait le tour du matériel que nous avons étudié et utilisé pour réaliser ce projet. Nous allons maintenant nous intéresser à l'aspect logiciel de ce projet qui consiste d'une part à programmer l'Arduino pour qu'il lise les valeurs des capteurs de forces et d'autre part à communiquer avec une interface utilisateur (un Smartphone ou un PC) pour donner les résultats et l'interprétation à l'utilisateur.
 
 \chapter{Le développement du logiciel}
 \label{chap:logiciel}
@@ -329,7 +360,7 @@ Pour que notre application soit plus fonctionnelle, nous avons décidé de mettr
 
 Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme : il y a une partie dédiée à la visualisation de la chaise, et une autre partie dédiée à la configuration (qu'elle concerne la chaise ou bien la visualisation). 
 
-Dans la partie visualisation, le schème choisi représente tout d'abord les pieds de la chaise, symbolisés par des cercles auxquels s'associe un nombre, qui correspond au ID de chaque load sensor. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins du panel de visualisation, et portant des nombres 1, 2, 3 et 4. Le schèma de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule \ref{eq:centre_gravite_vectorielle}. Le centre de gravité est représenté par un cercle noir, qui se déplace dans le panel de visualisation suivant les changements de la posture assise de l'utilisateur.
+Dans la partie visualisation, le schème choisi représente tout d'abord les pieds de la chaise, symbolisés par des cercles auxquels s'associe un nombre, qui correspond au ID de chaque load sensor. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins du panel de visualisation, et portant des nombres 1, 2, 3 et 4. Le schèma de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule \eqref{eq:centre_gravite_vectorielle}. Le centre de gravité est représenté par un cercle noir, qui se déplace dans le panel de visualisation suivant les changements de la posture assise de l'utilisateur.
 
 Finalement, le schèma comprend aussi la deadzone, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
 
