@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -39,11 +40,11 @@ import serialComm.ComInterface;
 public class MainWindow extends JFrame {
 
 	// window size in pixels
-	private final int WIDTH=500;
+	private final int WIDTH=700;
 	private final int HEIGHT=400;
 
 	// window title
-	private final String AppTitle="Amazing Posture Detector";
+	private final String AppTitle="Détecteur de posture (DI6)";
 
 	// Chaise object
 	private Chaise chaise;
@@ -57,7 +58,7 @@ public class MainWindow extends JFrame {
 
 	// custom made ComInterface
 	ComInterface comInterface;
-	
+
 	/* J objects to be used in saving/loading the chaise object */
 	// file chooser to load/save chaise
     final JFileChooser chaiseChooser = new JFileChooser(new File(System.getProperty("user.dir")));
@@ -70,47 +71,47 @@ public class MainWindow extends JFrame {
 		// initialize the Chaise and visualization panel objects
 		chaise=new Chaise();
 		panel=new PostureVisualizationJPanel(chaise);
-		
+
 		// MENU
 		JMenuBar menuBar;
 		JMenu menuFile, menuHelp;
 		JMenuItem menuItem;
-		
+
 		// Create the menu bar
 		menuBar = new JMenuBar();
-		
+
 		// Build the menus
-		menuFile = new JMenu("File");
-		menuHelp = new JMenu("Help");
-		menuFile.getAccessibleContext().setAccessibleDescription("File menu");
-		menuHelp.getAccessibleContext().setAccessibleDescription("Help menu");
+		menuFile = new JMenu("Fichier");
+		menuHelp = new JMenu("Aide");
+		menuFile.getAccessibleContext().setAccessibleDescription("Menu Fichier");
+		menuHelp.getAccessibleContext().setAccessibleDescription("Menu Aide");
 		menuBar.add(menuFile);
 		menuBar.add(menuHelp);
-		
+
 		// save chaise menu item
-		menuItem = new JMenuItem("Save chaise");
-		menuItem.getAccessibleContext().setAccessibleDescription("Save chaise");
+		menuItem = new JMenuItem("Enregistrer la chaise");
+		menuItem.getAccessibleContext().setAccessibleDescription("Enregistrer la chaise");
 		menuFile.add(menuItem);
-		
+
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnSaveChaiseHandler(chaiseChooser);
 			}
 		});
-		
+
 		// load chaise menu item
-		menuItem = new JMenuItem("Load chaise");
-		menuItem.getAccessibleContext().setAccessibleDescription("Load chaise");
+		menuItem = new JMenuItem("Ouvrir la chaise");
+		menuItem.getAccessibleContext().setAccessibleDescription("Ouvrir la chaise");
 		menuFile.add(menuItem);
-		
+
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnLoadChaiseHandler(chaiseChooser, deadzoneRadiusSlider);
 			}
 		});
-		
+
 		// documentation (en) menu item
 		menuItem = new JMenuItem("Documentation (français)");
 		menuItem.getAccessibleContext().setAccessibleDescription("Documentation FR");
@@ -126,12 +127,12 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		
+
 		// documentation (en) menu item
 		menuItem = new JMenuItem("Documentation (english)");
 		menuItem.getAccessibleContext().setAccessibleDescription("Documentation EN");
 		menuHelp.add(menuItem);
-		
+
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -142,9 +143,9 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		
+
 		this.setJMenuBar(menuBar);
-		
+
 		// make a new panel that has 1 row and 2 columns
 		// the first column contains the visualization
 		// the second column contains the configuration elements
@@ -156,13 +157,13 @@ public class MainWindow extends JFrame {
 		// add visualisation & config panels to main panel
 		mainPanel.add(panel);
 		mainPanel.add(configPanel);
-		
-		
+
+
 		this.setContentPane(mainPanel);
 		//add(panel);
 
 		// minimum screen size
-		this.setMinimumSize(new Dimension(300, 300));
+		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		// set the normal size
 		this.setSize(WIDTH,HEIGHT);
 		// set the window title
@@ -207,6 +208,21 @@ public class MainWindow extends JFrame {
 		public ConfigPanel(final MainWindow mainwindow) throws IOException, ClassNotFoundException {
 			super();
 
+
+			JPanel connectPanel=new JPanel();
+			connectPanel.setLayout(new GridLayout(-1,1));
+
+			JPanel btButPanel=new JPanel();
+			btButPanel.setLayout(new GridLayout(1, 2));
+
+
+			JPanel chaisePanel=new JPanel();
+			chaisePanel.setLayout(new GridLayout(-1,1,0,10));
+
+			JPanel chaiseButPanel=new JPanel();
+			chaiseButPanel.setLayout(new GridLayout(-1,1,0,10));
+			chaisePanel.add(chaiseButPanel);
+
 			// get the names of the available ports on the machine
 			String[] comListNames=new String[serialPorts.length];
 			for(int i=0;i<serialPorts.length;i++){
@@ -215,7 +231,9 @@ public class MainWindow extends JFrame {
 
 			// make a combobox containing the port names, then add it to the container (main window)
 			final JComboBox<String> comCombobox=new JComboBox<>(comListNames);
-			add(comCombobox);
+			connectPanel.add(comCombobox);
+
+			connectPanel.add(btButPanel);
 
 			// connection button
 			final JButton btnConnexion = new JButton("Connexion");
@@ -223,7 +241,7 @@ public class MainWindow extends JFrame {
 			final JButton btnDeconnexion=new JButton("Deconnexion");
 
 			// test button to show that we can send data to the Arduino
-			final JButton btnSendTextToArduino=new JButton("Send Arduino Command");
+			final JButton btnSendTextToArduino=new JButton("Tare");
 
 			// if no ports are available, the connection button should be turned off
 			if(serialPorts.length==0){
@@ -240,7 +258,7 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the connection button to the container (main window)
-			add(btnConnexion);
+			btButPanel.add(btnConnexion);
 
 
 			btnDeconnexion.addActionListener(new ActionListener() {
@@ -250,9 +268,9 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the connection button to the container (main window)
-			add(btnDeconnexion);
+			btButPanel.add(btnDeconnexion);
 
-			
+
 			btnSendTextToArduino.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -260,12 +278,12 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the Arduino command button to the container (main window)
-			add(btnSendTextToArduino);
-			
-			
+			chaiseButPanel.add(btnSendTextToArduino);
+
+
 			// setting the chaise configuration
 			final JButton btnConfigChaise = new JButton("Config Chaise");
-			
+
 			btnConfigChaise.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -273,11 +291,11 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the button
-			add(btnConfigChaise);
-		
+			chaiseButPanel.add(btnConfigChaise);
+
 			// controls for calibrating the deadzone
-			final JButton btnCalibrateDeadzone = new JButton("Calibrate Deadzone");
-			
+			final JButton btnCalibrateDeadzone = new JButton("Calibrer la zone");
+
 			btnCalibrateDeadzone.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -285,12 +303,9 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the button
-			add(btnCalibrateDeadzone);
-			
-			final JLabel deadzoneStatusLabel = new JLabel("");
-			
-			add(deadzoneStatusLabel);
-			
+			chaiseButPanel.add(btnCalibrateDeadzone);
+
+
 			deadzoneRadiusSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
@@ -299,8 +314,15 @@ public class MainWindow extends JFrame {
 				}
 			});
 			// add the slider
-			add(deadzoneRadiusSlider);
-			
+			chaisePanel.add(deadzoneRadiusSlider);
+
+
+			//Add the panels
+			add(connectPanel);
+	        add(chaisePanel);
+
+
+
 			// set labels on the slider
 			deadzoneRadiusSlider.setMajorTickSpacing(20);
 			deadzoneRadiusSlider.setMinorTickSpacing(5);
@@ -310,9 +332,11 @@ public class MainWindow extends JFrame {
 	                BorderFactory.createEmptyBorder(0,0,10,0));
 	        Font font = new Font("Serif", Font.ITALIC, 15);
 	        deadzoneRadiusSlider.setFont(font);
+
+
 		}
 	}
-	
+
 	/**
 	 * Method to handle the configuration of the Chaise object
 	 * @return Chaise object to be used
@@ -321,67 +345,67 @@ public class MainWindow extends JFrame {
 		// textfield for the number of pieds
 		JTextField piedsNum = new JTextField();
 		piedsNum.setColumns(5);
-		
+
 		JLabel piedsNumLabel = new JLabel("Nombre des pieds de la chaise");
-		
+
 		// arraylist of textfields for the positions of the pieds
 		ArrayList<JTextField> piedsPos = new ArrayList<>();
-		
+
 		// chaise object to return (null by default)
 		Chaise newChaise = null;
-		
+
 		// panel for the pieds num dialog
 		JPanel piedsNumDialog = new JPanel();
 		piedsNumDialog.add(piedsNumLabel);
 		piedsNumDialog.add(piedsNum);
-		
+
 		// panel for the pieds positions dialog
 		JPanel piedsPosDialog;
-		
+
 		// open a dialog window to get the number of pieds
 		int piedsNumResult = JOptionPane.showConfirmDialog(null, piedsNumDialog, "Nombre des pieds de la chaise",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-		
+
 		// if the user clicked OK
 		if (piedsNumResult == JOptionPane.OK_OPTION) {
 			// get the number of pieds
 			int pieds = Integer.parseInt(piedsNum.getText());
-			
+
 			// initialize the pieds positions panel
 			piedsPosDialog = new JPanel(new GridLayout(1, pieds));
-			
+
 			for (int i = 0; i < pieds; i++) {
 				// make a temporary panel to store the elements of one pied
 				JPanel tempPanel = new JPanel(new GridLayout(4, 1));
-				
+
 				// two textfields, one for the X pos and one for the Y pos
 				JTextField tempTextFieldX = new JTextField();
 				tempTextFieldX.setColumns(5);
 				JTextField tempTextFieldY = new JTextField();
 				tempTextFieldY.setColumns(5);
-				
+
 				// two labels, one for the X pos and one for the Y pos
 				JLabel tempLabelX = new JLabel("Pied " + (i + 1) + " X");
 				JLabel tempLabelY = new JLabel("Pied " + (i + 1) + " Y");
-				
+
 				// add the elements to the temp panel (in order)
 				tempPanel.add(tempLabelX);
 				tempPanel.add(tempTextFieldX);
 				tempPanel.add(tempLabelY);
 				tempPanel.add(tempTextFieldY);
-				
+
 				// add the textfields to the arraylist so we can get their values later
 				piedsPos.add(tempTextFieldX);
 				piedsPos.add(tempTextFieldY);
-				
+
 				// add the temp panel to the main pieds pos dialog
 				piedsPosDialog.add(tempPanel);
 			}
-			
+
 			// launch a dialog window to get the positions of the pieds
 			int piedsValuesResult = JOptionPane.showConfirmDialog(null, piedsPosDialog, "Positions des pieds",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-			
+
 			// if the user clicked OK
 			if (piedsValuesResult == JOptionPane.OK_OPTION) {
 				// make a new Chaise object
@@ -390,18 +414,18 @@ public class MainWindow extends JFrame {
 					// get the positions of the pieds from the arraylist
 					double tempValX = Double.parseDouble(piedsPos.get(i).getText());
 					double tempValY = Double.parseDouble(piedsPos.get(i+1).getText());
-					
+
 					// make a new pied and add it to the Chaise object
 					Pied p = new Pied(tempValX, tempValY, i/2 + 1);
 					newChaise.addPied(p);
 				}
 			}
 		}
-		
+
 		// finally, return the chaise object (or null if the user cancelled out)
 		return newChaise;
 	}
-	
+
 	/**
 	 * Method to handle the connection to the Arduino
 	 * @param comCombobox
@@ -439,7 +463,7 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * Method to handle the deconnection from the Arduino
 	 * @param comCombobox
@@ -483,7 +507,7 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * Method to launch the chaise configuration procedure
 	 */
@@ -516,11 +540,11 @@ public class MainWindow extends JFrame {
         	String path = saveChaise.getSelectedFile().getAbsolutePath();
         	// take off the file ending that the user may have put
         	path = path.split(Pattern.quote("."))[0];
-        	
+
         	// make sure we're not overriding a file
         	File f = new File(path + ".txt");
         	int result = 0;
-        	if(f.exists() && !f.isDirectory()) { 
+        	if(f.exists() && !f.isDirectory()) {
         		result = JOptionPane.showConfirmDialog(MainWindow.this, "File already exists. Overwrite file?");
         	}
         	if (result == 0) {
@@ -563,7 +587,7 @@ public class MainWindow extends JFrame {
 		// get the path to the documentation pdf
 		String path = System.getProperty("user.dir");
 		Path pathToUrl = Paths.get(path + "/doc_pdf/doc_" + lang + ".pdf");
-		
+
 		// open the pdf
 		File doc = new File(pathToUrl.toString());
 		Desktop.getDesktop().open(doc);
