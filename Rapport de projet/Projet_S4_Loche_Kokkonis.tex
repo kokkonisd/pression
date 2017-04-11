@@ -328,15 +328,38 @@ Le but du programme de l'Arduino est de récupérer les données que fournissent
 
 En travaillant avec la version utilisant des potentiomètres, on pouvait récupérer les valeurs des potentiomètres en éxecutant la commande \texttt{AnalogRead(A\#)} avec \textbf{\#} le numéro du pin Analog sur lequel on a connecté le potentiomètre. On se rappelle que l'entrée au niveau du pin Analog est un montage diviseur de tension. Ce montage fournis comme on l'a vu dans le chapitre précédent \ref{chap:arduino} une tension entre 0 et 5V au niveau du pin Analog. La commande  \texttt{AnalogRead(A\#)} permet de convertir cette valeur de tension en un nombre entier compris entre 0 et 1023 (donc 1024 valeurs possibles).
 
-Dans la version utilisant les amplificateurs, on a utilisé la librairie HX711 (\url{https://github.com/bogde/HX711}) permettant de récupérer les valeurs des capteurs sur les pins digitals de l'Arduino. Cette fois on récupère le nombre entier à l'aide de la commande \texttt{sensor.get\_unit()} ou \texttt{sensor.get\_value()} (\texttt{sensor} est l'objet représentant l'ampli dans le code C). Sans calibration de l'amplificateur, ce nombre est brut et n'a pas de sens. On applique alors des corrections notamment en faisant le zéro des amplificateurs avec la commande \texttt{sensor.tare()}. \'A ce moment, la valeur retournée par l'amplificateur augmentent de manière linéaire avec la force appliqué au capteur (elle a donc du sens).
+Dans la version utilisant les amplificateurs, on a utilisé la librairie HX711 (\url{https://github.com/bogde/HX711}) permettant de récupérer les valeurs des capteurs sur les pins digitals de l'Arduino. 
+Cette fois on récupère le nombre entier à l'aide de la commande \texttt{sensor.get\_unit()} ou \texttt{sensor.get\_value()} (\texttt{sensor} est l'objet représentant l'ampli dans le code C). 
+Sans calibration de l'amplificateur, ce nombre est brut et n'a pas de sens. 
+On applique alors des corrections notamment en faisant le zéro des amplificateurs avec la commande \texttt{sensor.tare()}.
+ \'A ce moment, la valeur retournée par l'amplificateur augmentent de manière linéaire avec la force appliqué au capteur (elle a donc du sens).
 
-\'Etant donné qu'on a fabriqué des demi-ponts de Wheatstone, ils sont sensibles aux variations de températures et la valeur des capteurs peut fluctuer. La valeur donnée par les amplificateurs a donc tendance à fluctuer (les fluctuations sont de l'ordre de \textpm 5) et peut parfois prendre des valeurs négatives par rapport au zéro obtenu par la tare. Pour essayer de compenser ce problème, premièrement, on a pris la valeur absolue des valeurs (on supprime alors les fluctuations négatives). En effet, l'idée derrière cette correction est que lorsque le capteur ne peux avoir que des valeurs positives ou nulle. La valeur nulle est la valeur au repos et la valeur augmentera lorsque une force sera appliqué sur le capteur. Un deuxième correction a été d'ajouter un décalage (offset) des valeurs obtenus pour faire en sorte de ne jamais avoir 0. Comme on a montré avec la formule \eqref{eq:centre_gravite_vectorielle}, si les valeurs des capteurs sont toutes nulles en même temps, la position du centre de gravité sera $(0, 0)$. Or on a voulu que, lorsque les capteurs sont au repos (donc après une tare), le centre de gravité coïncide avec le centre de la chaise. Pour cela, il faut impérativement que peut importe la géométrie de la chaise, les valeurs au niveau des capteurs soient non nulles.
+\'Etant donné qu'on a fabriqué des demi-ponts de Wheatstone, ils sont sensibles aux variations de températures et la valeur des capteurs peut fluctuer. 
+La valeur donnée par les amplificateurs a donc tendance à fluctuer (les fluctuations sont de l'ordre de \textpm 5) et peut parfois prendre des valeurs négatives par rapport au zéro obtenu par la tare.
+ Pour essayer de compenser ce problème, premièrement, on a pris la valeur absolue des valeurs (on supprime alors les fluctuations négatives). 
+En effet, l'idée derrière cette correction est que lorsque le capteur ne peux avoir que des valeurs positives ou nulles.
+ La valeur nulle est la valeur au repos et la valeur augmentera lorsque une force sera appliqué sur le capteur.
+  Un deuxième correction a été d'ajouter un décalage (offset) des valeurs obtenus pour faire en sorte de ne jamais avoir 0. 
+  Comme on a montré avec la formule \eqref{eq:centre_gravite_vectorielle}, si les valeurs des capteurs sont toutes nulles en même temps, la position du centre de gravité sera $(0, 0)$. 
+  Or on a voulu que, lorsque les capteurs sont au repos (donc après une tare), le centre de gravité coïncide avec le centre de la chaise.
+   Pour cela, il faut impérativement que peut importe la géométrie de la chaise, les valeurs au niveau des capteurs soient non nulles.
 
 
 % D'abord, donc, on récupère les données en faisant un \textit{read} sur les capteurs; on enregistre ces valeurs à un tableau de quatre entiers (\texttt{int}), après avoir pris leur valeur absolue, et avoir fait un \textit{offset}. Ceci est nécessaire, car les petites variations de température entre les cellules de charge donnent naissance à des variations de tension, qui sont ensuite amplifiées. Pour corriger ce paramètre, il est nécessaire de prendre la valeur absolue des données fournies par les capteurs de charge (en réalité, il est impossible qu'une personne applique une force négative aux capteurs !). Ensuite, pour vérifier que la valeur minimale des capteurs ne sera jamais 0 pour tous les capteurs, on prend soin de décaler les valeurs obtenues; comme on a montré avec la formule \ref{eq:centre_gravite_vectorielle}, si les \guillemotleft\ masses \guillemotright\ des capteurs sont tous nuls en même temps, la position du centre de gravité sera $(0, 0)$. Au cas où aucune charge n'est appliquée aux capteurs, le centre de gravité doit coïncider avec le centre de la chaise.
 
 Une fois ce travail achevé, on envoie les données à l'application. On sera en mode série, ce qui implique qu'on enverra les données octet par octet. Il est évident que cette option sert à mettre à jour les données en temps réel, en assurant en même temps une faible éventualité de pertes d'information ou de données incomplètes.
-%, étant donné qu’on envoie un seul octet à la fois. 
+%, étant donné qu’on envoie un seul octet à la fois.
+Un périphérique utilisant une liaison série possède voies de communication. La première est la voie RX permettant de recevoir les données (octets). La seconde est la voie TX permettant de transmettre les données.  Si on veux faire dialoguer deux périphérique série, il faut connecter la voie TX et RX de l'un respectivement sur les voies RX et TX de l'autre.
+
+\begin{eqnarray}
+TX_1 \rightarrow RX_2
+\\
+RX_1 \leftarrow TX_2
+\end{eqnarray}
+
+Ainsi les données envoyées par l'un sont reçu par l'autre et vis-versa. Ce mode de connexion est dit \guillemotleft croisé \guillemotright .
+Cependant pour que deux périphériques séries communiquent entre-eux, il faut qu'ils parlent le même langage c'est à dire que les paramètres de communication soient les même.
+
 On commence donc en initialisant la communication série, ce qui veut dire qu'on doit choisir les paramètres de communication. Afin d'obéir aux standards de l'Arduino, nous avons fixé les paramètres de communication de la façon suivante :
 
 \begin{itemize}
@@ -346,28 +369,55 @@ On commence donc en initialisant la communication série, ce qui veut dire qu'on
 \item \textit{Parity} (parité du message) : NO\_PARITY (pas de parité)
 \end{itemize}
 
-Pour tous ces paramètres, hormis le premier, nous avons choisi de suivre les standards mis en place par l'Arduino : 8 bits de données, 1 bit de stop, et pas de parité de message. Pour la communication, nous avons choisi un \texttt{baud rate} de 9600, car nous voulons que la communication se passe rapidement, mais pas au point de nous donner des résultats incohérents, dans le cas où sont impliqués des appareils ou des ordinateurs différents. En choisissant 9600 bauds, on obtient une vitesse confortable et une bonne fiabilité tant en Bluetooth qu'en USB.
+Pour tous ces paramètres, hormis le premier, nous avons choisi de suivre les standards mis en place par l'Arduino : 8 bits de données, 1 bit de stop, et pas de parité de message.
+Tout les périphériques séries utilisés pour communiquer ( l'Arduino, le PC, le smartphone Android, le module bluetooth) sont configurés de cette façon de manière à ce que tous se comprennent.
+ %Pour la communication, nous avons choisi un \texttt{baud rate} de 9600, car nous voulons que la communication se passe rapidement, mais pas au point de nous donner des résultats incohérents, dans le cas où sont impliqués des appareils ou des ordinateurs différents. En choisissant 9600 bauds, on obtient une vitesse confortable et une bonne compatibilité tant en Bluetooth qu'en USB.
 
-Une fois qu'on a initialisé la communication, on peut envoyer les données. Nous rappelons que le but est d’envoyer les 4 différentes valeurs obtenues à partir des 4 capteurs. Avant même de discuter le processus de l'envoi des données des capteurs, on sait qu'on doit envoyer un caractère qui \textit{initialise} le message, ainsi qu’un autre qui le \textit{termine}. Ceci sert à distinguer les messages entre eux, et à vérifier que toutes les données sont bien transmises. Pour initialiser le message, on envoie un caractère ASCII \guillemotleft\ STX \guillemotright\ (start of text), qui a pour code le nombre décimal 2; pour terminer le message, on envoie un caractère \guillemotleft\ CR \guillemotright\ (enter/carriage return), qui a pour code le nombre décimal 13. Notre module de communication sur l'application (qu'elle soit en PC ou en téléphone portable) est avertie désormais que les données des capteurs seront comprises entre ces deux caractères.
+Pour transmettre les données on a utilisé le port USB B intégré à l'Arduino. La connexion est donc directe entre le PC et l'Arduino. Le PC reconnais alors l'Arduino en tant que périphérique de communication série et on peut dialoguer sans problème. On a donc le schéma suivant pour la communication USB.
 
-Pour l'envoi des données des capteurs, nous avons décidé que le meilleur message serait court et simple.
+\begin{eqnarray}
+TX_{Arduino-USB} \rightarrow RX_{PC}  \\
+RX_{Arduino-USB}  \leftarrow TX_{PC}
+\end{eqnarray}
+
+Pour effectuer une liaison série en Bluetooth, on a utilisé un shield Bluetooth car l'Arduino ne possède pas de module bluetooth installé en usine. Le shield bluetooth un circuit électronique comprenant un module bluetooth conçu pour l'Arduino et venant se connecté sur celui-ci. En fait, le module bluetooth communique avec l'Arduino via le protocole série et le module bluetooth communique en série avec la carte bluetooth du PC ou du smartphone. On a donc le schéma suivant pour la communication Bluetooth.
+
+\begin{eqnarray}
+TX_{Arduino-Digital} \rightarrow RX_{Shield-Digital} \rightarrow TX_{Shield-Bluetooth} \rightarrow RX_{PC/Smartphone}  \\
+RX_{Arduino-Digital} \leftarrow TX_{Shield-Digital} \leftarrow RX_{Shield-Bluetooth} \leftarrow TX_{PC/Smartphone}
+\end{eqnarray}
+
+On a donc utilisé deux pins digital de l'Arduino pour communiquer en série avec le Shield. 
+Ainsi l'Arduino est connecté physiquement au module bluetooth et le module bluetooth est connecté sans fil au PC ou smartphone. 
+On voit bien avec ce schéma que le shield bluetooth est un intermédiaire. 
+Les données envoyés par l'arduino (sur la voie TX du port digital) se retrouvent bien sur la voie TX du bluetooth.
+ De même les données arrivant sur la voie RX du bluetooth se retrouvent bien sur la voie RX de l'Arduino.
+  Il a fallu suivre ce diagramme lors de la programmation et de la configuration des différents pins utilisés pour la communication série car on peut rapidement se tromper.
+
+Une fois qu'on a initialisé la communication, on peut envoyer les données. Nous rappelons que le but est d’envoyer les 4 différentes valeurs obtenues à partir des 4 capteurs. Avant même de discuter le processus de l'envoi des données des capteurs, on sait qu'on doit envoyer un caractère qui \textit{initialise} le message, ainsi qu’un autre qui le \textit{termine}. Ceci sert à distinguer les messages entre eux, et à vérifier que toutes les données sont bien transmises. Pour initialiser le message, on envoie un caractère ASCII \guillemotleft\ STX \guillemotright\ (start of text), qui a pour code le nombre décimal 2. Pour terminer le message, on envoie un caractère \guillemotleft\ CR \guillemotright\ (enter/carriage return), qui a pour code le nombre décimal 13. Notre module de communication sur l'application (qu'elle soit en PC ou en téléphone portable) est avertie désormais que les données des capteurs seront comprises entre ces deux caractères.
+
+%Pour l'envoi des données des capteurs, nous avons décidé que le meilleur message serait court et simple.
 %Ainsi, on diminue encore plus le danger de transmettre ou de recevoir des données incomplètes, car on envoie le minimum absolu des caractères. FAUX ne pas mettre
 Comme on ne connaît pas la taille de la valeur de chaque capteur (c'est-à-dire le nombre des chiffres), on ne peut pas les envoyer directement l'un après l'autre, il nous faut donc un séparateur.
 Nous avons choisi un caractère point-virgule (\guillemotleft ; \guillemotright), car il offre une séparation visuelle mais aussi sémantique. Toutefois, pour cette application n'importe quel caractère pourrait être choisi comme séparateur tant que ce n'est pas un chiffre ou un caractère délimiteur (STX ou CR). Le format de chaque message est donc le suivant :
 
 \begin{center}
-\texttt{02}\\
+\texttt{STX (02)}\\
 \texttt{valeur1;valeur2;valeur3;valeur4}\\
-\texttt{13}
+\texttt{CR (13)}
 \end{center}
 
-où \texttt{02} et \texttt{13} sont les caractères \texttt{STX} et \texttt{CR} respectivement, et \texttt{valeur1, valeur2, valeur3, valeur4} sont les nombres entiers obtenues à partir des 4 capteurs. 
+%où \texttt{02} et \texttt{13} sont les caractères \texttt{STX} et \texttt{CR} respectivement, et \texttt{valeur1, valeur2, valeur3, valeur4} sont les nombres entiers obtenues à partir des 4 capteurs. 
+où \texttt{valeur1, valeur2, valeur3, valeur4} sont des chaines de caractères ASCII représentant les nombre entiers/valeurs des capteurs. 
 %Comme on l'a dit plus haut, les valeurs sont transmises caractère par caractère, et non pas toutes en même temps.
 
-PARLER DU BLUETOOTH SHIELD ET DU SERIAL DANS LE CODE ARDUINO POUR REMPLIR UN PEU CE CHAPITRE
-
-
-Finalement, afin d'éviter d'envoyer des données qui ne changent pas (ou alors qui changent très peu), nous avons mis en place un petit \guillemotleft timer \guillemotright , qui fait qu'on envoie des données tous les 100 millisecondes. Une implémentation de premier niveau consisterait à arrêter le programme pour 100 millisecondes avant d'envoyer à nouveau des données, mais elle n'est pas tout a fait correcte Si, pendant le temps d'arrêt, on veut avoir accès aux données, ou par exemple envoyer des commandes à l'Arduino à partir de l'application PC ou Android, on ne le pourra pas, car le programme ne fonctionne pas pendant ce temps-là. Pour éviter ce problème, nous avons implémenté la fonctionnalité de manière \textit{asynchrone} : on calcule la différence entre le temps dit \guillemotleft du début \guillemotright\ et le temps dit \guillemotleft actuel \guillemotright . Si cette différence est égale à 100 millisecondes, on lit les données à partir des capteurs et on les envoie, puis on met à jour le temps dit \guillemotleft du début \guillemotright . Cela nous permet d'avoir accès aux autres fonctionnalités de l'Arduino, en limitant en même temps les données envoyés.
+%Finalement, afin d'éviter d'envoyer des données qui ne changent pas (ou alors qui changent très peu), nous avons mis en place un petit \guillemotleft timer \guillemotright , qui fait qu'on envoie des données tous les 100 millisecondes.
+Finalement, nous avons décidé d'envoyer ces données toutes les 100 millisecondes pour avoir une mesure réactive de la posture. Il a donc fallu implémenter un pause c'est à dire un \guillemotleft timer \guillemotright  dans l'envoie des données.
+ Une implémentation de premier niveau consisterait à arrêter le programme pour 100 millisecondes avant d'envoyer à nouveau des données, mais elle n'est pas tout a fait correcte.
+  Si, pendant le temps d'arrêt, on veut avoir accès aux données, ou par exemple envoyer des commandes à l'Arduino à partir de l'application PC ou Android, il risque d'y avoir des problèmes, car le programme sera en pause pendant ce temps-là.
+   Pour éviter ce problème, nous avons implémenté la fonctionnalité de manière \textit{asynchrone} : on calcule la différence entre le temps dit \guillemotleft du début \guillemotright\ et le temps dit \guillemotleft actuel \guillemotright . 
+   Si cette différence est supérieur ou égale à 100 millisecondes, on lit les données à partir des capteurs et on les envoie, puis on met à jour le temps dit \guillemotleft du début \guillemotright . 
+   Cela nous permet d'avoir accès aux autres fonctionnalités de l'Arduino, en limitant en même temps les données envoyés.
 
 
 \textbf{Transition:} Nous avons pu voir comment nous avons choisis de récupérer les données des capteurs et les transmettre à l'ordinateur ou le smartphone qui va se charger de la visualisation. Intéressons-nous sans attendre aux programmes PC et Android que nous avons conçu pour permettre à l'utilisateur de visualiser sa posture.
