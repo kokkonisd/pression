@@ -429,7 +429,23 @@ Pour gérer les données fournies par les load sensors, nous devons construire u
 
 Pour mieux organiser notre workflow et afin d'avoir accès aux versions précédentes de notre logiciel, nous avons utilisé \texttt{git} comme \textit{VCS} (logiciel de contrôle des versions). Suite à la création d'un dépôt sur \texttt{GitHub}, nous avons pu synchroniser nos fichiers locaux, gérés par \texttt{git}, sur le dépôt en ligne. Cela permet de mettre en jour le projet, et \guillemotleft\ télécharger \guillemotright\ les changements qu'on y fait, avec une seule commande.
 
-Pour que notre application soit plus fonctionnelle, nous avons décidé de mettre en place une version PC et Android. De cette manière, on permet à l'utilisateur,selon sa préférence, de consulter le correcteur de posture depuis son ordinateur ou son téléphone portable.
+Pour que notre application soit plus fonctionnelle, nous avons décidé de mettre en place une version PC et Android (voir figures \ref{fig:screenshot_pc} et \ref{fig:screenshot_android}). De cette manière, on permet à l'utilisateur,selon sa préférence, de consulter le correcteur de posture depuis son ordinateur ou son téléphone portable.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12cm]{image/screenshot_pc1}
+\end{center}
+\caption{L'application PC}
+\label{fig:screenshot_pc}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12cm]{image/screenshot_android1}
+\end{center}
+\caption{L'application Android}
+\label{fig:screenshot_android}
+\end{figure}
 
 Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme : il y a une partie dédiée à la visualisation de la chaise, et une autre partie dédiée à la configuration (qu'elle concerne la chaise ou bien la visualisation). 
 
@@ -449,6 +465,74 @@ En somme, le schème choisi permet les manipulations suivantes :
 Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0); cela veut dire que les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini). Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas on doit faire un \guillemotleft\ pair \guillemotright\  afin de pouvoir se connecter), ce qui est préférable, soit par USB. Finalement, on doit s'asseoir correctement, afin de calibrer l'application. On clique alors sur \guillemotleft\ tare \guillemotright\ , puis sur \guillemotleft\ calibrer \guillemotright\  pour calibrer la position de la deadzone. Une fois qu'on l'a calibrée, la deadzone est placée dans la position considérée comme \guillemotleft\ optimale \guillemotright\ . Finalement on peut modifier sa taille selon nos préférences. 
 
 Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne. En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré. Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
+
+Pour arriver à ce résultat, nous sommes passés par plusieurs étapes différentes, que nous allons examiner par la suite.
+
+\subsection{La communication en série}
+\label{subsec:comm_serie}
+La première chose sur laquelle nous avons commencé à travailler peut être considérée comme l’étau de notre application, tout comme la modélisation de la chaise décrite dans la sous-section \ref{subsec:model_chaise}. Il s’agit de la partie \textit{communication}. C'est grâce à ce module qu'on peut finalement recevoir les données des senseurs dans un contexte qui permet de les visualiser et de les rendre plus faciles à interpréter par l'utilisateur.
+
+Ce module est basé sur la librairie \texttt{jSerialComm} [REFERENCE BIBLIOGRAPHIQUE]. Il obéit, comme nous avons dit, au protocole suivant :
+
+\begin{itemize}
+\item \textit{BaudRate} (vitesse de communication) : 9600
+\item \textit{DataBits} (nombre de bits de données) : 8
+\item \textit{StopBits} (nombre de bits de stop) : 1
+\item \textit{Parity} (parité du message) : NO\_PARITY (pas de parité)
+\end{itemize}
+
+Nous pouvons désormais communiquer avec l'Arduino, en imposant un protocole commun pour les deux appareils. Le module est capable de trouver tous les \textit{ports} de communication en série disponibles sur l'ordinateur (ou le téléphone portable), de les lister et d’accorder à l'utilisateur le lancement d’un flux de communication à travers un de ces ports. Dans un second temps, ce flux permet de recevoir ou même d’envoyer des données : nous rappelons que, même si la fonction principale de l'application est de recevoir des données à partir des senseurs et de les interpréter, on doit être capable d'envoyer une commande afin d’effectuer une \textit{tare}, et réinitialiser ainsi les senseurs.
+
+Finalement, le module \textit{communication en série} comporte un \guillemotleft\ parser \guillemotright , qui permet d'interpréter les données qui arrivent octet par octet depuis l'Arduino, et de les organiser dans un tableau d'entiers de façon que la valeur et l'ID des senseurs soient facilement récupérables. Cette fonctionnalité permet aussi de savoir si on a reçu des données incomplètes, ou même si on n'a rien reçu depuis l'Arduino.
+
+
+\subsection{La modélisation de la chaise}
+\label{subsec:model_chaise}
+Dans la programmation, la partie la plus difficile est souvent non pas l'implémentation, mais la modélisation d'un problème. Ici on voit que cette hypothèse est bien vérifiée : la qualité de notre correcteur de posture dépend, au niveau logiciel, de la qualité et de l'exactitude de la modélisation de notre objet d'étude, c'est-à-dire de la \textit{chaise}. C'est à cause de ce fait que nous avons dépensé beaucoup de temps à bien modéliser l'objet \guillemotleft\ chaise \guillemotright\ afin de prévenir l’intrusion d’incertitudes et de problèmes secondaires.
+
+En obéissant au modèle de programmation utilisé par \texttt{Java} (c'est-à-dire à la programmation dite \textit{orientation-objet} ou \textit{OOP}), nous avons décidé de séparer la chaise en deux éléments : le \guillemotleft\ parent \guillemotright\ (la chaise) et l' \guillemotleft\ enfant \guillemotright\ (les pieds). L'idée ici est que, si on se donne une chaise arbitraire, elle va forcement posséder des pieds; en fait, la seule chose qui distingue les chaises différentes, au niveau de leurs pieds, est le \textit{nombre} des pieds, ou leur position.
+
+Nous avons donc commencé par la construction d'une classe appelée \texttt{Pied}, qui comporte trois caractéristiques :
+\begin{itemize}
+\item Sa position (posX, posY);
+\item Sa \guillemotleft\ masse \guillemotright ;
+\item L’ID du senseur qui lui correspond.
+\end{itemize}
+
+Dans notre application, l'ID du senseur qui correspond à un certain pied est un nombre entier, compris entre 1 et 4 ; il sert à identifier les pieds et à les distinguer entre eux. Ce nombre, avec la position, sont les deux caractéristiques requises pour modéliser un pied. La troisième caractéristique, à savoir la masse associée au pied, va changer en fonction de la position de la charge appliquée sur la chaise.
+
+Ensuite, nous avons travaillé sur la modélisation de la chaise elle-même. Celle-ci est bien sûr plus compliquée à définir que le pied. Dans une configuration élémentaire, une chaise pourrait être conçue comme un ensemble de pieds; mais dans notre application il est essentiel de pouvoir la visualiser pour l'utilisateur, et lui procurer ainsi des informations supplémentaires, telles que la \textit{deadzone}, c'est-à-dire la zone dans laquelle la posture de l'utilisateur est optimale. Il est également essentiel que notre configuration rende compte de l'échelle et les dimensions de la chaise, questions que nous détaillerons par la suite.
+
+Une chaise comporte donc :
+\begin{itemize}
+\item Un ensemble (plus précisément, un \texttt{ArrayList}) d’objets \texttt{Pied};
+\item Un barycentre, appelé $G$, défini par sa position \texttt{(gposX, gposY)};
+\item Une deadzone, définie par quatre paramètres :
+\begin{itemize}
+\item Sa position \texttt{(deadzoneX, deadzoneY)};
+\item Son rayon \texttt{deadzoneR};
+\item Son \textit{rapport} \texttt{deadzoneRatio}
+\end{itemize}
+\item Sa taille horizontale et verticale \texttt{(maxPosX, maxPosY)}.
+\end{itemize}
+
+Comme nous avons dit plus haut, l'élément le plus essentiel de notre modélisation est l'ensemble des objets \texttt{Pied} qui constituent la chaise. Ensuite, nous associons le point $G$, décrit au début de ce chapitre, à l'objet chaise, car il est propre à lui et ne dépend que des valeurs de masse fournies par les pieds, qui à leur tour appartiennent à la chaise. Il est donc plus logique que le barycentre fasse partie de la chaise.
+
+À ce niveau, nous avons construit une fonctionnalité supplémentaire, qui peut paraître simple, mais son implémentation n'est pas évidente : la deadzone. Celle-ci est définie tout d'abord par sa position, qui dépend de l'utilisateur, puisqu'elle doit être adaptée à ses besoins. Étant donné qu’il s’agit d’un cercle, comme on a vu au début de ce chapitre, elle dispose d’un rayon. Soulignons que la deadzone est susceptible de se déformer en fonction des dimensions de la fenêtre de l'application, en devenant une \guillemotleft\ ellipse \guillemotright .
+
+La contrainte à implémenter ici est simple : on ne veut pas que le rayon de la deadzone dépasse la moitié de la dimension la plus petite de la chaise, qu'elle soit la dimension verticale ou horizontale. Pour généraliser nos formules, afin d'être sûr que cette contrainte s'applique sur n’importe quelle chaise, il a fallu introduire la notion du \textit{ratio}. Comme on l'expliquera dans la sous-section \ref{subsec:visualisation}, le rayon de la deadzone dépend d'un \texttt{JSlider}. Comme il est divisé en 100 unités, le \texttt{JSlider} peut avoir toutes les valeurs entières entre 0 et 100. Le \textit{ratio} est tout simplement le pourcentage du \texttt{JSlider}, c'est à dire :
+
+$$\mathrm{ratio} = \frac{\mathrm{JSlider}}{100} \in [0, 1]$$
+
+Pour être donc sûr que le rayon de la deadzone ne dépassera jamais la moitié de la plus petite dimension de la fenêtre, il suffit de multiplier la moitié du \textit{ratio} par la plus petite dimension. Le rayon de la deadzone est ainsi donné par la formule suivante :
+
+$$R_\mathrm{deadzone} = \frac{\mathrm{ratio}}{2}\ \mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$$
+
+où $\mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$ est la taille de la plus petite dimension.
+
+\subsection{La visualisation du correcteur de posture}
+\label{subsec:visualisation}
+%TODO
 
 
 %% === COMPTES RENDUS ===
