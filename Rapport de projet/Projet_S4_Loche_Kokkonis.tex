@@ -425,11 +425,14 @@ Finalement, nous avons décidé d'envoyer ces données toutes les 100 millisecon
 \section{Haut niveau : les applications PC et Android}
 \label{sec:logiciel_haut}
 
-Pour gérer les données fournies par les load sensors, nous devons construire une application qui visualise la posture assise de l'utilisateur. Pour le développement de cette application, nous avons choisi \texttt{Java} comme langage de programmation, car il est conforme avec cette tâche, et il nous est accessible à travers notre cursus académique; en réalité, tous les deux nous l'avions déjà utilisé, aussi bien pour les projets PeiP de la première année, que pour des projets personnels.
+%Pour gérer les données fournies par les load sensors, nous devons construire une application qui visualise la posture assise de l'utilisateur. 
+Pour interpréter les données fournies par les capteurs de charges, nous avons du concevoir une application permettant de visualiser la posture assise de l'utilisateur.
+ Cette partie aura pour but de vous présenter notre solution logicielle dont nous aborderons quelques détails de réalisation par la suite.
+Pour le développement de cette application, nous avons choisi \texttt{Java} comme langage de programmation. Il est conforme avec cette tâche, et il nous est accessible à travers notre cursus académique. En réalité, nous l'avions déjà utilisé, aussi bien pour les projets PeiP de la première année, que pour des projets personnels.
 
-Pour mieux organiser notre workflow et afin d'avoir accès aux versions précédentes de notre logiciel, nous avons utilisé \texttt{git} comme \textit{VCS} (logiciel de contrôle des versions). Suite à la création d'un dépôt sur \texttt{GitHub}, nous avons pu synchroniser nos fichiers locaux, gérés par \texttt{git}, sur le dépôt en ligne. Cela permet de mettre en jour le projet, et \guillemotleft\ télécharger \guillemotright\ les changements qu'on y fait, avec une seule commande.
+Pour mieux organiser notre travail et afin d'avoir accès aux versions précédentes de notre logiciel, nous avons utilisé \texttt{git} comme \textit{VCS} (logiciel de contrôle des versions). Suite à la création d'un dépôt sur \texttt{GitHub}, nous avons pu synchroniser nos fichiers locaux, gérés par \texttt{git}, sur le dépôt en ligne. Cela nous a permis de mettre en jour le projet, et mettre en communs les changements effectués facilement.
 
-Pour que notre application soit plus fonctionnelle, nous avons décidé de mettre en place une version PC et Android (voir figures \ref{fig:screenshot_pc} et \ref{fig:screenshot_android}). De cette manière, on permet à l'utilisateur,selon sa préférence, de consulter le correcteur de posture depuis son ordinateur ou son téléphone portable.
+Pour que notre application soit polyvalente, nous avons décidé de mettre en place une version PC et Android (voir figures \ref{fig:screenshot_pc} et \ref{fig:screenshot_android}). De cette manière, l'utilisateur peut consulter le correcteur de posture depuis son ordinateur ou son téléphone portable.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -447,13 +450,14 @@ Pour que notre application soit plus fonctionnelle, nous avons décidé de mettr
 \label{fig:screenshot_android}
 \end{figure}
 
-Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme : il y a une partie dédiée à la visualisation de la chaise, et une autre partie dédiée à la configuration (qu'elle concerne la chaise ou bien la visualisation). 
+Le design général de l'application dans les deux cas reste le même, indépendamment de la plateforme :  une partie est dédiée à la visualisation de la chaise, et l'autre est dédiée à la configuration (qu'elle concerne la chaise, la visualisation où la communication bluetooth). 
 
-Dans la partie visualisation, le schème choisi représente tout d'abord les pieds de la chaise, symbolisés par des cercles auxquels s'associe un nombre, qui correspond au ID de chaque load sensor. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins du panel de visualisation, et portant des nombres 1, 2, 3 et 4. Le schèma de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule \eqref{eq:centre_gravite_vectorielle}. Le centre de gravité est représenté par un cercle noir, qui se déplace dans le panel de visualisation suivant les changements de la posture assise de l'utilisateur.
+Dans la partie visualisation, on a représenté les pieds de la chaise par des cercles auxquels s'associe un nombre, correspondant à l'ID de chaque capteurs. Pour une chaise banale à quatre pieds, on aura donc quatre cercles, situés aux quatre coins de la zone de visualisation, et portant des nombres 1, 2, 3 et 4.
+Cette zone de la visualisation comprend en outre le centre de gravité de la personne assise, qui est donné par la formule \eqref{eq:centre_gravite_vectorielle}. Le centre de gravité est représenté par un cercle noir, qui se déplace dans en suivant les changements de la posture de l'utilisateur.
 
-Finalement, le schèma comprend aussi la deadzone, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
+Finalement, nous avons aussi inséré la \guillemotleft  deadzone\footnote{La deadzone est le nom qu'on donne à la zone de confort, c'est à dire la zone où on considère l'assise correcte.} \guillemotright, c'est-à-dire la zone dans laquelle la posture assise est considérée idéale. Traduit littéralement, ce mot signifie la zone morte. C'est un nom qu'on donne à un périmètre délimitant une zone où il est sensé ne rien se passer. Ici, si le centre de gravité est dans la zone, on est bien assis alors il ne se passe rien. Elle est représentée par un cercle vert, dont on peut modifier la taille ainsi que la position. Cela garantit que si on a une chaise différente (par exemple une chaise à trois ou à cinq pieds), l'utilisateur peut déplacer la position de la deadzone selon ses besoins : il suffit de prendre la posture considérée comme idéale, puis de calibrer la deadzone en cliquant sur le bouton correspondant.
 
-En somme, le schème choisi permet les manipulations suivantes :
+En somme, notre solution permet les manipulations suivantes :
 \begin{itemize}
 \item Modifier le nombre et les positions des pieds de la chaise;
 \item Modifier la position et la taille de la deadzone;
@@ -462,17 +466,30 @@ En somme, le schème choisi permet les manipulations suivantes :
 \end{itemize}
 
 
-Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0); cela veut dire que les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini). Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas on doit faire un \guillemotleft\ pair \guillemotright\  afin de pouvoir se connecter), ce qui est préférable, soit par USB. Finalement, on doit s'asseoir correctement, afin de calibrer l'application. On clique alors sur \guillemotleft\ tare \guillemotright\ , puis sur \guillemotleft\ calibrer \guillemotright\  pour calibrer la position de la deadzone. Une fois qu'on l'a calibrée, la deadzone est placée dans la position considérée comme \guillemotleft\ optimale \guillemotright\ . Finalement on peut modifier sa taille selon nos préférences. 
+Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0). Les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini).
+ Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas il faut appairer le smartphone ou PC au shield Bluetooth de l'Arduino au préalable afin de pouvoir s'y connecter), ce qui est préférable, soit par USB. 
+Finalement, on doit s'asseoir correctement, afin de calibrer l'application.
+Pour ce faire, il faut ,avant de s'asseoir sur la chaise, appuyer sur le bouton \guillemotleft\ tare \guillemotright . Cette action fera le zéro des capteurs et le centre de gravité se retrouvera déplacé au centre de la zone de visualisation. On peut ensuite s'asseoir dans la position désiré puis appuyer sur le bouton \guillemotleft\ calibrer \guillemotright . Une fois la calibration terminée, la deadzone est centrée sur la position du centre de gravité désirée. Finalement on peut modifier sa taille selon nos préférences. 
 
-Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne. En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré. Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
+Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne.
+ En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. 
+Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). 
+La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré.
+ Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
 
-Pour arriver à ce résultat, nous sommes passés par plusieurs étapes différentes, que nous allons examiner par la suite.
+Bien que notre matériel soit conçu pour une chaise à quatre pieds banale, nous avons tout de même tenus à développer un logiciel aussi général et polyvalent que possible.
+En effet, il peut fonctionner avec n'importe quel type de chaise avec n'importe quel nombre de pieds.
+
+Pour arriver à ce résultat, nous sommes passés par plusieurs étapes. L'objectif de la suite du rapport sera de les détailler.
 
 \subsection{La communication en série}
 \label{subsec:comm_serie}
-La première chose sur laquelle nous avons commencé à travailler peut être considérée comme l’étau de notre application, tout comme la modélisation de la chaise décrite dans la sous-section \ref{subsec:model_chaise}. Il s’agit de la partie \textit{communication}. C'est grâce à ce module qu'on peut finalement recevoir les données des senseurs dans un contexte qui permet de les visualiser et de les rendre plus faciles à interpréter par l'utilisateur.
+La première chose sur laquelle nous avons commencé à travailler est un élément essentiel de notre application, tout comme la modélisation de la chaise décrite dans la sous-section \ref{subsec:model_chaise}. Il s'agit de la partie \textit{communication}. C'est grâce à ce module qu'on peut finalement recevoir les données des capteurs dans un contexte qui permet de les visualiser et de les rendre plus faciles à interpréter par l'utilisateur.
 
-Ce module est basé sur la librairie \texttt{jSerialComm} [REFERENCE BIBLIOGRAPHIQUE]. Il obéit, comme nous avons dit, au protocole suivant :
+L'idée ici a été de trouver un moyen de manipuler les liaisons série de l'ordinateur pour permettre à l'Arduino de communiquer avec le PC où le smartphone.
+Pour cela, on a utilisé la librairie JAVA open-source \texttt{jSerialComm} [REFERENCE BIBLIOGRAPHIQUE]. Nous avons ensuite utilisé le code que Jérémy avait écrit pendant son stage de PeiP1 pour communiquer avec les ports série de l'ordinateur. On a donc pu rapidement élaborer un module JAVA permettant de communiquer avec l'Arduino sur lequel nous avons greffé l'interface graphique. La librairie jSerialComm est très complète et permet de lister et configurer tout les ports séries disponibles sur l'ordinateur à notre guise. Nous avons donc utilisé le standard défini dans la section \ref{sec:logiciel_bas} lorsque nous parlions de l'Arduino à savoir:
+
+%Ce module est basé sur la librairie \texttt{jSerialComm} [REFERENCE BIBLIOGRAPHIQUE]. Il obéit, comme nous avons dit, au protocole suivant :
 
 \begin{itemize}
 \item \textit{BaudRate} (vitesse de communication) : 9600
@@ -481,9 +498,22 @@ Ce module est basé sur la librairie \texttt{jSerialComm} [REFERENCE BIBLIOGRAPH
 \item \textit{Parity} (parité du message) : NO\_PARITY (pas de parité)
 \end{itemize}
 
-Nous pouvons désormais communiquer avec l'Arduino, en imposant un protocole commun pour les deux appareils. Le module est capable de trouver tous les \textit{ports} de communication en série disponibles sur l'ordinateur (ou le téléphone portable), de les lister et d’accorder à l'utilisateur le lancement d’un flux de communication à travers un de ces ports. Dans un second temps, ce flux permet de recevoir ou même d’envoyer des données : nous rappelons que, même si la fonction principale de l'application est de recevoir des données à partir des senseurs et de les interpréter, on doit être capable d'envoyer une commande afin d’effectuer une \textit{tare}, et réinitialiser ainsi les senseurs.
+On peut ensuite utiliser les ports séries à travers des flux d'entrée et de sorties. Ils se présentent sous la forme d'objets standards de la classe \texttt{java.io}. On reçoit les données dans un objet \textit{InputStream} retourné par le port série sélectionné avec la librairie jSerialComm puis on envoi les données dans un objet \textit{OutputStream} retourné par le port série. Ainsi, comme on l'a vu précédemment, les octets transmis à l'ordinateur au niveau du port série via la voie RX arriveront dans l'objet \textit{InputStream} et les données sortantes de l'ordinateur via \textit{l'OutputStream} se feront sur la voie TX.
 
-Finalement, le module \textit{communication en série} comporte un \guillemotleft\ parser \guillemotright , qui permet d'interpréter les données qui arrivent octet par octet depuis l'Arduino, et de les organiser dans un tableau d'entiers de façon que la valeur et l'ID des senseurs soient facilement récupérables. Cette fonctionnalité permet aussi de savoir si on a reçu des données incomplètes, ou même si on n'a rien reçu depuis l'Arduino.
+La librairie jSerialComm prends en charge la carte Bluetooth de l'ordinateur, si celui-ci en est équipé, et permet d'ouvrir des flux de communication série en Bluetooth de la même manière que pour un ports série physique. Le fonctionnement Bluetooth a donc été totalement transparent et implémenté d'office au niveau de l'application PC.
+
+Concernant l'application mobile, nous avons utilisé une partie du code rédigé par Jérémy lors de son projet de PeiP1 qui utilisait aussi la communication bluetooth série sur Android.
+ Le module bluetooth sur Android fonctionne grâce à l'API bluetooth   d'Android. 
+Nous nous sommes basés sur l'exemple \textit{BluetoothChat} fourni par Google dans son EDI Android Studio. L'idée reste cependant la même, la programmation se fait en JAVA et la réception et l'émission de données se font à travers des objets java.io.InputStream et java.io.OutputStream. 
+La communication pour le PC et Android est donc identique.
+
+%Nous pouvons désormais communiquer avec l'Arduino, en imposant un protocole commun pour les deux appareils.
+%Le module est capable de trouver tous les \textit{ports} de communication série disponibles sur l'ordinateur (ou le téléphone portable).
+% On peut ensuite les lister et accorder à l'utilisateur le lancement d'un flux de communication à travers un de ces ports. Ce flux permet de recevoir et envoyer des données : nous rappelons que, même si la fonction principale de l'application est de recevoir des données à partir des senseurs et de les interpréter, on doit être capable d'envoyer une commande afin d'effectuer une \textit{tare}, et réinitialiser ainsi les senseurs.
+
+Enfin, nous avons ajouté aux modules de communications un \guillemotleft\ parser \guillemotright , c'est à dire une sorte de déchiffreur pour interpréter les données reçues au niveau des flux.
+ Le parser analyse les octets et les organise dans un tableau d'entiers de façon que la valeur et l'ID des capteurs soient facilement récupérables pour être utilisés par la suite.
+Cette fonctionnalité permet aussi de savoir si on a reçu des données incomplètes, ou même si on n'a rien reçu depuis l'Arduino. En effet, le parser permet de détecter les données invalides en produisant les erreurs associés aux problèmes rencontrés (message incomplet, caractères non numérique pour les valeurs de capteurs...)
 
 
 \subsection{La modélisation de la chaise}
@@ -536,17 +566,136 @@ où $\mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$ est la taille de l
 
 
 %% === COMPTES RENDUS ===
-\weeklyreport{11/01/2017}{Rapport seance 1}
-\weeklyreport{18/01/2017}{Rapport seance 2}
-\weeklyreport{25/01/2017}{Rapport seance 3}
-\weeklyreport{01/02/2017}{Rapport seance 4}
-\weeklyreport{08/02/2017}{Rapport seance 5}
-\weeklyreport{15/02/2017}{Rapport seance 6}
-\weeklyreport{08/03/2017}{Rapport seance 7}
-\weeklyreport{15/03/2017}{Rapport seance 8}
-\weeklyreport{22/03/2017}{Rapport seance 9}
-\weeklyreport{29/03/2017}{Rapport seance 10}
-\weeklyreport{05/04/2017}{Rapport seance 11}
+\weeklyreport{11/01/2017}{
+Séance 1:
+Expérimentation et choix techniques:
+\begin{itemize}
+\item Installation IDE Arduino + pilotes
+\item Création du dépôt Github
+\item Premier code Arduino: faire clignoter la LED intégrée
+\item Acquisition du capteur de pression et affichage moniteur série
+\item Dialogue JAVA série via jSerialComm entre Arduino et PC
+\end{itemize}
+}
+\weeklyreport{18/01/2017}{
+Séance 2:
+Travail sur le matériel:
+\begin{itemize}
+\item Branchement de 3 potentiomètres + un FSR sur l'Arduino
+\item Recherche de capteurs capable de mesurer des force plus grandes
+\end{itemize}
+Programmation:
+\begin{itemize}
+\item Mise en place du protocole de communication des données
+\item Programmation d'une première interface graphique avec JAVA Swing pour visualiser la chaise
+\item Première vidéo de fonctionnement du programme
+\end{itemize}
+}
+\weeklyreport{25/01/2017}{
+Séance 3:
+Travail sur le matériel:
+\begin{itemize}
+\item Démontage d'une balance électronique pour étudier les capteurs de charges
+\item Mesure des résistances des capteurs de charges et création d'un pont WheatStone
+\item Tentative de mesure du pont wheatstone (échec)
+\item Ajout du Shield Bluetooth sur l'Arduino
+\item Test d'alimentation de l'Arduino via une batterie portable
+\end{itemize}
+Programmation:
+\begin{itemize}
+\item Modification du code de l'Arduino pour recevoir des données depuis le PC
+\item Ajout du code de prise en charge du Shield Bluetooth
+\end{itemize}
+}
+\weeklyreport{01/02/2017}{
+Séance 4:
+Programmation:
+\begin{itemize}
+\item Démarrage du développement de l'application Android sur Android Studio
+\item Ajout de fonctionnalité de paramétrage de la chaise sur PC
+\end{itemize}
+}
+\weeklyreport{08/02/2017}{
+Séance 5:
+Programmation:
+\begin{itemize}
+\item Ajout de la fonction de paramétrage d'une "deadzone" dans laquelle on dit que la posture assise est correcte.  Un cercle vert indique la zone de confort. Les informations à propos de cette zone sont stockés dans l'objet Chaise conçu pour effectuer tout les calculs.
+\item Corrections de bugs dans l'application Android. Amélioration des performances.
+\item Modification du nom bluetooth du shield Arduino (BTProjetDI6)
+\end{itemize}
+}
+\weeklyreport{15/02/2017}{
+Séance 6:
+Programmation:
+\begin{itemize}
+\item Retour au tableau blanc, correction de bugs introduits par la fonctionnalité de deadzone
+\item Ajout de fonctionnalité de sauvegarde et chargement de l'objet chaise.
+\end{itemize}
+}
+\weeklyreport{08/03/2017}{
+Séance 7:
+Programmation:
+\begin{itemize}
+\item Finalisation de la sauvegarde et du chargement de la chaise sur PC
+\item Début de l'implémentation de la fonction de chargement sur Android
+\item Modification du code de l'Arduino pour prendre en charge les amplificateurs HX711
+\end{itemize}
+Matériel:
+\begin{itemize}
+\item Récupération de 4 cellules de charges
+\item Fabrication des ponts wheatstones fonctionnels
+\item Connexion de 3 amplificateurs HX711 pour utiliser les capteurs de charges
+\end{itemize}
+}
+\weeklyreport{15/03/2017}{
+Séance 8:
+Programmation:
+\begin{itemize}
+\item Modification du parser pour l'objet chaise (correction de bugs et modification du fonctionnement, la sérialisation ne marchait pas bien)
+\item Modification du code de l'Arduino pour adapter la mesure des capteurs de charges (réduire le bruit)
+\end{itemize}
+}
+\weeklyreport{22/03/2017}{
+Séance 9:
+Programmation:
+\begin{itemize}
+\item Refactoring du code d'enregistrement 
+\item Modification de la description de la deadzone (on utilise le ratio maintenant)
+\item Ajout des boutons Tare sur PC et Android
+\item Prise en charge de la Tare sur l'Arduino
+\end{itemize}
+Matériel:
+\begin{itemize}
+\item Design de cales pour les capteurs de charges sur AutoCad
+\item Réalisation de cales en bois MDF pour les capteurs de charges
+\end{itemize}
+Première simulation:
+On a posé une chaise sur les capteurs et on a posé un sac sur celle-ci après avoir fait la calibration. 
+On arrive bien à détecter la position du sac.
+}
+\weeklyreport{29/03/2017}{
+Séance 10:
+Programmation:
+\begin{itemize}
+\item Amélioration de l'acquisition des valeurs dans le programme Arduino
+\end{itemize}
+Matériel:
+\begin{itemize}
+\item Changement des fils de connexion des capteurs de charges
+\item Ajout d'une protection mécanique des fils avec de la gaine thermo-rétractable
+\end{itemize}
+}
+Rédaction du rapport de projet
+\weeklyreport{05/04/2017}{
+Séance 11:
+Matériel:
+\begin{itemize}
+\item Recherche d'une plaque à poser sur les capteurs de charge pour les protéger et éviter un contact direct avec les pieds de la chaise
+\item Dimension de la plaque $60 \times 60$ cm ou $65 \times 65$ cm.
+\end{itemize}
+Rédaction du rapport de projet
+Prise de photos pour le rapport de projet
+}
 \weeklyreport{26/04/2017}{Rapport seance 12}
 
 
