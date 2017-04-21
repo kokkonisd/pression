@@ -290,7 +290,7 @@ Jérémy a réussi à récupérer les cellules de charges d'un pèse personne é
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.2]{image/load_sensor.jpg}
+\includegraphics[width=12cm]{image/load_sensor.jpg}
 \end{center}
 \caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE:ELECTRONIC STACK EXCHANGE}
 \label{fig:load_sensor}
@@ -300,7 +300,7 @@ Par la suite, le défi a été de réaliser 4 ponts de Wheatstone en couplant ch
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.2]{image/load_sensor_connected.jpg}
+\includegraphics[width=12cm]{image/load_sensor_connected.jpg}
 \end{center}
 \caption{4 cellules de charges en demi-pont connectées à l'Arduino en utilisant des amplis HX711}
 \label{fig:load_sensor_connected}
@@ -518,24 +518,31 @@ Cette fonctionnalité permet aussi de savoir si on a reçu des données incompl�
 
 \subsection{La modélisation de la chaise}
 \label{subsec:model_chaise}
-Dans la programmation, la partie la plus difficile est souvent non pas l'implémentation, mais la modélisation d'un problème. Ici on voit que cette hypothèse est bien vérifiée : la qualité de notre correcteur de posture dépend, au niveau logiciel, de la qualité et de l'exactitude de la modélisation de notre objet d'étude, c'est-à-dire de la \textit{chaise}. C'est à cause de ce fait que nous avons dépensé beaucoup de temps à bien modéliser l'objet \guillemotleft\ chaise \guillemotright\ afin de prévenir l’intrusion d’incertitudes et de problèmes secondaires.
+Dans la programmation, la partie la plus difficile est souvent non pas l'implémentation, mais la modélisation d'un problème. Ici on voit que cette hypothèse est bien vérifiée : la qualité de notre correcteur de posture dépend, au niveau logiciel, de la qualité et de l'exactitude de la modélisation de notre objet d'étude, c'est-à-dire de la \textit{chaise}. C'est à cause de ce fait que nous avons dépensé beaucoup de temps à bien modéliser l'objet \guillemotleft\ chaise \guillemotright\ afin de prévenir l'intrusion d'incertitudes et de problèmes secondaires.
 
-En obéissant au modèle de programmation utilisé par \texttt{Java} (c'est-à-dire à la programmation dite \textit{orientation-objet} ou \textit{OOP}), nous avons décidé de séparer la chaise en deux éléments : le \guillemotleft\ parent \guillemotright\ (la chaise) et l' \guillemotleft\ enfant \guillemotright\ (les pieds). L'idée ici est que, si on se donne une chaise arbitraire, elle va forcement posséder des pieds; en fait, la seule chose qui distingue les chaises différentes, au niveau de leurs pieds, est le \textit{nombre} des pieds, ou leur position.
+Le fait de développer cet objet nous a permis de conceptualiser l'objectif du projet. Concrètement, cet objet contient toute la logique du projet qui est de déterminer la posture d'une personne en l'occurrence ici nous la déterminons à l'aide de la position du centre de gravité.
 
-Nous avons donc commencé par la construction d'une classe appelée \texttt{Pied}, qui comporte trois caractéristiques :
+En obéissant au modèle de programmation utilisé par \texttt{JAVA} (c'est-à-dire à la programmation orientée objet ou \textit{OOP}), nous avons décidé de séparer la chaise en deux éléments : le \guillemotleft\ parent \guillemotright\ (la chaise) et l' \guillemotleft\ enfant \guillemotright\ (les pieds).
+Nous sommes parti de l'idée suivante: si on se donne une chaise arbitraire, elle va forcément posséder des pieds. En fait, la seule chose qui distingue deux chaises sera son nombre de pieds et leur position respectives. Ce n'est pas tout à fait exacte dans la réalité car on pourrait aussi considérer le dossier, mais l'important est que, dans notre cas d'étude, on ne s'intéresse qu'à la valeur des forces au niveau des pieds.
+
+Nous avons donc commencé par la construction d'une classe (objet) appelée \texttt{Pied}, qui comporte trois caractéristiques :
 \begin{itemize}
 \item Sa position (posX, posY);
-\item Sa \guillemotleft\ masse \guillemotright ;
-\item L’ID du senseur qui lui correspond.
+\item Sa \guillemotleft\ masse \guillemotright (ou valeur de force) ;
+\item L’ID du capteur qui lui est associé.
 \end{itemize}
 
-Dans notre application, l'ID du senseur qui correspond à un certain pied est un nombre entier, compris entre 1 et 4 ; il sert à identifier les pieds et à les distinguer entre eux. Ce nombre, avec la position, sont les deux caractéristiques requises pour modéliser un pied. La troisième caractéristique, à savoir la masse associée au pied, va changer en fonction de la position de la charge appliquée sur la chaise.
+Dans notre application, l'ID du capteur qui correspond à un certain pied est un nombre entier, compris entre 1 et 4 ; il sert à identifier les pieds et à les distinguer entre eux. Ce nombre, avec la position, sont les deux caractéristiques requises pour modéliser un pied. La troisième caractéristique, à savoir la masse associée au pied, va changer en fonction de la position de la charge appliquée sur la chaise.
 
-Ensuite, nous avons travaillé sur la modélisation de la chaise elle-même. Celle-ci est bien sûr plus compliquée à définir que le pied. Dans une configuration élémentaire, une chaise pourrait être conçue comme un ensemble de pieds; mais dans notre application il est essentiel de pouvoir la visualiser pour l'utilisateur, et lui procurer ainsi des informations supplémentaires, telles que la \textit{deadzone}, c'est-à-dire la zone dans laquelle la posture de l'utilisateur est optimale. Il est également essentiel que notre configuration rende compte de l'échelle et les dimensions de la chaise, questions que nous détaillerons par la suite.
+Ensuite, nous avons travaillé sur la modélisation de la chaise elle-même. 
+Celle-ci est bien sûr plus compliquée à définir que le pied. 
+Dans une configuration élémentaire, une chaise pourrait être conçue comme un ensemble de pieds.
+Cependant, il est essentiel de pouvoir la visualiser pour l'utilisateur, et lui procurer ainsi des informations supplémentaires, telles que la \textit{deadzone}, c'est-à-dire la zone dans laquelle la posture de l'utilisateur est optimale.
+Il est également essentiel que notre configuration rende compte de l'échelle et les dimensions de la chaise, questions que nous détaillerons par la suite.
 
 Une chaise comporte donc :
 \begin{itemize}
-\item Un ensemble (plus précisément, un \texttt{ArrayList}) d’objets \texttt{Pied};
+\item Un ensemble (plus précisément, un \texttt{ArrayList}) d'objets \texttt{Pied} modifiable à tout instant;
 \item Un barycentre, appelé $G$, défini par sa position \texttt{(gposX, gposY)};
 \item Une deadzone, définie par quatre paramètres :
 \begin{itemize}
@@ -546,19 +553,37 @@ Une chaise comporte donc :
 \item Sa taille horizontale et verticale \texttt{(maxPosX, maxPosY)}.
 \end{itemize}
 
-Comme nous avons dit plus haut, l'élément le plus essentiel de notre modélisation est l'ensemble des objets \texttt{Pied} qui constituent la chaise. Ensuite, nous associons le point $G$, décrit au début de ce chapitre, à l'objet chaise, car il est propre à lui et ne dépend que des valeurs de masse fournies par les pieds, qui à leur tour appartiennent à la chaise. Il est donc plus logique que le barycentre fasse partie de la chaise.
+Comme nous avons dit plus haut, l'élément le plus essentiel de notre modélisation est l'ensemble des objets \texttt{Pied} qui constituent la chaise.
+Le point $G$, correspondant au centre de masse, est calculé par une la formule de calcul \eqref{eq:centre_gravite_cartesienne} implémentée dans l'objet chaise et n'est calculé que lorsque les pieds de la chaise sont modifiés (valeurs, position, ajout d'un pied...). On calcul donc la position de $G$ à l'aide des Pieds présents dans la liste des pieds de la chaise.
 
-À ce niveau, nous avons construit une fonctionnalité supplémentaire, qui peut paraître simple, mais son implémentation n'est pas évidente : la deadzone. Celle-ci est définie tout d'abord par sa position, qui dépend de l'utilisateur, puisqu'elle doit être adaptée à ses besoins. Étant donné qu’il s’agit d’un cercle, comme on a vu au début de ce chapitre, elle dispose d’un rayon. Soulignons que la deadzone est susceptible de se déformer en fonction des dimensions de la fenêtre de l'application, en devenant une \guillemotleft\ ellipse \guillemotright .
+Le barycentre étant une caractéristique de la chaise, il est logique qu'il soit contenu dans cet objet.
 
-La contrainte à implémenter ici est simple : on ne veut pas que le rayon de la deadzone dépasse la moitié de la dimension la plus petite de la chaise, qu'elle soit la dimension verticale ou horizontale. Pour généraliser nos formules, afin d'être sûr que cette contrainte s'applique sur n’importe quelle chaise, il a fallu introduire la notion du \textit{ratio}. Comme on l'expliquera dans la sous-section \ref{subsec:visualisation}, le rayon de la deadzone dépend d'un \texttt{JSlider}. Comme il est divisé en 100 unités, le \texttt{JSlider} peut avoir toutes les valeurs entières entre 0 et 100. Le \textit{ratio} est tout simplement le pourcentage du \texttt{JSlider}, c'est à dire :
+À ce niveau, nous avons construit une fonctionnalité supplémentaire, qui peut paraître simple, mais son implémentation n'est pas évidente : la deadzone.
+Celle-ci est définie tout d'abord par sa position, qui dépend de l'utilisateur, puisqu'elle doit être adaptée à ses besoins.
+Nous avons choisi de représenter cette zone par un cercle disposant d'un rayon modifiable.
+Soulignons que la deadzone est susceptible de se déformer en fonction des dimensions de la fenêtre de l'application, en devenant une \guillemotleft\ ellipse \guillemotright .
+
+Nous avons choisi de définir la deadzone relativement aux caractéristiques de la chaise. L'idée est que l'utilisateur peut jouer sur la taille de la deadzone à l'aide d'un ratio compris entre 0 et 1 et sur la position du centre de la deadzone à l'aide de la calibration. 
+Le ratio sert à définir la proportion d'une dimension caractéristique de la chaise qui sera utilisé en tant que rayon pour la deadzone. 
+On a choisit de faire en sorte que la deadzone ne recouvre pas toute la surface en dessous de la chaise. 
+La contrainte à implémenter ici est simple : on ne veut pas que le rayon de la deadzone dépasse la moitié de la dimension la plus petite de la chaise, qu'elle soit la dimension verticale ou horizontale (ainsi la deadzone est toujours contenue entre les pieds).
+%Pour généraliser nos formules, afin d'être sûr que cette contrainte s'applique sur n'importe quelle chaise, il a fallu introduire la notion du \textit{ratio}. 
+Comme on l'expliquera dans la sous-section \ref{subsec:visualisation}, le rayon de la deadzone dépend d'un \texttt{JSlider} modifié par l'utilisateur à travers l'interface graphique (widget graphique de la librairie Swing JAVA représentant un slider).
+Comme il est divisé en 100 unités, le \texttt{JSlider} peut avoir toutes les valeurs entières entre 0 et 100. Le \textit{ratio} est tout simplement le pourcentage du \texttt{JSlider}, c'est à dire :
 
 $$\mathrm{ratio} = \frac{\mathrm{JSlider}}{100} \in [0, 1]$$
 
-Pour être donc sûr que le rayon de la deadzone ne dépassera jamais la moitié de la plus petite dimension de la fenêtre, il suffit de multiplier la moitié du \textit{ratio} par la plus petite dimension. Le rayon de la deadzone est ainsi donné par la formule suivante :
+%Pour être donc sûr que le rayon de la deadzone ne dépassera jamais la moitié de la plus petite dimension de la chaise, il suffit de multiplier la moitié du \textit{ratio} par la plus petite dimension. Le rayon de la deadzone est ainsi donné par la formule suivante :
+Pour faire en sorte que la deadzone soit contenue entre les pieds de la chaise, on calcul son rayon de la façon suivante:
 
 $$R_\mathrm{deadzone} = \frac{\mathrm{ratio}}{2}\ \mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$$
 
-où $\mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$ est la taille de la plus petite dimension.
+où $\mathrm{min}(\mathrm{dimensionX},\ \mathrm{dimensionY})$ est la taille de la plus petite dimension de la chaise.
+
+L'élaboration de l'objet Chaise nous a demandé beaucoup de temps et de correction de bugs. En effet, il a fallu élaborer les formules de calculs, définir les bonnes structures de données et passer par quelques étapes de sérieuses réflexion pour aboutir à un objet fonctionnel et qui réalise les fonctions voulues.
+
+Nous allons désormais passer à la partie visualisation de la posture dans laquelle nous expliquerons comment nous avons utilisé l'objet Chaise pour l'afficher à l'utilisateur de manière compréhensible.
+
 
 \subsection{La visualisation du correcteur de posture}
 \label{subsec:visualisation}
@@ -577,6 +602,7 @@ Expérimentation et choix techniques:
 \item Dialogue JAVA série via jSerialComm entre Arduino et PC
 \end{itemize}
 }
+
 \weeklyreport{18/01/2017}{
 Séance 2:
 Travail sur le matériel:
@@ -591,6 +617,7 @@ Programmation:
 \item Première vidéo de fonctionnement du programme
 \end{itemize}
 }
+
 \weeklyreport{25/01/2017}{
 Séance 3:
 Travail sur le matériel:
@@ -607,6 +634,7 @@ Programmation:
 \item Ajout du code de prise en charge du Shield Bluetooth
 \end{itemize}
 }
+
 \weeklyreport{01/02/2017}{
 Séance 4:
 Programmation:
@@ -615,6 +643,7 @@ Programmation:
 \item Ajout de fonctionnalité de paramétrage de la chaise sur PC
 \end{itemize}
 }
+
 \weeklyreport{08/02/2017}{
 Séance 5:
 Programmation:
@@ -624,6 +653,7 @@ Programmation:
 \item Modification du nom bluetooth du shield Arduino (BTProjetDI6)
 \end{itemize}
 }
+
 \weeklyreport{15/02/2017}{
 Séance 6:
 Programmation:
@@ -632,6 +662,7 @@ Programmation:
 \item Ajout de fonctionnalité de sauvegarde et chargement de l'objet chaise.
 \end{itemize}
 }
+
 \weeklyreport{08/03/2017}{
 Séance 7:
 Programmation:
@@ -647,6 +678,7 @@ Matériel:
 \item Connexion de 3 amplificateurs HX711 pour utiliser les capteurs de charges
 \end{itemize}
 }
+
 \weeklyreport{15/03/2017}{
 Séance 8:
 Programmation:
@@ -655,6 +687,7 @@ Programmation:
 \item Modification du code de l'Arduino pour adapter la mesure des capteurs de charges (réduire le bruit)
 \end{itemize}
 }
+
 \weeklyreport{22/03/2017}{
 Séance 9:
 Programmation:
@@ -673,6 +706,7 @@ Première simulation:
 On a posé une chaise sur les capteurs et on a posé un sac sur celle-ci après avoir fait la calibration. 
 On arrive bien à détecter la position du sac.
 }
+
 \weeklyreport{29/03/2017}{
 Séance 10:
 Programmation:
@@ -684,8 +718,9 @@ Matériel:
 \item Changement des fils de connexion des capteurs de charges
 \item Ajout d'une protection mécanique des fils avec de la gaine thermo-rétractable
 \end{itemize}
-}
 Rédaction du rapport de projet
+}
+
 \weeklyreport{05/04/2017}{
 Séance 11:
 Matériel:
@@ -696,6 +731,7 @@ Matériel:
 Rédaction du rapport de projet
 Prise de photos pour le rapport de projet
 }
+
 \weeklyreport{26/04/2017}{Rapport seance 12}
 
 
