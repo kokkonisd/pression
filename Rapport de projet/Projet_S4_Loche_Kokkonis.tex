@@ -587,7 +587,157 @@ Nous allons désormais passer à la partie visualisation de la posture dans laqu
 
 \subsection{La visualisation du correcteur de posture}
 \label{subsec:visualisation}
-%TODO
+
+Une fois qu'on a réussi à modéliser et puis implémenter la chaise, il est temps de développer l'interface graphique. Ce domaine est important aussi, car notre résolution au problème de la posture assise nécessite un moyen visuel pour communiquer à l'utilisateur la qualité de la posture.
+
+Pour implémenter cette interface graphique, nous avions le choix entre les deux librairies graphiques actuellement les plus préférées en \texttt{Java} : \texttt{Swing} et \texttt{JavaFX}. Bien que, à partir de \texttt{Java 8}, la documentation officielle de \texttt{Java} propose de préférence \texttt{JavaFX}, \texttt{Swing} est toujours largement exploité et très bien documenté. Il se touve d’ailleurs derrière le développement de logiciels très populaires, utilisées même aujourd'hui, comme \texttt{NetBeans} ou \texttt{IntelliJ IDEA}.
+
+L'interface graphique de notre application est séparée en deux parties, un panneau de visualisation de la chaise, et un panneau permettant de contrôler ensemble le détecteur et la chaise. Ces deux panneaux contiennent les éléments décrits au début de ce chapitre.
+
+Le panneau de visualisation, que nous allons appeler désormais \texttt{Visualisation JPanel}, contient la partie du programme qui est responsable pour le \textit{dessin} de tous les éléments graphiques sur l'écran. Il est préférable d'avoir une seule partie dédiée au \textit{dessin}, afin de mieux organiser notre code, mais aussi afin de minimiser les appels aux processus de dessin, qui ne sont pas efficaces d’habitude, et qui ont un certain coût, tant au niveau du temps qu’à celui des ressources de l'ordinateur. Cette technique est aussi très utilisée dans le développement des pages web, où le temps de chargement dans tous les cas doit être le plus bref possible.
+
+Dans la partie qui gère le \textit{dessin} de notre application, on retrouve les éléments essentiels de la chaise : deux axes, vertical et horizontal, qui désignent le centre géométrique du panneau de visualisation, les pieds, représentés par des cercles numérotés selon les ID des senseurs correspondants, la deadzone, et finalement le barycentre. Ce dernier est figuré simplement par un cercle noir, dont la position est calculée dans le module chaise (voir la sous-section \ref{subsec:model_chaise}). Par contre, le dessin des pieds est plus compliqué : afin d’assurer que les numéros - à savoir les ID - des pieds sont bien centrés par rapport aux cercles qui représentent les pieds eux-mêmes, nous avons dû utiliser un élément \texttt{Java} appelé \texttt{FontMetrics}. Cet élément permet de savoir exactement où se trouve le centre et les extrémités X et Y d'une chaîne de caractères; or ce sont les informations requises dans notre cas pour centrer les ID, qui sont représentés par une chaîne de caractères. On pourrait signaler ici une limitation de \texttt{Java} : il n’y est ni évident, ni efficace, de centrer une chaîne de caractères, donc il est difficile d’obtenir une interface graphique qui soit non seulement pratique mais aussi esthétique, avec un design fonctionnel pour l'utilisateur, sans recours à des méthodes supplémentaires (documentation, tooltips etc) .
+
+Dans les paragraphes qui suivent, il nous faut présenter l'élément peut-être le plus important de cette partie de notre logiciel : les méthodes \texttt{scaleX} et \texttt{scaleY}.
+
+Le problème à traiter ici est le suivant : à cause du fait qu'on ne peut ni contrôler ni prévoir la taille éventuelle de la fenêtre ou de la chaise, on configure deux \guillemotleft\ référentiels \guillemotright . 
+Le premier est le référentiel \guillemotleft\ réel \guillemotright , qui correspond aux vraies dimensions de la chaise. Supposons, par exemple, une chaise carrée à quatre pieds, dont le côté mesure 1 mètre. Comme nous avons dit plus haut, le point \texttt{(0, 0)} correspond au pied gauche devant. Si on place quelque chose au point \texttt{(0.5 m, 0.5 m)}, celui-ci se trouvera au centre de la chaise, dans le référentiel dit \guillemotleft\ réel \guillemotright . 
+
+Le second référentiel est le réferentiel \guillemotleft\ numérique \guillemotright , qui correspond à la visualisation de la chaise, et, comme nous avons dit plus haut, dépend de la taille de la fenêtre de l'application et de la taille de la chaise saisie par l'utilisateur. 
+
+Le but est donc d’exprimer les données de notre référentiel \guillemotleft\ réel \guillemotright\ dans le référentiel \guillemotleft\ numérique \guillemotright\ .
+
+\begin{figure}[htbp]
+\begin{tikzpicture}
+\coordinate (P1) at (0,4);
+\coordinate (P2) at (4,4);
+\coordinate (P3) at (0,0);
+\coordinate (P4) at (4,0);
+\coordinate (A) at (2,4);
+\coordinate (B) at (0, 2);
+\coordinate (ARR) at (6,1.6);
+\coordinate (MCH) at (1.5, 3);
+
+\draw[<->, line width=1pt] (0.2,4) -- (3.8,4);
+\draw[<->, line width=1pt] (0,0.2) -- (0,3.8);
+\draw (A) node[above] {$\alpha$};
+\draw (B) node[left] {$\beta$};
+
+\draw (P1) node[above] {$P_1\ (0, 0)$} node{$\bullet$};
+\draw (P2) node[above] {$P_2$} node{$\bullet$};
+\draw (P3) node[below] {$P_3$} node{$\bullet$};
+\draw (P4) node[below] {$P_4$} node{$\bullet$};
+
+\draw (MCH) node[below] {$M_{ch} (x_{ch}, y_{ch})$} node{$\bullet$};
+\draw [-] [dashed] (MCH) -- (0,3);
+\draw [-] [dashed] (MCH) -- (1.5,4);
+
+\draw (ARR) node[above] {\Huge{$\Rightarrow$}};
+
+\coordinate (S1) at (8, 4);
+\coordinate (S2) at (12, 4);
+\coordinate (S3) at (8, 0);
+\coordinate (S4) at (12, 0);
+\coordinate (D) at (8, 4.4);
+
+\draw[<->, line width=1pt] (7.8,4.4) -- (8.2,4.4);
+\draw (D) node[above] {$d$};
+
+\draw (S1) circle (.2cm);
+\draw (S2) circle (.2cm);
+\draw (S3) circle (.2cm);
+\draw (S4) circle (.2cm);
+
+\draw (S1) node {$1$};
+\draw (S2) node {$2$};
+\draw (S3) node {$3$};
+\draw (S4) node {$4$};
+
+\draw [-] (8, 4.2) -- (12, 4.2);
+\draw [-] (8, -0.2) -- (12,-0.2);
+\draw [-] (7.8, 4) -- (7.8, 0);
+\draw [-] (12.2, 4) -- (12.2, 0);
+
+\draw[<->, line width=1pt] (12.4, -0.2) -- (12.4, 4.2);
+\draw[<->, line width=1pt] (7.8, -0.4) -- (12.2, -0.4);
+
+\draw (10, -0.6) node {$l$};
+\draw (12.6, 2) node {$h$};
+
+\coordinate (MNUM) at (9.5, 3);
+\draw (MNUM) node[below] {$M_{num} (x_{num}, y_{num})$} node{$\bullet$};
+\draw [-] [dashed] (MNUM) -- (7.8, 3);
+\draw [-] [dashed] (MNUM) -- (9.5, 4.2);
+\end{tikzpicture}
+\caption{Le même point exprimé en deux référentiels : \textit{réel} (à gauche) et \textit{numérique} (à droite)}
+\label{fig:visualisation_referentiels}
+\end{figure}
+
+Supposons une chaise à quatre pieds (voir la figure \ref{fig:visualisation_referentiels}), dont la largeur est $\alpha$ et la hauteur $\beta$. Supposons aussi que le panneau de visualisation a une hauteur $h$ et une largeur $l$. Signalons comme $d$ le diamètre des cercles utilisés dans le panneau, c'est-à-dire le cercle qui représente le barycentre, et les cercles qui représentent les pieds de la chaise. Alors, la largeur et la hauteur de la chaise dans le panneau de visualisation sont :
+
+\begin{equation}
+\mathrm{largeur} = l - d
+\end{equation}
+
+\begin{equation}
+\mathrm{hauteur} = h - d
+\end{equation}
+
+Cependant, quand on passe à l'implémentation de ces formules, on fait face à une différence importante. Pour obtenir la hauteur et la largeur du panneau, on utilise la méthode \texttt{getHeight()} et, respectivement, \texttt{getWidth()}); or, comme il est noté dans la documentation [REFERENCE BIBLIOGRAPHIQUE], ces méthodes nous donnent un nombre qui est un pixel trop grand. Nous devons donc le supprimer :
+
+\begin{center}
+\texttt{height = getHeight() - 1 - diamètre}\\
+\texttt{width = getWidth() - 1 - diamètre}
+\end{center}
+
+Les formules qui relient les deux référentiels seront finalement les suivantes :
+
+\begin{equation}
+\label{eqn:form_ref_hor}
+x_{num} = x_{ch}\ \ \frac{\mathrm{largeur}}{\alpha} + \frac{d}{2}
+\end{equation}
+
+\begin{equation}
+\label{eqn:form_ref_vert}
+y_{num} = y_{ch}\ \ \frac{\mathrm{hauteur}}{\beta} + \frac{d}{2}
+\end{equation}
+
+où $(x_{ch}, y_{ch})$ est un point quelconque dans le référentiel de la chaise (c'est-à-dire le référentiel \guillemotleft\ réel \guillemotright ), et $(x_{num}, y_{num})$ est le même point, exprimé dans le référentiel du panneau (c'est-à-dire le référentiel \guillemotleft\ numérique \guillemotright ).
+
+En somme, les méthodes \texttt{scaleX} et \texttt{scaleY} permettent de dessiner n'importe quel élément (que ce soit le barycentre ou la deadzone) avec la certitude que l'échelle est respectée dans n'importe quelle taille de fenêtre.
+
+Une fois qu'on a décrit la partie calculatoire qui assure le bon fonctionnement du panneau de visualisation, nous allons passer à la description des éléments interactifs de l'interface graphique.
+
+Tout d'abord, nous avons utilisé les objets \texttt{JFrame} et \texttt{JPanel} pour séparer la fenêtre de notre application en deux; ce faisant, nous communiquons à l'utilisateur que la partie gauche, à savoir le panneau de visualisation, va afficher des informations relatives à la qualité de la posture assise, alors que la partie droite va lui permettre de contrôler les paramètres du détecteur de posture. Finalement, en haut se trouve un menu construit à partir d'un objet \texttt{JMenu}, qui permet d'enregistrer ou de charger une chaise.
+
+Ensuite, en utilisant deux objets \texttt{JButton} et un objet \texttt{JComboBox}, nous avons créé la partie \textit{communication} du panneau de contrôle : Le \texttt{JComboBox} est tout simplement une liste contenant tout port sériel disponible sur la machine et récupérable grâce au module de communication décrit dans la sous-section \ref{subsec:comm_serie}. Les \texttt{JButton} sont des boutons, permettant de se connecter ou se déconnecter au port choisi (voir figure \ref{fig:app_pc_comms}). Évidemment, nous avons mis en place des mécanismes pour que les boutons \guillemotleft\ Connexion \guillemotright\ et \guillemotleft\ Déconnexion \guillemotright\ soient actifs seulement s'il le faut; par exemple, l'utilisateur ne doit pas être capable de cliquer sur \guillemotleft\ Déconnexion \guillemotright\ s'il n'est pas connecté au préalable.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12cm]{image/app_pc_comms}
+\end{center}
+\caption{Les contrôles de communication dans l'application PC}
+\label{fig:app_pc_comms}
+\end{figure}
+
+En dessous de ces trois éléments se trouvent trois autres boutons, qui ne concernent pas la connexion avec l'Arduino, mais les paramètres du détecteur de posture : 
+\begin{itemize}
+\item Le bouton \guillemotleft\ Tare \guillemotright\ permet de faire une \textit{tare} et réinitialiser les senseurs
+\item Le bouton \guillemotleft\ Config chaise \guillemotright\ permet de configurer les paramètres de la chaise (c'est-à-dire le nombre des pieds et leurs positions)
+\item Le bouton \guillemotleft\ Calibrer la zone \guillemotright\ permet de centrer la deadzone à la position actuelle du barycentre (voir figure \ref{fig:app_pc_chaise}). Ce dernier bouton est très important, car il permet à l'utilisateur de contrôler la position de la zone optimale ; il est à noter que celle-ci n'est pas forcément au centre de la chaise, puisqu’elle dépend de la structure de cette dernière.
+\end{itemize}
+
+Enfin, on a un objet \texttt{JSlider}, qui permet de contrôler la taille de la deadzone (voir figure \ref{fig:app_pc_chaise}). Il est tout à fait possible d'avoir une deadzone dont le diamètre est égal à la plus petite dimension de la chaise; toutefois il est fortement conseillé d'avoir la deadzone la plus petite possible, afin que le détecteur soit plus précis.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6cm]{image/app_pc_chaise}
+\end{center}
+\caption{Les contrôles de configuration de la chaise}
+\label{fig:app_pc_chaise}
+\end{figure}
+
+Pour conclure, notre choix d’utiliser exclusivement des éléments \texttt{Swing} pour construire l'interface graphique repose au fait que cette librairie est très bien documentée et supportée en ligne, ce qui nous a permis de résoudre tous les problèmes que nous avons rencontrés et de rendre notre interface graphique plus fonctionnelle.
 
 
 %% === COMPTES RENDUS ===
