@@ -1,5 +1,7 @@
 \documentclass{polytech/polytech}
 \usepackage{tikz}
+%\usepackage[backend=biber]{biblatex}
+%\usepackage{cite}
 
 %-----------Configuration du rapport-----------------
 
@@ -37,11 +39,15 @@
 \keyword{Posture correction, Embedded system, Arduino, Java, C}
 
 
+\addbibresource{biblio.bib}
+
+
 \begin{document}
+
 
 \chapter*{Introduction}
 
-De nos jours, de nombreuses personnes souffrent du mal de dos dut à une mauvaise posture assise. En effet, il suffit de se rendre dans une salle de cours pleine d'étudiants pour constater que beaucoup d'entre eux sont mal assis. C'est pourquoi, nous avons choisi de travailler sur le projet de développement d'un correcteur de posture assise proposé par M.Beaufils. La proposition de M. Beaufils a été de construire ce dispositif à partir d'un Arduino Uno et des capteurs de forces placés sous les pieds d'une chaise. 
+De nos jours\citation{article}, de nombreuses personnes souffrent du mal de dos dut à une mauvaise posture assise. En effet, il suffit de se rendre dans une salle de cours pleine d'étudiants pour constater que beaucoup d'entre eux sont mal assis. C'est pourquoi, nous avons choisi de travailler sur le projet de développement d'un correcteur de posture assise proposé par M.Beaufils. La proposition de M. Beaufils a été de construire ce dispositif à partir d'un Arduino Uno et des capteurs de forces placés sous les pieds d'une chaise. 
 
 Le but de ce rapport va donc être de vous aider à comprendre comment on peut exploiter des capteurs de forces et un dispositif de type micro-contrôleur pour déterminer la qualité de l'assise. 
 
@@ -95,7 +101,7 @@ La figure \ref{fig:illustr_chaise_forces}  illustre la répartition des forces p
 \includegraphics[scale=1]{image/Chaise_forces_homo.jpg}
 \includegraphics[scale=1]{image/Chaise_forces_hetero.jpg}
 \end{center}
-\caption{Illustration de la projection de la résultante des forces appliqués à la chaise vue au niveau des pieds de celle-ci pour deux position assises différentes}
+\caption{Illustration de la projection de la résultante des forces appliqués à la chaise vue au niveau des pieds de celle-ci pour deux position assises différentes.}
 \label{fig:illustr_chaise_forces}
 \end{figure}
 
@@ -142,7 +148,7 @@ L'idée ici est de représenter la chaise dans le plan du sol. La figure \ref{fi
 \draw (A4) node[above] {$A_4,m_4$} node{$\bullet$};
 \end{tikzpicture}
 \end{center}
-\caption{Représentation de la chaise dans le plan du sol}
+\caption{Représentation de la chaise dans le plan du sol.}
 \label{fig:schem_plan_sol_math}
 \end{figure}
 
@@ -199,7 +205,7 @@ On peut donc retrouver la position du centre de masse d'une personne assise sur 
 \draw (G) node[above right] {$G,M$} node[blue]{$\bullet$};
 \end{tikzpicture}
 \end{center}
-\caption{Exemple de la position du centre de masse $G$ avec les valeurs de forces $m_i$ réparties de façon hétérogène sur les points $A_i$ }
+\caption{Exemple de la position du centre de masse $G$ avec les valeurs de forces $m_i$ réparties de façon hétérogène sur les points $A_i$.}
 \label{fig:schem_plan_sol_math_G}
 \end{figure}
 
@@ -241,7 +247,7 @@ Dans un premier temps cette solution nous a convenus pendant que nous développi
 \begin{center}
 \includegraphics[scale=0.6]{image/Arduino_v0.jpg}
 \end{center}
-\caption{3 potentiomètres et une résistance de force connectés à un Arduino Uno}
+\caption{3 potentiomètres et une résistance de force connectés à un Arduino Uno.}
 \label{fig:arduino_v0}
 \end{figure}
 
@@ -257,7 +263,7 @@ Le fonctionnement d'une cellule de charge se base sur la capacité qu'ont les co
 \begin{center}
 \includegraphics[scale=1]{image/load_cell.jpg}
 \end{center}
-\caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE: SPARKFUN.COM}
+\caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE: SPARKFUN.COM.}
 \label{fig:load_cell_sparkfun}
 \end{figure}
 
@@ -282,7 +288,7 @@ du pont WheatStone, les variations de tensions sont trop faibles (de l'ordre du 
 \begin{center}
 \includegraphics[scale=1]{image/wheatstone_bridge.jpg}
 \end{center}
-\caption{Schéma d'un pont de Wheatstone avec $V_{EX}$ la tension d'alimentation et $V_O$ la tension de sortie SOURCE:NATIONAL INSTRUMENT}
+\caption{Schéma d'un pont de Wheatstone avec $V_{EX}$ la tension d'alimentation et $V_O$ la tension de sortie. SOURCE:NATIONAL INSTRUMENT}
 \label{fig:wheatstone_bridge}
 \end{figure}
 
@@ -292,7 +298,7 @@ Jérémy a réussi à récupérer les cellules de charges d'un pèse personne é
 \begin{center}
 \includegraphics[width=12cm]{image/load_sensor.jpg}
 \end{center}
-\caption{Schéma d'une cellule de charge avec jauge de contrainte SOURCE:ELECTRONIC STACK EXCHANGE}
+\caption{Schéma d'une cellule de charge avec jauge de contrainte. SOURCE:ELECTRONIC STACK EXCHANGE}
 \label{fig:load_sensor}
 \end{figure}
 
@@ -302,7 +308,7 @@ Par la suite, le défi a été de réaliser 4 ponts de Wheatstone en couplant ch
 \begin{center}
 \includegraphics[width=12cm]{image/load_sensor_connected.jpg}
 \end{center}
-\caption{4 cellules de charges en demi-pont connectées à l'Arduino en utilisant des amplis HX711}
+\caption{4 cellules de charges en demi-pont connectées à l'Arduino en utilisant des amplis HX711.}
 \label{fig:load_sensor_connected}
 \end{figure}
 
@@ -438,7 +444,7 @@ Pour que notre application soit polyvalente, nous avons décidé de mettre en pl
 \begin{center}
 \includegraphics[width=12cm]{image/screenshot_pc1}
 \end{center}
-\caption{L'application PC}
+\caption{L'application PC.}
 \label{fig:screenshot_pc}
 \end{figure}
 
@@ -446,7 +452,7 @@ Pour que notre application soit polyvalente, nous avons décidé de mettre en pl
 \begin{center}
 \includegraphics[width=12cm]{image/screenshot_android1}
 \end{center}
-\caption{L'application Android}
+\caption{L'application Android.}
 \label{fig:screenshot_android}
 \end{figure}
 
@@ -482,7 +488,7 @@ En effet, il peut fonctionner avec n'importe quel type de chaise avec n'importe 
 
 Pour arriver à ce résultat, nous sommes passés par plusieurs étapes. L'objectif de la suite du rapport sera de les détailler.
 
-\subsection{La communication en série}
+\subsection{La communication série}
 \label{subsec:comm_serie}
 La première chose sur laquelle nous avons commencé à travailler est un élément essentiel de notre application, tout comme la modélisation de la chaise décrite dans la sous-section \ref{subsec:model_chaise}. Il s'agit de la partie \textit{communication}. C'est grâce à ce module qu'on peut finalement recevoir les données des capteurs dans un contexte qui permet de les visualiser et de les rendre plus faciles à interpréter par l'utilisateur.
 
@@ -590,23 +596,68 @@ Nous allons désormais passer à la partie visualisation de la posture dans laqu
 
 Une fois qu'on a réussi à modéliser et puis implémenter la chaise, il est temps de développer l'interface graphique. Ce domaine est important aussi, car notre résolution au problème de la posture assise nécessite un moyen visuel pour communiquer à l'utilisateur la qualité de la posture.
 
-Pour implémenter cette interface graphique, nous avions le choix entre les deux librairies graphiques actuellement les plus préférées en \texttt{Java} : \texttt{Swing} et \texttt{JavaFX}. Bien que, à partir de \texttt{Java 8}, la documentation officielle de \texttt{Java} propose de préférence \texttt{JavaFX}, \texttt{Swing} est toujours largement exploité et très bien documenté. Il se touve d’ailleurs derrière le développement de logiciels très populaires, utilisées même aujourd'hui, comme \texttt{NetBeans} ou \texttt{IntelliJ IDEA}.
+Pour implémenter cette interface graphique, nous avions le choix entre les deux librairies graphiques les plus populaire en \texttt{Java} : \texttt{Swing} et \texttt{JavaFX}. Bien que, à partir de \texttt{Java 8}, la documentation officielle de \texttt{Java} propose de préférence \texttt{JavaFX}, \texttt{Swing} est toujours largement exploité et très bien documenté. C'est d'ailleurs sur Swing que sont basés des logiciels très populaires, utilisées même aujourd'hui, comme les EDI \texttt{NetBeans} ou \texttt{IntelliJ IDEA} .
 
-L'interface graphique de notre application est séparée en deux parties, un panneau de visualisation de la chaise, et un panneau permettant de contrôler ensemble le détecteur et la chaise. Ces deux panneaux contiennent les éléments décrits au début de ce chapitre.
+L'interface graphique de notre application est séparée en deux parties, un panneau de visualisation de la chaise, et un panneau permettant de contrôler ensemble le détecteur et la chaise.
+Ces panneaux sont basés sur des widget graphiques de la librairie Swing. 
+Nous avons utilisé l'objet JPanel permettant de contenir et d'organiser plusieurs widgets.
+ Le JPanel est un objet que nous avons décidé de manipuler à la manière d'un conteneur pour organiser l'ensemble de l'interface graphiques (boutons, slider, liste...) et à la manière d'un widget pour dessiner la chaise.
 
-Le panneau de visualisation, que nous allons appeler désormais \texttt{Visualisation JPanel}, contient la partie du programme qui est responsable pour le \textit{dessin} de tous les éléments graphiques sur l'écran. Il est préférable d'avoir une seule partie dédiée au \textit{dessin}, afin de mieux organiser notre code, mais aussi afin de minimiser les appels aux processus de dessin, qui ne sont pas efficaces d’habitude, et qui ont un certain coût, tant au niveau du temps qu’à celui des ressources de l'ordinateur. Cette technique est aussi très utilisée dans le développement des pages web, où le temps de chargement dans tous les cas doit être le plus bref possible.
+Le premier panneau de visualisation, que nous allons appeler désormais \texttt{Visualisation JPanel}, contient donc la partie du programme qui est responsable du \textit{dessin} des cercles et ovales représentant la chaise.
+%Il est préférable d'avoir une seule partie dédiée au \textit{dessin}.
+Nous avons dédié un seul JPanel au dessin.
+L'intérêt est de mieux organiser notre code et minimiser les appels du processus de dessin (couteux en ressources). 
+Lorsque l'on a besoin de mettre à jour le dessin de la chaise, à la suite d'une modification de valeur d'un pied par exemple, on ne demandera la mise à jour que de ce JPanel.
+ %afin de mieux organiser notre code, mais aussi afin de minimiser les appels aux processus de dessin qui ne sont pas efficaces d'habitude, et qui ont un certain coût, tant au niveau du temps qu'à celui des ressources de l'ordinateur.
+Cette technique est aussi très utilisée dans le développement des pages web, où le temps de chargement dans tous les cas doit être le plus bref possible.
 
-Dans la partie qui gère le \textit{dessin} de notre application, on retrouve les éléments essentiels de la chaise : deux axes, vertical et horizontal, qui désignent le centre géométrique du panneau de visualisation, les pieds, représentés par des cercles numérotés selon les ID des senseurs correspondants, la deadzone, et finalement le barycentre. Ce dernier est figuré simplement par un cercle noir, dont la position est calculée dans le module chaise (voir la sous-section \ref{subsec:model_chaise}). Par contre, le dessin des pieds est plus compliqué : afin d’assurer que les numéros - à savoir les ID - des pieds sont bien centrés par rapport aux cercles qui représentent les pieds eux-mêmes, nous avons dû utiliser un élément \texttt{Java} appelé \texttt{FontMetrics}. Cet élément permet de savoir exactement où se trouve le centre et les extrémités X et Y d'une chaîne de caractères; or ce sont les informations requises dans notre cas pour centrer les ID, qui sont représentés par une chaîne de caractères. On pourrait signaler ici une limitation de \texttt{Java} : il n’y est ni évident, ni efficace, de centrer une chaîne de caractères, donc il est difficile d’obtenir une interface graphique qui soit non seulement pratique mais aussi esthétique, avec un design fonctionnel pour l'utilisateur, sans recours à des méthodes supplémentaires (documentation, tooltips etc) .
+Dans ce JPanel, on retrouve les éléments essentiels de la chaise : 
 
-Dans les paragraphes qui suivent, il nous faut présenter l'élément peut-être le plus important de cette partie de notre logiciel : les méthodes \texttt{scaleX} et \texttt{scaleY}.
+\begin{itemize}
+\item deux axes, vertical et horizontal, désignant le centre géométrique du panneau de visualisation;
+\item les pieds, représentés par des cercles numérotés selon les ID des capteurs correspondants;
+\item la deadzone;
+\item le barycentre. 
+\end{itemize}
 
-Le problème à traiter ici est le suivant : à cause du fait qu'on ne peut ni contrôler ni prévoir la taille éventuelle de la fenêtre ou de la chaise, on configure deux \guillemotleft\ référentiels \guillemotright . 
-Le premier est le référentiel \guillemotleft\ réel \guillemotright , qui correspond aux vraies dimensions de la chaise. Supposons, par exemple, une chaise carrée à quatre pieds, dont le côté mesure 1 mètre. Comme nous avons dit plus haut, le point \texttt{(0, 0)} correspond au pied gauche devant. Si on place quelque chose au point \texttt{(0.5 m, 0.5 m)}, celui-ci se trouvera au centre de la chaise, dans le référentiel dit \guillemotleft\ réel \guillemotright . 
+Pour dessiner tout ça, nous avons redéfinit la méthode paintComponent(Graphics g) du JPanel. En effet, cette méthode permet de dessiner ce que l'on veut dans l'espace de l'écran réservé au JPanel. L'objet Graphics passé en paramètre de cette fonction est en fait la zone de dessin qui contient toutes les méthodes nécessaires aux dessins de cercles, lignes, textes...
 
-Le second référentiel est le réferentiel \guillemotleft\ numérique \guillemotright , qui correspond à la visualisation de la chaise, et, comme nous avons dit plus haut, dépend de la taille de la fenêtre de l'application et de la taille de la chaise saisie par l'utilisateur. 
+Nous avons donc simplement utilisé les méthodes g.drawOval , g.drawLine, g.fillOval pour dessiner nos éléments graphiques.
+Le plus compliqué a été de définir les coordonnées passés en paramètres de ces méthodes.
 
-Le but est donc d’exprimer les données de notre référentiel \guillemotleft\ réel \guillemotright\ dans le référentiel \guillemotleft\ numérique \guillemotright\ .
+Le barycentre est illustré par un cercle noir, dont la position est calculée dans le module chaise (voir la sous-section \ref{subsec:model_chaise}). 
 
+Cependant, déterminer les bonnes coordonnées pour le dessins des pieds à été compliqué. En effet, pour s'assurer que les numéros des pieds soit bien centrés par rapport aux cercles qui représentent les pieds eux-mêmes, nous avons dû utiliser une librairie \texttt{Java} appelé \texttt{FontMetrics}. 
+%Par contre, le dessin des pieds est plus compliqué : afin d'assurer que les numéros - à savoir les ID - des pieds soit bien centrés par rapport aux cercles qui représentent les pieds eux-mêmes, nous avons dû utiliser une librairie \texttt{Java} appelé \texttt{FontMetrics}. 
+Cette librairie fournit des méthodes permettant de savoir exactement où se trouve le centre et les extrémités X et Y d'une chaîne de caractères; or ce sont les informations requises dans notre cas pour centrer les ID, qui sont représentés par une chaîne de caractères. 
+On pourrait signaler ici une limitation de \texttt{Swing} : il n'est ni évident, ni efficace, de centrer une chaîne de caractères, donc il est difficile d'obtenir une interface graphique qui soit non seulement pratique mais aussi esthétique, avec un design fonctionnel pour l'utilisateur, sans recours à des méthodes supplémentaires (documentation, tooltips etc) .
+
+Nous nous en sommes tout de même sorti avec l'aide d'une documentation en ligne à propos du dessin avec Swing \url{http://www.ntu.edu.sg/home/ehchua/programming/java/J4b_CustomGraphics.html}.
+
+
+Dans les paragraphes qui suivent, nous allons aborder un problème qui nous a pris du temps. 
+Ce problème a été celui d'adapter les informations réelles (les dimensions de la chaise, la position réelle du barycentre...) à l'échelle de l'objet JPanel. On comprends bien que ce qui se passe sur un écran est tout à fait différent de ce qui se passe en réalité. Nous allons donc vous expliquer le fonctionnement de nos fonctions de mise à l'échelle, qui ont rendu possible l'interprétation des données réelles de la chaise.
+% il nous faut présenter l'élément peut-être le plus important de cette partie de notre logiciel : les méthodes \texttt{scaleX} et \texttt{scaleY}.
+
+Le problème à traiter ici est le suivant : à cause du fait qu'on ne peut ni contrôler ni prévoir la taille éventuelle de la fenêtre (donc du JPanel) ou de la chaise, on configure deux \guillemotleft\ référentiels \guillemotright . 
+Le premier est le référentiel \guillemotleft\ réel \guillemotright , qui correspond aux vraies dimensions de la chaise.
+Supposons, par exemple, une chaise carrée à quatre pieds, dont le côté mesure 1 mètre.
+Comme nous avons dit plus haut, le point \texttt{(0, 0)} correspond au pied gauche devant.
+Si on place quelque chose au point \texttt{(0.5 m, 0.5 m)}, celui-ci se trouvera au centre de la chaise, dans le référentiel dit \guillemotleft\ réel \guillemotright . 
+
+Le second référentiel est le référentiel \guillemotleft\ Swing \guillemotright , qui correspond au JPanel de visualisation de la chaise, et, comme nous avons dit plus haut, dépend de la taille de la fenêtre de l'application et de la taille de la chaise saisie par l'utilisateur. 
+Il faut bien comprendre que nous n'imposons pas de contrainte sur les dimensions du JPanel. Ainsi, il pourra être carré ou rectangulaire et de n'importe qu'elle dimension.
+
+%\begin{figure}[htbp]
+%\includegraphics[scale=1]{image/jpanel1.png}
+%\includegraphics[scale=1]{image/jpanel2.png}
+%\includegraphics[scale=1]{image/jpanel3.png}
+%\end{figure}
+
+La mise à l'échelle correspond donc à exprimer les données de notre référentiel \guillemotleft\ réel \guillemotright\ dans le référentiel \guillemotleft\ Swing \guillemotright\  servant à la visualisation dans le JPanel. 
+L'idée est que, peut importe la forme du JPanel et les dimensions de la fenêtre, le barycentre, la deadzone et les pieds se comporte toujours de la même façon.
+ Nous avons cherché à garantir que si l'utilisateur voit le barycentre sortir de la deadzone alors en réalité c'est bien parce que son centre de gravité sors de la deadzone et non à cause une mauvaise implémentation de l'interface graphique.
+ 
 \begin{figure}[htbp]
 \begin{tikzpicture}
 \coordinate (P1) at (0,4);
@@ -669,75 +720,126 @@ Le but est donc d’exprimer les données de notre référentiel \guillemotleft\
 \draw [-] [dashed] (MNUM) -- (7.8, 3);
 \draw [-] [dashed] (MNUM) -- (9.5, 4.2);
 \end{tikzpicture}
-\caption{Le même point exprimé en deux référentiels : \textit{réel} (à gauche) et \textit{numérique} (à droite)}
+\caption{Le même point exprimé en deux référentiels : \textit{réel} (à gauche) et \textit{numérique} (à droite).}
 \label{fig:visualisation_referentiels}
 \end{figure}
 
-Supposons une chaise à quatre pieds (voir la figure \ref{fig:visualisation_referentiels}), dont la largeur est $\alpha$ et la hauteur $\beta$. Supposons aussi que le panneau de visualisation a une hauteur $h$ et une largeur $l$. Signalons comme $d$ le diamètre des cercles utilisés dans le panneau, c'est-à-dire le cercle qui représente le barycentre, et les cercles qui représentent les pieds de la chaise. Alors, la largeur et la hauteur de la chaise dans le panneau de visualisation sont :
+Supposons une chaise à quatre pieds (voir la figure \ref{fig:visualisation_referentiels}), dont la largeur est $\alpha$ et la hauteur $\beta$.
+ Supposons aussi que le JPanel a une hauteur $h$ et une largeur $l$. Notons $d$ le diamètre des cercles utilisés dans le panneau, c'est-à-dire le cercle qui représente le barycentre, et les cercles qui représentent les pieds de la chaise.
+ Alors, la largeur et la hauteur de la chaise dans le panneau de visualisation sont :
 
 \begin{equation}
-\mathrm{largeur} = l - d
+\mathrm{largeur_{chaise}} = l - d
 \end{equation}
 
 \begin{equation}
-\mathrm{hauteur} = h - d
+\mathrm{hauteur_{chaise}} = h - d
 \end{equation}
 
-Cependant, quand on passe à l'implémentation de ces formules, on fait face à une différence importante. Pour obtenir la hauteur et la largeur du panneau, on utilise la méthode \texttt{getHeight()} et, respectivement, \texttt{getWidth()}); or, comme il est noté dans la documentation [REFERENCE BIBLIOGRAPHIQUE], ces méthodes nous donnent un nombre qui est un pixel trop grand. Nous devons donc le supprimer :
+Dans le référentiel réel, les pieds sont représentés par des points tandis que dans le référentiel du JPanel ils sont représentés par des cercles. 
+Soustraire $d$ aux dimensions du JPanel pour avoir les dimensions de la chaise dans le JPanel permettent d'assurer que nos cercles sont bien contenus dans celui-ci si on identifie les coins du JPanel aux pieds de la chaise.
+
+Cependant, quand on passe à l'implémentation de ces formules, on fait face à une petite différence. 
+Pour obtenir la hauteur et la largeur du JPanel, on utilise la méthode \texttt{$h$=getHeight()} et, respectivement, \texttt{$l$=getWidth()}).
+Or, comme il est noté dans la documentation [REFERENCE BIBLIOGRAPHIQUE], ces méthodes nous donnent un nombre qui est un pixel trop grand. 
+Nous devons donc le supprimer ce qui donner donc \texttt{$l$=getWidth()-1} et \texttt{$h$=getHeight()-1}.
+On a donc finalement la hauteur et largeur de la chaise dans le JPanel :
 
 \begin{center}
-\texttt{height = getHeight() - 1 - diamètre}\\
-\texttt{width = getWidth() - 1 - diamètre}
+$\mathrm{hauteur_{chaise}}$  = getHeight() - 1 - diamètre\\
+$\mathrm{largeur_{chaise}}$ = getWidth() - 1 - diamètre
 \end{center}
 
-Les formules qui relient les deux référentiels seront finalement les suivantes :
+A l'aide d'un produit en croix, nous pouvons désormais mettre à l'échelle les dimensions de la chaise car on connais les dimensions de la chaise dans la réalité (dans l'objet Chaise) et les dimensions de la chaise dans le JPanel.
+Les dimensiosn que nous avons calculé jusqu'à présent nous permettent donc de faire le lien entre la position d'un point dans la réalité (le barycentre par exemple) et sa représentation dans le JPanel.
+Si on donne les coordonnées cartésiennes d'un points réel ($x_{Chaise}$,$y_{Chaise}$) on peut trouver où le dessiner dans le JPanel à l'aide des coordonnées ($x_{JPanel}$,$y_{JPanel}$) à l'aide des equations \eqref{eqn:form_ref_hor} et \eqref{eqn:form_ref_vert}.
 
 \begin{equation}
 \label{eqn:form_ref_hor}
-x_{num} = x_{ch}\ \ \frac{\mathrm{largeur}}{\alpha} + \frac{d}{2}
+x_{JPanel} = x_{Chaise}\ \ \frac{\mathrm{largeur}}{\alpha} + \frac{d}{2}
 \end{equation}
 
 \begin{equation}
 \label{eqn:form_ref_vert}
-y_{num} = y_{ch}\ \ \frac{\mathrm{hauteur}}{\beta} + \frac{d}{2}
+y_{JPanel} = y_{Chaise}\ \ \frac{\mathrm{hauteur}}{\beta} + \frac{d}{2}
 \end{equation}
 
-où $(x_{ch}, y_{ch})$ est un point quelconque dans le référentiel de la chaise (c'est-à-dire le référentiel \guillemotleft\ réel \guillemotright ), et $(x_{num}, y_{num})$ est le même point, exprimé dans le référentiel du panneau (c'est-à-dire le référentiel \guillemotleft\ numérique \guillemotright ).
+où($x_{Chaise}$,$y_{Chaise}$) est un point quelconque dans le référentiel de la chaise (c'est-à-dire le référentiel \guillemotleft\ réel \guillemotright ), et ($x_{JPanel}$,$y_{JPanel}$) est le même point, exprimé dans le référentiel du JPanel.
 
-En somme, les méthodes \texttt{scaleX} et \texttt{scaleY} permettent de dessiner n'importe quel élément (que ce soit le barycentre ou la deadzone) avec la certitude que l'échelle est respectée dans n'importe quelle taille de fenêtre.
+En somme, les méthodes \texttt{scaleX(double xChaise)} et \texttt{scaleY(double yChaise)} permettent de dessiner n'importe quel élément (que ce soit le barycentre ou la deadzone) avec la certitude que l'échelle est respectée peu importe la taille de fenêtre.
 
-Une fois qu'on a décrit la partie calculatoire qui assure le bon fonctionnement du panneau de visualisation, nous allons passer à la description des éléments interactifs de l'interface graphique.
+Une fois qu'on a décrit la partie calculatoire qui assure le bon fonctionnement du panneau de visualisation, nous allons passer à la description des éléments interactifs de l'interface graphique. 
+Nous avons déjà parlé brièvement du JPanel que nous avons utilisé en tant que zone de dessin. Nous allons maintenant voir qu'il est aussi utilisé en tant que conteneur.
 
-Tout d'abord, nous avons utilisé les objets \texttt{JFrame} et \texttt{JPanel} pour séparer la fenêtre de notre application en deux; ce faisant, nous communiquons à l'utilisateur que la partie gauche, à savoir le panneau de visualisation, va afficher des informations relatives à la qualité de la posture assise, alors que la partie droite va lui permettre de contrôler les paramètres du détecteur de posture. Finalement, en haut se trouve un menu construit à partir d'un objet \texttt{JMenu}, qui permet d'enregistrer ou de charger une chaise.
+Nous avons utilisé les objets \texttt{JFrame} et \texttt{JPanel} pour séparer la fenêtre de notre application en deux.
+Nous communiquons à l'utilisateur que la partie gauche, à savoir le panneau de visualisation, va afficher des informations relatives à la qualité de la posture assise, alors que la partie droite va lui permettre de contrôler les paramètres du détecteur de posture.
+ Finalement, en haut se trouve un menu construit à partir d'un objet \texttt{JMenu}, qui permet d'enregistrer ou de charger une chaise.
 
-Ensuite, en utilisant deux objets \texttt{JButton} et un objet \texttt{JComboBox}, nous avons créé la partie \textit{communication} du panneau de contrôle : Le \texttt{JComboBox} est tout simplement une liste contenant tout port sériel disponible sur la machine et récupérable grâce au module de communication décrit dans la sous-section \ref{subsec:comm_serie}. Les \texttt{JButton} sont des boutons, permettant de se connecter ou se déconnecter au port choisi (voir figure \ref{fig:app_pc_comms}). Évidemment, nous avons mis en place des mécanismes pour que les boutons \guillemotleft\ Connexion \guillemotright\ et \guillemotleft\ Déconnexion \guillemotright\ soient actifs seulement s'il le faut; par exemple, l'utilisateur ne doit pas être capable de cliquer sur \guillemotleft\ Déconnexion \guillemotright\ s'il n'est pas connecté au préalable.
+Ensuite, en utilisant deux objets \texttt{JButton} et un objet \texttt{JComboBox}, nous avons créé la partie \textit{communication} du panneau de contrôle.
+
+ Le \texttt{JComboBox} est tout simplement une liste contenant tous les ports série disponible sur la machine et récupérable grâce à la librairie JSerialComm.
+Les \texttt{JButton} sont des boutons, permettant de se connecter ou se déconnecter du port choisi (voir figure \ref{fig:app_pc_comms}). Évidemment, nous avons mis en place des mécanismes pour que les boutons \guillemotleft\ Connexion \guillemotright\ et \guillemotleft\ Déconnexion \guillemotright\ soient actifs seulement s'il le faut.
+Par exemple, l'utilisateur ne doit pas être capable de cliquer sur \guillemotleft\ Déconnexion \guillemotright\ s'il n'est pas connecté au préalable. 
+Ce fonctionnement permet de faciliter l'apprentissage du logiciel et de limiter les bugs d'interaction avec l'utilisateur.
 
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=12cm]{image/app_pc_comms}
 \end{center}
-\caption{Les contrôles de communication dans l'application PC}
+\caption{Les contrôles de communication dans l'application PC.}
 \label{fig:app_pc_comms}
 \end{figure}
 
 En dessous de ces trois éléments se trouvent trois autres boutons, qui ne concernent pas la connexion avec l'Arduino, mais les paramètres du détecteur de posture : 
 \begin{itemize}
-\item Le bouton \guillemotleft\ Tare \guillemotright\ permet de faire une \textit{tare} et réinitialiser les senseurs
+\item Le bouton \guillemotleft\ Tare \guillemotright\ permet de faire le zéro des capteurs.
 \item Le bouton \guillemotleft\ Config chaise \guillemotright\ permet de configurer les paramètres de la chaise (c'est-à-dire le nombre des pieds et leurs positions)
-\item Le bouton \guillemotleft\ Calibrer la zone \guillemotright\ permet de centrer la deadzone à la position actuelle du barycentre (voir figure \ref{fig:app_pc_chaise}). Ce dernier bouton est très important, car il permet à l'utilisateur de contrôler la position de la zone optimale ; il est à noter que celle-ci n'est pas forcément au centre de la chaise, puisqu’elle dépend de la structure de cette dernière.
+\item Le bouton \guillemotleft\ Calibrer la zone \guillemotright\ permet de centrer la deadzone à la position actuelle du barycentre (voir figure \ref{fig:app_pc_chaise}). Ce dernier bouton est important, car il permet à l'utilisateur de contrôler la position de la zone optimale. 
+Il est à noter que celle-ci n'est pas forcément au centre de la chaise, puisqu'elle dépend de la forme et de la posture optimale sur la chaise en question.
 \end{itemize}
 
-Enfin, on a un objet \texttt{JSlider}, qui permet de contrôler la taille de la deadzone (voir figure \ref{fig:app_pc_chaise}). Il est tout à fait possible d'avoir une deadzone dont le diamètre est égal à la plus petite dimension de la chaise; toutefois il est fortement conseillé d'avoir la deadzone la plus petite possible, afin que le détecteur soit plus précis.
+Enfin, un objet \texttt{JSlider} permet de contrôler la taille de la deadzone (voir figure \ref{fig:app_pc_chaise}). 
+Le diamètre de la deadzone est libre et il conviendrait de consulter un ergothérapeute pour connaître la limite dans laquelle on autorise des modifications de posture.
+
+Cependant, il va de soi que plus la deadzone est petite, plus le détecteur sera sensible.
+
+%Il est tout à fait possible d'avoir une deadzone dont le diamètre est égal à la plus petite dimension de la chaise; toutefois il est fortement conseillé d'avoir la deadzone la plus petite possible, afin que le détecteur soit plus précis.
 
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=6cm]{image/app_pc_chaise}
 \end{center}
-\caption{Les contrôles de configuration de la chaise}
+\caption{Les contrôles de configuration de la chaise.}
 \label{fig:app_pc_chaise}
 \end{figure}
 
-Pour conclure, notre choix d’utiliser exclusivement des éléments \texttt{Swing} pour construire l'interface graphique repose au fait que cette librairie est très bien documentée et supportée en ligne, ce qui nous a permis de résoudre tous les problèmes que nous avons rencontrés et de rendre notre interface graphique plus fonctionnelle.
+Pour conclure, notre choix d'utiliser exclusivement des éléments \texttt{Swing} pour construire l'interface graphique repose sur le fait que cette librairie est très bien documentée et supportée en ligne.
+Les documentations nous ont permis de résoudre tous les problèmes que nous avons rencontrés et de rendre notre interface graphique fonctionnelle.
+
+
+\chapter*{Conclusion}
+
+
+Au travers de ce projet de construction d'un correcteur de posture assise, nous avons montré que nous étions capable de faire preuve d'initiative et de créativité.
+
+Nous avons démontré notre capacité à nous approprier le fonctionnement du micro-contrôleur Arduino et nous avons réussi à dimensionner et interfacer correctement des capteurs avec celui-ci.
+
+Les étapes d'études, de recherches et compréhension du fonctionnement de ce dispositif nous ont appris beaucoup de chose dans les domaines de l'électronique et de l'informatique.
+
+
+
+Après 12 séance de projet, nous sommes fier de vous présenter notre \cite{article1} prototype fonctionnel de correcteur de posture assise.
+
+
+
+\chapter{SOURCES}
+BROUILLON BIBLIOGRAPHIE
+\url{https://www.arduino.cc/}
+\url{http://www.ntu.edu.sg/home/ehchua/programming/java/J4b_CustomGraphics.html}
+
+
+
+\printbibliography
 
 
 %% === COMPTES RENDUS ===
@@ -883,11 +985,6 @@ Prise de photos pour le rapport de projet
 }
 
 \weeklyreport{26/04/2017}{Rapport seance 12}
-
-
-\chapter{SOURCES}
-BROUILLON BIBLIOGRAPHIE
-\url{https://www.arduino.cc/}
 
 
 \end{document}

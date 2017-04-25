@@ -1,0 +1,7 @@
+[0] Config.pm:354> INFO - This is Biber 2.7
+[0] Config.pm:357> INFO - Logfile is 'Projet_S4_Loche_Kokkonis.blg'
+[47] biber-MSWIN32:303> INFO - === 
+[80] Biber.pm:359> INFO - Reading 'Projet_S4_Loche_Kokkonis.bcf'
+[211] Biber.pm:835> INFO - Found 1 citekeys in bib section 0
+[245] Biber.pm:3670> INFO - Processing section 0
+[271] Biber.pm:3840> INFO - Looking for bibtex format file 'polytech/dummy.bib' for section 0
