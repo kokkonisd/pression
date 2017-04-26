@@ -16,11 +16,11 @@
 
 %------------Poster------------------
 
-\posterblock{Titre 1 poster}{texte 1 poster}{image/poster_1}{légende 1 poster}
+\posterblock{Test de l'application Android avec un sac}{Pour tester l'application Android, on a posé un sac sur une chaise à quatre pieds; puis on s'est connecté par Bluetooth pour visualiser le déplacement du centre de gravité du sac.}{image/poster_1}{Test du correcteur de posture en déplaçant un sac sur une chaise}
 
-\posterblock{Titre 2 poster}{texte 2 poster}{image/poster_1}{légende 2 poster}
+\posterblock{Preséntation du montage}{Le correcteur de posture comporte quatre cellules de charge, quatre amplificateurs HX711 et un Arduino UNO avec son Shield Bluetooth. Ici, nous l'avons alimenté par un \textit{powerbank}, et on s'est connecté à l'Arduino par Bluetooth avec l'application Android qu'on a construit pour visualiser le correcteur de posture.}{image/poster_2}{Le montage électronique de notre correcteur de posture}
 
-\posterblock{Titre 3 poster}{texte 3 poster}{image/poster_1}{légende 3 poster}
+\posterblock{Titre 3 poster}{texte 3 poster}{image/poster_3}{légende 3 poster}
 
 
 
@@ -344,6 +344,9 @@ Nous avons cherché à comparer ces valeurs avec les valeurs réelles de notre c
 En connectant un ampèremètre en série avec les différents fils d'alimentations des composants électroniques, nous avons déterminé la consommation pratique de notre prototype.
 
 \begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12cm]{image/mesure_de_consommation1}
+\end{center}
 \caption{Mesure de la consommation de courant des amplificateurs HX711 connectés aux cellules de charges}
 \label{fig:mesure_amper_hx711}
 \end{figure}
@@ -353,6 +356,9 @@ La partie d'alimentation des amplificateurs HX711 connectés aux ponts de wheats
 En mesurant ensuite le courant consommé par l'ensemble Arduino + amplificateurs et cellules de charges (cf. figure \ref{fig:mesure_amper_tot}), nous sommes arrivés à une valeur moyenne de consommation de 113 mA à 5V c'est à dire une puissance de 0.566mW.
 
 \begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12cm]{image/mesure_de_consommation2}
+\end{center}
 \caption{Mesure de la consommation énergétique totale du prototype}
 \label{fig:mesure_amper_tot}
 \end{figure}
@@ -391,8 +397,8 @@ $4 \times$Cellule de charge & 12 € \\\hline
 Batterie Lithium externe pour smartphone (2000 mAh) & 10 € \\\hline
 Cable USB-B$\rightarrow$A & 2 € \\\hline
 Breadbord (plaque prototype) \& Fils de connexion & 9 € \\\hline
-$8 \times$Résistance (1 k$\Omega$) & 0.04 € (par pièce) \\\hline
-\textbf{Total} &  \textbf{85.52 €} \\\hline
+$8 \times$Résistance (1 k$\Omega$) & 0,04 € (par pièce) \\\hline
+\textbf{Total} &  \textbf{85,52 €} \\\hline
 \end{tabular}
 \end{center}
 \caption{Le prix de chaque partie du montage électronique sur \textit{Amazon}}
