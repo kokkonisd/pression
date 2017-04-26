@@ -1,5 +1,7 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: Projet_S4_Loche_Kokkonis.aux
-I found no \citation commands---while reading file Projet_S4_Loche_Kokkonis.aux
-I found no \bibdata command---while reading file Projet_S4_Loche_Kokkonis.aux
-I found no \bibstyle command---while reading file Projet_S4_Loche_Kokkonis.aux
-(There were 3 error messages)
+[0] Config.pm:354> INFO - This is Biber 2.7
+[0] Config.pm:357> INFO - Logfile is 'Projet_S4_Loche_Kokkonis.blg'
+[46] biber-MSWIN32:303> INFO - === 
+[78] Biber.pm:359> INFO - Reading 'Projet_S4_Loche_Kokkonis.bcf'
+[209] Biber.pm:835> INFO - Found 7 citekeys in bib section 0
+[243] Biber.pm:3670> INFO - Processing section 0
+[269] Biber.pm:3840> INFO - Looking for bibtex format file 'polytech/dummy.bib' for section 0
