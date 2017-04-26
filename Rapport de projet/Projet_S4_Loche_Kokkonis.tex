@@ -1,6 +1,6 @@
 \documentclass{polytech/polytech}
 \usepackage{tikz}
-%\usepackage[backend=biber]{biblatex}
+%\usepackage[backend=biblatex]{biblatex}
 %\usepackage{cite}
 
 %-----------Configuration du rapport-----------------
@@ -40,7 +40,6 @@
 
 
 \addbibresource{biblio.bib}
-
 
 \begin{document}
 
@@ -241,7 +240,7 @@ Nous avons pu expérimenter avec des montages composé de 3 potentiomètres et d
 
 Nous nous sommes vite rendu compte qu'utiliser des FSR pour mesurer la répartition des masses sous les pieds d'une chaise ne serait pas adapté. En effet, le capteur sature au delà d'une pression de 2kg. Il est tout à fait possible de faire saturer le capteur avec nos doigts.
 
-Dans un premier temps cette solution nous a convenus pendant que nous développions le microgiciel de l'Arduino et les applications PC et Android que nous vous présenterons par la suite dans le chapitre \ref{chap:Application}. La figure \ref{fig:arduino_v0} présente le montage que nous avons utilisé jusqu'à la séance 6 de travail.
+Dans un premier temps cette solution nous a convenus pendant que nous développions le microgiciel de l'Arduino et les applications PC et Android que nous vous présenterons par la suite dans le chapitre \ref{chap:logiciel}. La figure \ref{fig:arduino_v0} présente le montage que nous avons utilisé jusqu'à la séance 6 de travail.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -821,15 +820,31 @@ Les documentations nous ont permis de résoudre tous les problèmes que nous avo
 
 
 Au travers de ce projet de construction d'un correcteur de posture assise, nous avons montré que nous étions capable de faire preuve d'initiative et de créativité.
-
 Nous avons démontré notre capacité à nous approprier le fonctionnement du micro-contrôleur Arduino et nous avons réussi à dimensionner et interfacer correctement des capteurs avec celui-ci.
+Finalement, à l'aide d'un Arduino et de capteurs de forces récupérés sur un pèse-personne électronique on peut créer un correcteur de posture assise.
+Notre logiciel fonctionnant à la fois sur PC et sur un appareil Android est un agrément non négligeable et permet de rendre l'utilisation du correcteur de posture simple et ludique.
 
-Les étapes d'études, de recherches et compréhension du fonctionnement de ce dispositif nous ont appris beaucoup de chose dans les domaines de l'électronique et de l'informatique.
+En 12 séances de travail, nous avons réussi à étudier et concevoir un correcteur de posture alors que nous n'avions jamais manipulé de micro-contrôleur auparavant.
+Heureusement, nos projets personnels et polytech précédent nous avaient permis d'acquérir d'excellentes bases en programmation (notamment JAVA) et les nouveautés se sont surtout situés au niveau du micro-contrôleur et de l'électronique. 
 
+Nous avons réussi a surmonter ces nouveautés en électronique et informatique embarqué et c'est avec fierté et enthousiasme que nous vous présentons notre prototype.
 
+Afin de garder l'esprit ouvert sur le perfectionnement de ce prototype, nous avons réfléchit à des améliorations telles que:
 
-Après 12 séance de projet, nous sommes fier de vous présenter notre \cite{article1} prototype fonctionnel de correcteur de posture assise.
+%Notre prototype actuel bien que fonctionnel pourrait subir des améliorations auxquelles nous avons réfléchit:
 
+\begin{itemize}
+\item Réduction de sa taille notamment en passant sur une version miniature de l'Arduino Uno (Arduino Pro Mini);
+\item Incruster les capteurs directement dans les pieds de la chaise pour plus de maniabilité;
+\item L'amélioration de l'autonomie en modifiant la gestion des amplificateurs et l'ajout d'une fonction de veille lorsque personne n'est assis sur la chaise;
+\item Ajout de LEDs RGB changeant de couleur et de vibreurs au niveau du plateau de l'assise pour notifier l'utilisateur en cas de mauvaise assise;
+\item Ajout de la possibilité de choisir un mode graduel de notification (LED pour les petites sorties de la zone, Vibreur ensuite et Son pour les sorties extrêmes de la zone);
+\item Ajout de nouvelles fonctions de paramétrage (couleurs de LEDs et vibreurs) dans l'application mobile.
+\end{itemize}
+
+Ces améliorations (réalisables avec plus de temps) permettraient de rendre l'utilisation du correcteur de posture transparente et permettraient peut-être d'aboutir à un produit commercialisable.
+
+%Avec ce rapport nous espérons que vous avez eut l'opportunité d'apprécier notre travail.
 
 
 \chapter{SOURCES}
@@ -839,7 +854,7 @@ BROUILLON BIBLIOGRAPHIE
 
 
 
-\printbibliography
+
 
 
 %% === COMPTES RENDUS ===
