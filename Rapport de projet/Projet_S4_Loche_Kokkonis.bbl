@@ -1,0 +1,383 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist[entry]{nyt/global/WWW}
+    \entry{site_arduino}{online}{}
+      \name{author}{1}{}{%
+        {{hash=ee5bced252ab77ec8d633c1afda7c5da}{%
+           family={Arduino},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{fullhash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{authornamehash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{authorfullhash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \field{sortinit}{A}
+      \field{sortinithash}{3248043b5fe8d0a34dab5ab6b8d4309b}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Le site officiel d'Arduino}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://www.arduino.cc/
+      \endverb
+    \endentry
+    \entry{hx711}{online}{}
+      \name{author}{1}{}{%
+        {{hash=4340620af312804b7022d51995d06075}{%
+           family={bodge},
+           familyi={b\bibinitperiod}}}%
+      }
+      \strng{namehash}{4340620af312804b7022d51995d06075}
+      \strng{fullhash}{4340620af312804b7022d51995d06075}
+      \strng{authornamehash}{4340620af312804b7022d51995d06075}
+      \strng{authorfullhash}{4340620af312804b7022d51995d06075}
+      \field{sortinit}{b}
+      \field{sortinithash}{5f6fa000f686ee5b41be67ba6ff7962d}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{HX711 Arduino library}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://github.com/bogde/HX711
+      \endverb
+    \endentry
+    \entry{load_cell}{online}{}
+      \name{author}{1}{}{%
+        {{hash=1f917edcd21f6eb675068a43f7d4d0da}{%
+           family={Exchange},
+           familyi={E\bibinitperiod},
+           given={Electronics\bibnamedelima Stack},
+           giveni={E\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{fullhash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{authornamehash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{authorfullhash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \field{sortinit}{E}
+      \field{sortinithash}{07bbd5a529b5beaa311df5be05b874bc}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{How to mount a Half Bridge Load cell}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://electronics.stackexchange.com/questions/233574/how-to-mount-a-half-bridge-load-cell
+      \endverb
+    \endentry
+    \entry{android_studio}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8b36e9207c24c76e6719268e49201d94}{%
+           family={Google},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{fullhash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{authornamehash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{authorfullhash}{8b36e9207c24c76e6719268e49201d94}
+      \field{sortinit}{G}
+      \field{sortinithash}{618d986594b7198ba52cf8b00d348f3f}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Android Studio}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://developer.android.com/studio/index.html
+      \endverb
+    \endentry
+    \entry{repo_github}{online}{}
+      \name{author}{1}{}{%
+        {{hash=e7dfd961fab221d964ca36f57f5a0531}{%
+           family={KOKKONIS\bibnamedelima Dimitrios},
+           familyi={K\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={LOCHE\bibnamedelima Jérémy},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{fullhash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{authornamehash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{authorfullhash}{e7dfd961fab221d964ca36f57f5a0531}
+      \field{sortinit}{K}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{pression}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://github.com/kokkonisd/pression
+      \endverb
+    \endentry
+    \entry{sparkfun}{online}{}
+      \name{author}{1}{}{%
+        {{hash=aab303b1d1e2d7fbb445a4b20f091c5c}{%
+           family={Sparkfun},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{fullhash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{authornamehash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{authorfullhash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Getting Started with Load Cells}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://learn.sparkfun.com/tutorials/getting-started-with-load-cells
+      \endverb
+    \endentry
+    \entry{ntu_swing}{online}{}
+      \name{author}{1}{}{%
+        {{hash=aa38c43f2e7a64af7d0109a1992dc116}{%
+           family={University},
+           familyi={U\bibinitperiod},
+           given={Nanyang\bibnamedelima Technological},
+           giveni={N\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{fullhash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{authornamehash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{authorfullhash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \field{sortinit}{U}
+      \field{sortinithash}{1554584e7f69d2b4fe0a645e73d50194}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Java Programming Tutorial - Custom Graphics}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb http://www.ntu.edu.sg/home/ehchua/programming/java/J4b_CustomGraphics.html
+      \endverb
+    \endentry
+  \endsortlist
+  \sortlist[entry]{nyt/global/}
+    \entry{site_arduino}{online}{}
+      \name{author}{1}{}{%
+        {{hash=ee5bced252ab77ec8d633c1afda7c5da}{%
+           family={Arduino},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{fullhash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{authornamehash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \strng{authorfullhash}{ee5bced252ab77ec8d633c1afda7c5da}
+      \field{sortinit}{A}
+      \field{sortinithash}{3248043b5fe8d0a34dab5ab6b8d4309b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Le site officiel d'Arduino}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://www.arduino.cc/
+      \endverb
+    \endentry
+    \entry{hx711}{online}{}
+      \name{author}{1}{}{%
+        {{hash=4340620af312804b7022d51995d06075}{%
+           family={bodge},
+           familyi={b\bibinitperiod}}}%
+      }
+      \strng{namehash}{4340620af312804b7022d51995d06075}
+      \strng{fullhash}{4340620af312804b7022d51995d06075}
+      \strng{authornamehash}{4340620af312804b7022d51995d06075}
+      \strng{authorfullhash}{4340620af312804b7022d51995d06075}
+      \field{sortinit}{b}
+      \field{sortinithash}{5f6fa000f686ee5b41be67ba6ff7962d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{HX711 Arduino library}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://github.com/bogde/HX711
+      \endverb
+    \endentry
+    \entry{load_cell}{online}{}
+      \name{author}{1}{}{%
+        {{hash=1f917edcd21f6eb675068a43f7d4d0da}{%
+           family={Exchange},
+           familyi={E\bibinitperiod},
+           given={Electronics\bibnamedelima Stack},
+           giveni={E\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{fullhash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{authornamehash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \strng{authorfullhash}{1f917edcd21f6eb675068a43f7d4d0da}
+      \field{sortinit}{E}
+      \field{sortinithash}{07bbd5a529b5beaa311df5be05b874bc}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{How to mount a Half Bridge Load cell}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://electronics.stackexchange.com/questions/233574/how-to-mount-a-half-bridge-load-cell
+      \endverb
+    \endentry
+    \entry{android_studio}{online}{}
+      \name{author}{1}{}{%
+        {{hash=8b36e9207c24c76e6719268e49201d94}{%
+           family={Google},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{fullhash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{authornamehash}{8b36e9207c24c76e6719268e49201d94}
+      \strng{authorfullhash}{8b36e9207c24c76e6719268e49201d94}
+      \field{sortinit}{G}
+      \field{sortinithash}{618d986594b7198ba52cf8b00d348f3f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Android Studio}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://developer.android.com/studio/index.html
+      \endverb
+    \endentry
+    \entry{repo_github}{online}{}
+      \name{author}{1}{}{%
+        {{hash=e7dfd961fab221d964ca36f57f5a0531}{%
+           family={KOKKONIS\bibnamedelima Dimitrios},
+           familyi={K\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={LOCHE\bibnamedelima Jérémy},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{fullhash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{authornamehash}{e7dfd961fab221d964ca36f57f5a0531}
+      \strng{authorfullhash}{e7dfd961fab221d964ca36f57f5a0531}
+      \field{sortinit}{K}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{pression}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://github.com/kokkonisd/pression
+      \endverb
+    \endentry
+    \entry{sparkfun}{online}{}
+      \name{author}{1}{}{%
+        {{hash=aab303b1d1e2d7fbb445a4b20f091c5c}{%
+           family={Sparkfun},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{fullhash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{authornamehash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \strng{authorfullhash}{aab303b1d1e2d7fbb445a4b20f091c5c}
+      \field{sortinit}{S}
+      \field{sortinithash}{3c1547c63380458f8ca90e40ed14b83e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Getting Started with Load Cells}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb https://learn.sparkfun.com/tutorials/getting-started-with-load-cells
+      \endverb
+    \endentry
+    \entry{ntu_swing}{online}{}
+      \name{author}{1}{}{%
+        {{hash=aa38c43f2e7a64af7d0109a1992dc116}{%
+           family={University},
+           familyi={U\bibinitperiod},
+           given={Nanyang\bibnamedelima Technological},
+           giveni={N\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{fullhash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{authornamehash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \strng{authorfullhash}{aa38c43f2e7a64af7d0109a1992dc116}
+      \field{sortinit}{U}
+      \field{sortinithash}{1554584e7f69d2b4fe0a645e73d50194}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Java Programming Tutorial - Custom Graphics}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb http://www.ntu.edu.sg/home/ehchua/programming/java/J4b_CustomGraphics.html
+      \endverb
+    \endentry
+  \endsortlist
+  \missing{jserialcomm}
+\endrefsection
+\endinput
+

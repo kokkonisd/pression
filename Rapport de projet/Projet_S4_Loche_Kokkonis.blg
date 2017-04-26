@@ -1,7 +1,27 @@
 [0] Config.pm:354> INFO - This is Biber 2.7
 [0] Config.pm:357> INFO - Logfile is 'Projet_S4_Loche_Kokkonis.blg'
-[46] biber-MSWIN32:303> INFO - === 
-[78] Biber.pm:359> INFO - Reading 'Projet_S4_Loche_Kokkonis.bcf'
-[209] Biber.pm:835> INFO - Found 7 citekeys in bib section 0
-[243] Biber.pm:3670> INFO - Processing section 0
-[269] Biber.pm:3840> INFO - Looking for bibtex format file 'polytech/dummy.bib' for section 0
+[50] biber-darwin:303> INFO - === Wed Apr 26, 2017, 14:42:28
+[73] Biber.pm:359> INFO - Reading 'Projet_S4_Loche_Kokkonis.bcf'
+[190] Biber.pm:835> INFO - Found 8 citekeys in bib section 0
+[224] Biber.pm:3670> INFO - Processing section 0
+[242] Biber.pm:3840> INFO - Looking for bibtex format file 'polytech/dummy.bib' for section 0
+[246] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
+[249] bibtex.pm:1292> INFO - Found BibTeX data source 'polytech/dummy.bib'
+[251] Biber.pm:3840> INFO - Looking for bibtex format file 'biblio.bib' for section 0
+[252] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
+[254] bibtex.pm:1292> INFO - Found BibTeX data source 'biblio.bib'
+[273] Utils.pm:164> WARN - BibTeX subsystem: /var/folders/2v/m7r378zd7l97gx4fjtqs45600000gn/T/77wUVwvE_F/biblio.bib_8795.utf8, line 2, warning: 11 characters of junk seen at toplevel
+[274] Utils.pm:164> WARN - I didn't find a database entry for 'jserialcomm' (section 0)
+[295] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[295] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'level = 4' with 'level = 2'
+[295] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[295] Biber.pm:3499> INFO - Sorting list 'nyt/global/WWW' of type 'entry' with scheme 'nyt' and locale 'fr-FR'
+[295] Biber.pm:3505> INFO - No sort tailoring available for locale 'fr-FR'
+[313] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[313] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[314] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'level = 4' with 'level = 2'
+[314] Biber.pm:3499> INFO - Sorting list 'nyt/global/' of type 'entry' with scheme 'nyt' and locale 'fr-FR'
+[314] Biber.pm:3505> INFO - No sort tailoring available for locale 'fr-FR'
+[322] bbl.pm:608> INFO - Writing 'Projet_S4_Loche_Kokkonis.bbl' with encoding 'UTF-8'
+[324] bbl.pm:712> INFO - Output to Projet_S4_Loche_Kokkonis.bbl
+[325] Biber.pm:109> INFO - WARNINGS: 2
