@@ -214,9 +214,10 @@ L'idée, pour savoir si une personne est mal assise, est d'enregistrer la positi
 
 \textbf{Transition:} On sait maintenant que l'essentiel du projet consiste à acquérir la valeur des forces sous les pieds de la chaise. La partie suivante de ce rapport sera donc consacré à la réalisation de cette acquisition à l'aide de capteurs de forces et d'un Arduino.
 
-\section{Le matériel et Arduino}
+\section{Le prototype}
 \label{chap:arduino}
 
+\subsection{L'Arduino Uno et les capteurs de forces}
 Construire un correcteur de posture assise a nécessité de trouver un moyen de récupérer les informations de l'assise de l'utilisateur. On a vu dans la section \ref{chap:posture_determination} pourquoi cela est utile. Nous avons choisi de suivre la proposition de M.Beaufils qui était d'utiliser des capteurs positionnés sous les pieds d'une chaise. Il a été nécessaire d'utiliser un dispositif capable de mesurer les valeurs rapportées par ces capteurs. Notre choix se porte sur la proposition de M.Beaufils qui est d'utiliser un  micro-contrôleur Arduino Uno auquel sont connecté les capteurs de forces. 
 
 Les premières séances de travail ont été consacré à des recherches sur les capteurs de forces (leurs caractéristiques et comment il fonctionnent). 
@@ -312,8 +313,99 @@ Par la suite, le défi a été de réaliser 4 ponts de Wheatstone en couplant ch
 \end{figure}
 
  En effet, les amplificateurs prennent un pont de wheatstone en entrée. On a donc connecté nos ponts de Wheatstone complet a l'amplificateur HX711 et connecté les amplis à l'Arduino au niveau des pins digitales. Les HX711 fournissent $V_{EX}$ et analysent $V_O$. L'amplificateur va d'une part amplifier le signal (la tension $V_O$) du pont mais aussi le convertir en signal numérique (digital) directement lisible par l'Arduino. Lors de la programmation de l'Arduino, nous avons donc utilisé une librairie permettant de contrôler et analyser les données de l'amplificateur HX711.
+ 
+ Dans un optique de respect de l'environnement et de développement durable, nous avons cherché à estimer la consommation énergétique de notre prototype. Nous allons voir dans la prochaine section qu'il est possible d'alimenter notre prototype à l'aide d'une batterie portable servant à recharger un smartphone et ce pendant plusieurs heures.
 
-Nous avons désormais fait le tour du matériel que nous avons étudié et utilisé pour réaliser ce projet. Nous allons maintenant nous intéresser à l'aspect logiciel de ce projet qui consiste d'une part à programmer l'Arduino pour qu'il lise les valeurs des capteurs de forces et d'autre part à communiquer avec une interface utilisateur (un Smartphone ou un PC) pour donner les résultats et l'interprétation à l'utilisateur.
+\subsection{Consommation énergétique, autonomie et budget}
+
+Nous avons cherché à déterminer la consommation énergétique et le prix de notre prototype.
+L'idée derrière notre estimation et de faire la somme des consommations énergétiques de chaque éléments du prototype pour estimer la consommation totale.
+
+En cherchant dans les documentations techniques des composants, nous avons pu établir un tableau de consommation pour chaque éléments (cf. table \ref{tab:consommation}).
+
+\begin{table}
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Matériau} & \textbf{Consommation} \\\hline\hline
+Arduino & 50 mA \\\hline
+Shield Bluetooth & 30 mA \\\hline
+$4 \times$HX711 + Cellules de charge & 25 mA \\\hline
+\textbf{Total} &  \textbf{105 mA} \\\hline
+\end{tabular}
+\end{center}
+\caption{La consommation de chaque partie du montage électronique}
+\label{tab:consommation}
+\end{table}
+
+Ces consommations sont les consommation moyennes observés pour chaque éléments pris uns par uns dans des conditions d'opération similaire aux notre. 
+Nous avons cherché à comparer ces valeurs avec les valeurs réelles de notre circuit.
+
+En connectant un ampèremètre en série avec les différents fils d'alimentations des composants électroniques, nous avons déterminé la consommation pratique de notre prototype.
+
+\begin{figure}[htbp]
+\caption{Mesure de la consommation de courant des amplificateurs HX711 connectés aux cellules de charges}
+\label{fig:mesure_amper_hx711}
+\end{figure}
+
+La partie d'alimentation des amplificateurs HX711 connectés aux ponts de wheatstone (cf. figure \ref{fig:mesure_amper_hx711}) consomme environ 26mA à 5V c'est à dire une puissance d'environ 130mW.
+
+En mesurant ensuite le courant consommé par l'ensemble Arduino + amplificateurs et cellules de charges (cf. figure \ref{fig:mesure_amper_tot}), nous sommes arrivés à une valeur moyenne de consommation de 113 mA à 5V c'est à dire une puissance de 0.566mW.
+
+\begin{figure}[htbp]
+\caption{Mesure de la consommation énergétique totale du prototype}
+\label{fig:mesure_amper_tot}
+\end{figure}
+
+On peut comparer cette consommation à celle d'une souris optique d'ordinateur.
+
+En alimentant notre prototype à l'aide d'une batterie externe d'une capacité de 2000mAh, on va pouvoir faire fonctionner le prototype pendant une durée de d'environ 17h30 avant de devoir recharger la batterie (cf. equation \eqref{eqn:duree_fonct}).
+
+\begin{equation}
+\label{eqn:duree_fonct}
+\text{Durée fonctionnement}
+=
+\frac{\text{Capacité}}
+{\text{Consommation de courant}}
+= \frac{2000\text{mAh}}{113\text{mA}}
+=17.69 h
+\end{equation}
+
+
+On pourrait réduire cette consommation énergétique en utilisant un modèle d'Arduino plus petit tel que l'Arduino Pro Mini. 
+On peut aussi éteindre les LEDs de l'Arduino pour réduire la consommation de quelques dizaines de mA.
+De même on aurait pu avec plus de temps rajouter un boutons poussoir permettant de mettre en veille l'Arduino et les amplificateurs si personne n'est assis sur la chaise.
+
+Nous avons aussi étudié la dimension économique du prototype. 
+Nous avons ensuite estimé le prix de reviens de notre prototype (cf. table \ref{tab:prix_amazon}). 
+
+\begin{table}
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Matériau} & \textbf{Prix} \\\hline\hline
+Arduino & 20 € \\\hline
+Shield Bluetooth & 25 € \\\hline
+$4 \times$HX711 & 1,80 € (par pièce) \\\hline
+$4 \times$Cellule de charge & 12 € \\\hline
+Batterie Lithium externe pour smartphone (2000 mAh) & 10 € \\\hline
+Cable USB-B$\rightarrow$A & 2 € \\\hline
+Breadbord (plaque prototype) \& Fils de connexion & 9 € \\\hline
+$8 \times$Résistance (1 k$\Omega$) & 0.04 € (par pièce) \\\hline
+\textbf{Total} &  \textbf{85.52 €} \\\hline
+\end{tabular}
+\end{center}
+\caption{Le prix de chaque partie du montage électronique sur \textit{Amazon}}
+\label{tab:prix_amazon}
+\end{table}
+
+
+Il est possible de diminuer le cout de ce prototype en remplaçant l'Arduino Uno par un modèle Arduino Pro mini en moyenne 50\% moins cher que la version Uno. De même on peut remplacer le Shield Bluetooth par un module Bluetooth HC-05 coutant environ 5€ contre 25€ pour le shield.
+Nous avons tout de même fait attention aux cout de ce prototype en choisissant des cellules de charges de pèse personne électronique au lieu de cellules de charge plus performante.
+ En effet, celle-ci atteignent des coût proche de 100 € pièce contre 4€ pièce pour les cellules que nous avons récupéré.
+
+\textbf{Transition:} Nous avons désormais fait le tour du matériel que nous avons étudié et utilisé pour réaliser ce projet. Nous allons maintenant nous intéresser à l'aspect logiciel de ce projet qui consiste d'une part à programmer l'Arduino pour qu'il lise les valeurs des capteurs de forces et d'autre part à communiquer avec une interface utilisateur (un Smartphone ou un PC) pour donner les résultats et l'interprétation à l'utilisateur.
+
 
 \chapter{Le développement du logiciel}
 \label{chap:logiciel}
