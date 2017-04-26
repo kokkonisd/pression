@@ -448,7 +448,7 @@ En effet, l'idée derrière cette correction est que lorsque le capteur ne peux 
    Pour cela, il faut impérativement que peut importe la géométrie de la chaise, les valeurs au niveau des capteurs soient non nulles.
 
 
-% D'abord, donc, on récupère les données en faisant un \textit{read} sur les capteurs; on enregistre ces valeurs à un tableau de quatre entiers (\texttt{int}), après avoir pris leur valeur absolue, et avoir fait un \textit{offset}. Ceci est nécessaire, car les petites variations de température entre les cellules de charge donnent naissance à des variations de tension, qui sont ensuite amplifiées. Pour corriger ce paramètre, il est nécessaire de prendre la valeur absolue des données fournies par les capteurs de charge (en réalité, il est impossible qu'une personne applique une force négative aux capteurs !). Ensuite, pour vérifier que la valeur minimale des capteurs ne sera jamais 0 pour tous les capteurs, on prend soin de décaler les valeurs obtenues; comme on a montré avec la formule \ref{eq:centre_gravite_vectorielle}, si les \guillemotleft\ masses \guillemotright\ des capteurs sont tous nuls en même temps, la position du centre de gravité sera $(0, 0)$. Au cas où aucune charge n'est appliquée aux capteurs, le centre de gravité doit coïncider avec le centre de la chaise.
+% D'abord, donc, on récupère les données en faisant un \textit{read} sur les capteurs; on enregistre ces valeurs à un tableau de quatre entiers (\texttt{int}), après avoir pris leur valeur absolue, et avoir fait un \textit{offset}. Ceci est nécessaire, car les petites variations de température entre les cellules de charge donnent naissance à des variations de tension, qui sont ensuite amplifiées. Pour corriger ce paramètre, il est nécessaire de prendre la valeur absolue des données fournies par les capteurs de charge (en réalité, il est impossible qu'une personne applique une force négative aux capteurs !). Ensuite, pour vérifier que la valeur minimale des capteurs ne sera jamais 0 pour tous les capteurs, on prend soin de décaler les valeurs obtenues; comme on a montré avec la formule \ref{eq:centre_gravite_vectorielle}, si les \guillemotleft ~masses~\guillemotright\ des capteurs sont tous nuls en même temps, la position du centre de gravité sera $(0, 0)$. Au cas où aucune charge n'est appliquée aux capteurs, le centre de gravité doit coïncider avec le centre de la chaise.
 
 Une fois ce travail achevé, on envoie les données à l'application. On sera en mode série, ce qui implique qu'on enverra les données octet par octet. Il est évident que cette option sert à mettre à jour les données en temps réel, en assurant en même temps une faible éventualité de pertes d'information ou de données incomplètes.
 %, étant donné qu’on envoie un seul octet à la fois.
@@ -497,7 +497,7 @@ Les données envoyés par l'arduino (sur la voie TX du port digital) se retrouve
  De même les données arrivant sur la voie RX du bluetooth se retrouvent bien sur la voie RX de l'Arduino.
   Il a fallu suivre ce diagramme lors de la programmation et de la configuration des différents pins utilisés pour la communication série car on peut rapidement se tromper.
 
-Une fois qu'on a initialisé la communication, on peut envoyer les données. Nous rappelons que le but est d’envoyer les 4 différentes valeurs obtenues à partir des 4 capteurs. Avant même de discuter le processus de l'envoi des données des capteurs, on sait qu'on doit envoyer un caractère qui \textit{initialise} le message, ainsi qu’un autre qui le \textit{termine}. Ceci sert à distinguer les messages entre eux, et à vérifier que toutes les données sont bien transmises. Pour initialiser le message, on envoie un caractère ASCII \guillemotleft\ STX \guillemotright\ (start of text), qui a pour code le nombre décimal 2. Pour terminer le message, on envoie un caractère \guillemotleft\ CR \guillemotright\ (enter/carriage return), qui a pour code le nombre décimal 13. Notre module de communication sur l'application (qu'elle soit en PC ou en téléphone portable) est avertie désormais que les données des capteurs seront comprises entre ces deux caractères.
+Une fois qu'on a initialisé la communication, on peut envoyer les données. Nous rappelons que le but est d’envoyer les 4 différentes valeurs obtenues à partir des 4 capteurs. Avant même de discuter le processus de l'envoi des données des capteurs, on sait qu'on doit envoyer un caractère qui \textit{initialise} le message, ainsi qu’un autre qui le \textit{termine}. Ceci sert à distinguer les messages entre eux, et à vérifier que toutes les données sont bien transmises. Pour initialiser le message, on envoie un caractère ASCII \guillemotleft ~STX \guillemotright\ (start of text), qui a pour code le nombre décimal 2. Pour terminer le message, on envoie un caractère \guillemotleft\ CR~\guillemotright\ (enter/carriage return), qui a pour code le nombre décimal 13. Notre module de communication sur l'application (qu'elle soit en PC ou en téléphone portable) est avertie désormais que les données des capteurs seront comprises entre ces deux caractères.
 
 %Pour l'envoi des données des capteurs, nous avons décidé que le meilleur message serait court et simple.
 %Ainsi, on diminue encore plus le danger de transmettre ou de recevoir des données incomplètes, car on envoie le minimum absolu des caractères. FAUX ne pas mettre
@@ -569,15 +569,15 @@ En somme, notre solution permet les manipulations suivantes :
 \end{itemize}
 
 
-Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft\ configuration \guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0). Les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini).
+Pour utiliser l'application, il faut d'abord configurer la chaise. On clique sur le bouton \guillemotleft ~configuration~\guillemotright\ , on saisit le nombre des pieds de la chaise et leurs positions (on supposera que pour une chaise à quatre pieds, le pied qui se trouve devant et à gauche est au point (0,0). Les positions des autres pieds seront mesurées relativement au point (0,0) qu'on a défini).
  Une fois que la chaise est configurée, on peut se connecter à l'Arduino, soit par Bluetooth (auquel cas il faut appairer le smartphone ou PC au shield Bluetooth de l'Arduino au préalable afin de pouvoir s'y connecter), ce qui est préférable, soit par USB. 
 Finalement, on doit s'asseoir correctement, afin de calibrer l'application.
-Pour ce faire, il faut ,avant de s'asseoir sur la chaise, appuyer sur le bouton \guillemotleft\ tare \guillemotright . Cette action fera le zéro des capteurs et le centre de gravité se retrouvera déplacé au centre de la zone de visualisation. On peut ensuite s'asseoir dans la position désiré puis appuyer sur le bouton \guillemotleft\ calibrer \guillemotright . Une fois la calibration terminée, la deadzone est centrée sur la position du centre de gravité désirée. Finalement on peut modifier sa taille selon nos préférences. 
+Pour ce faire, il faut ,avant de s'asseoir sur la chaise, appuyer sur le bouton \guillemotleft ~tare \guillemotright . Cette action fera le zéro des capteurs et le centre de gravité se retrouvera déplacé au centre de la zone de visualisation. On peut ensuite s'asseoir dans la position désiré puis appuyer sur le bouton \guillemotleft\ calibrer~\guillemotright . Une fois la calibration terminée, la deadzone est centrée sur la position du centre de gravité désirée. Finalement on peut modifier sa taille selon nos préférences. 
 
 Maintenant, l'application affichera la deadzone et le barycentre, qui deviendra rouge quand il sort de la deadzone, ce qui veut dire que notre posture n'est pas bonne.
  En ce point, on peut sauvegarder la chaise afin d'éviter la procédure de configuration chaque fois qu'on veut utiliser l'application. 
-Pour ce faire, on clique sur \guillemotleft\ sauvegarder chaise \guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). 
-La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft\ charger une chaise \guillemotright\  et donc charger le fichier qu'on a enregistré.
+Pour ce faire, on clique sur \guillemotleft ~sauvegarder chaise~\guillemotright\ , puis on choisit un dossier et un nom pour notre chaise (la chaise sera sauvegardée dans un fichier \texttt{.txt}). 
+La prochaine fois qu'on ouvrira l'application, on pourra cliquer sur \guillemotleft ~charger une chaise~\guillemotright\  et donc charger le fichier qu'on a enregistré.
  Ce fonctionnement nous permet aussi d'utiliser plusieurs chaises sans avoir besoin de changer la configuration chaque fois qu'on utilise une chaise différente.
 
 Bien que notre matériel soit conçu pour une chaise à quatre pieds banale, nous avons tout de même tenus à développer un logiciel aussi général et polyvalent que possible.
@@ -614,24 +614,24 @@ La communication pour le PC et Android est donc identique.
 %Le module est capable de trouver tous les \textit{ports} de communication série disponibles sur l'ordinateur (ou le téléphone portable).
 % On peut ensuite les lister et accorder à l'utilisateur le lancement d'un flux de communication à travers un de ces ports. Ce flux permet de recevoir et envoyer des données : nous rappelons que, même si la fonction principale de l'application est de recevoir des données à partir des senseurs et de les interpréter, on doit être capable d'envoyer une commande afin d'effectuer une \textit{tare}, et réinitialiser ainsi les senseurs.
 
-Enfin, nous avons ajouté aux modules de communications un \guillemotleft\ parser \guillemotright , c'est à dire une sorte de déchiffreur pour interpréter les données reçues au niveau des flux.
+Enfin, nous avons ajouté aux modules de communications un \guillemotleft ~parser~\guillemotright , c'est à dire une sorte de déchiffreur pour interpréter les données reçues au niveau des flux.
  Le parser analyse les octets et les organise dans un tableau d'entiers de façon que la valeur et l'ID des capteurs soient facilement récupérables pour être utilisés par la suite.
 Cette fonctionnalité permet aussi de savoir si on a reçu des données incomplètes, ou même si on n'a rien reçu depuis l'Arduino. En effet, le parser permet de détecter les données invalides en produisant les erreurs associés aux problèmes rencontrés (message incomplet, caractères non numérique pour les valeurs de capteurs...)
 
 
 \subsection{La modélisation de la chaise}
 \label{subsec:model_chaise}
-Dans la programmation, la partie la plus difficile est souvent non pas l'implémentation, mais la modélisation d'un problème. Ici on voit que cette hypothèse est bien vérifiée : la qualité de notre correcteur de posture dépend, au niveau logiciel, de la qualité et de l'exactitude de la modélisation de notre objet d'étude, c'est-à-dire de la \textit{chaise}. C'est à cause de ce fait que nous avons dépensé beaucoup de temps à bien modéliser l'objet \guillemotleft\ chaise \guillemotright\ afin de prévenir l'intrusion d'incertitudes et de problèmes secondaires.
+Dans la programmation, la partie la plus difficile est souvent non pas l'implémentation, mais la modélisation d'un problème. Ici on voit que cette hypothèse est bien vérifiée : la qualité de notre correcteur de posture dépend, au niveau logiciel, de la qualité et de l'exactitude de la modélisation de notre objet d'étude, c'est-à-dire de la \textit{chaise}. C'est à cause de ce fait que nous avons dépensé beaucoup de temps à bien modéliser l'objet \guillemotleft ~chaise~\guillemotright\ afin de prévenir l'intrusion d'incertitudes et de problèmes secondaires.
 
 Le fait de développer cet objet nous a permis de conceptualiser l'objectif du projet. Concrètement, cet objet contient toute la logique du projet qui est de déterminer la posture d'une personne en l'occurrence ici nous la déterminons à l'aide de la position du centre de gravité.
 
-En obéissant au modèle de programmation utilisé par \texttt{JAVA} (c'est-à-dire à la programmation orientée objet ou \textit{OOP}), nous avons décidé de séparer la chaise en deux éléments : le \guillemotleft\ parent \guillemotright\ (la chaise) et l' \guillemotleft\ enfant \guillemotright\ (les pieds).
+En obéissant au modèle de programmation utilisé par \texttt{JAVA} (c'est-à-dire à la programmation orientée objet ou \textit{OOP}), nous avons décidé de séparer la chaise en deux éléments : le \guillemotleft ~parent \guillemotright\ (la chaise) et l' \guillemotleft\ enfant~\guillemotright\ (les pieds).
 Nous sommes parti de l'idée suivante: si on se donne une chaise arbitraire, elle va forcément posséder des pieds. En fait, la seule chose qui distingue deux chaises sera son nombre de pieds et leur position respectives. Ce n'est pas tout à fait exacte dans la réalité car on pourrait aussi considérer le dossier, mais l'important est que, dans notre cas d'étude, on ne s'intéresse qu'à la valeur des forces au niveau des pieds.
 
 Nous avons donc commencé par la construction d'une classe (objet) appelée \texttt{Pied}, qui comporte trois caractéristiques :
 \begin{itemize}
 \item Sa position (posX, posY);
-\item Sa \guillemotleft\ masse \guillemotright (ou valeur de force) ;
+\item Sa \guillemotleft ~masse~\guillemotright (ou valeur de force) ;
 \item L’ID du capteur qui lui est associé.
 \end{itemize}
 
@@ -664,7 +664,7 @@ Le barycentre étant une caractéristique de la chaise, il est logique qu'il soi
 À ce niveau, nous avons construit une fonctionnalité supplémentaire, qui peut paraître simple, mais son implémentation n'est pas évidente : la deadzone.
 Celle-ci est définie tout d'abord par sa position, qui dépend de l'utilisateur, puisqu'elle doit être adaptée à ses besoins.
 Nous avons choisi de représenter cette zone par un cercle disposant d'un rayon modifiable.
-Soulignons que la deadzone est susceptible de se déformer en fonction des dimensions de la fenêtre de l'application, en devenant une \guillemotleft\ ellipse \guillemotright .
+Soulignons que la deadzone est susceptible de se déformer en fonction des dimensions de la fenêtre de l'application, en devenant une \guillemotleft ~ellipse~\guillemotright .
 
 Nous avons choisi de définir la deadzone relativement aux caractéristiques de la chaise. L'idée est que l'utilisateur peut jouer sur la taille de la deadzone à l'aide d'un ratio compris entre 0 et 1 et sur la position du centre de la deadzone à l'aide de la calibration. 
 Le ratio sert à définir la proportion d'une dimension caractéristique de la chaise qui sera utilisé en tant que rayon pour la deadzone. 
@@ -736,13 +736,13 @@ Dans les paragraphes qui suivent, nous allons aborder un problème qui nous a pr
 Ce problème a été celui d'adapter les informations réelles (les dimensions de la chaise, la position réelle du barycentre...) à l'échelle de l'objet JPanel. On comprends bien que ce qui se passe sur un écran est tout à fait différent de ce qui se passe en réalité. Nous allons donc vous expliquer le fonctionnement de nos fonctions de mise à l'échelle, qui ont rendu possible l'interprétation des données réelles de la chaise.
 % il nous faut présenter l'élément peut-être le plus important de cette partie de notre logiciel : les méthodes \texttt{scaleX} et \texttt{scaleY}.
 
-Le problème à traiter ici est le suivant : à cause du fait qu'on ne peut ni contrôler ni prévoir la taille éventuelle de la fenêtre (donc du JPanel) ou de la chaise, on configure deux \guillemotleft\ référentiels \guillemotright . 
-Le premier est le référentiel \guillemotleft\ réel \guillemotright , qui correspond aux vraies dimensions de la chaise.
+Le problème à traiter ici est le suivant : à cause du fait qu'on ne peut ni contrôler ni prévoir la taille éventuelle de la fenêtre (donc du JPanel) ou de la chaise, on configure deux \guillemotleft ~référentiels~\guillemotright . 
+Le premier est le référentiel \guillemotleft ~réel~\guillemotright , qui correspond aux vraies dimensions de la chaise.
 Supposons, par exemple, une chaise carrée à quatre pieds, dont le côté mesure 1 mètre.
 Comme nous avons dit plus haut, le point \texttt{(0, 0)} correspond au pied gauche devant.
-Si on place quelque chose au point \texttt{(0.5 m, 0.5 m)}, celui-ci se trouvera au centre de la chaise, dans le référentiel dit \guillemotleft\ réel \guillemotright . 
+Si on place quelque chose au point \texttt{(0.5 m, 0.5 m)}, celui-ci se trouvera au centre de la chaise, dans le référentiel dit \guillemotleft ~réel~\guillemotright . 
 
-Le second référentiel est le référentiel \guillemotleft\ Swing \guillemotright , qui correspond au JPanel de visualisation de la chaise, et, comme nous avons dit plus haut, dépend de la taille de la fenêtre de l'application et de la taille de la chaise saisie par l'utilisateur. 
+Le second référentiel est le référentiel \guillemotleft ~Swing~\guillemotright , qui correspond au JPanel de visualisation de la chaise, et, comme nous avons dit plus haut, dépend de la taille de la fenêtre de l'application et de la taille de la chaise saisie par l'utilisateur. 
 Il faut bien comprendre que nous n'imposons pas de contrainte sur les dimensions du JPanel. Ainsi, il pourra être carré ou rectangulaire et de n'importe qu'elle dimension.
 
 %\begin{figure}[htbp]
@@ -751,7 +751,7 @@ Il faut bien comprendre que nous n'imposons pas de contrainte sur les dimensions
 %\includegraphics[scale=1]{image/jpanel3.png}
 %\end{figure}
 
-La mise à l'échelle correspond donc à exprimer les données de notre référentiel \guillemotleft\ réel \guillemotright\ dans le référentiel \guillemotleft\ Swing \guillemotright\  servant à la visualisation dans le JPanel. 
+La mise à l'échelle correspond donc à exprimer les données de notre référentiel \guillemotleft ~réel \guillemotright\ dans le référentiel \guillemotleft\ Swing~\guillemotright\  servant à la visualisation dans le JPanel. 
 L'idée est que, peut importe la forme du JPanel et les dimensions de la fenêtre, le barycentre, la deadzone et les pieds se comporte toujours de la même façon.
  Nous avons cherché à garantir que si l'utilisateur voit le barycentre sortir de la deadzone alors en réalité c'est bien parce que son centre de gravité sors de la deadzone et non à cause une mauvaise implémentation de l'interface graphique.
  
@@ -861,7 +861,7 @@ x_{JPanel} = x_{Chaise}\ \ \frac{\mathrm{largeur}}{\alpha} + \frac{d}{2}
 y_{JPanel} = y_{Chaise}\ \ \frac{\mathrm{hauteur}}{\beta} + \frac{d}{2}
 \end{equation}
 
-où($x_{Chaise}$,$y_{Chaise}$) est un point quelconque dans le référentiel de la chaise (c'est-à-dire le référentiel \guillemotleft\ réel \guillemotright ), et ($x_{JPanel}$,$y_{JPanel}$) est le même point, exprimé dans le référentiel du JPanel.
+où($x_{Chaise}$,$y_{Chaise}$) est un point quelconque dans le référentiel de la chaise (c'est-à-dire le référentiel \guillemotleft ~réel~\guillemotright ), et ($x_{JPanel}$,$y_{JPanel}$) est le même point, exprimé dans le référentiel du JPanel.
 
 En somme, les méthodes \texttt{scaleX(double xChaise)} et \texttt{scaleY(double yChaise)} permettent de dessiner n'importe quel élément (que ce soit le barycentre ou la deadzone) avec la certitude que l'échelle est respectée peu importe la taille de fenêtre.
 
@@ -875,8 +875,8 @@ Nous communiquons à l'utilisateur que la partie gauche, à savoir le panneau de
 Ensuite, en utilisant deux objets \texttt{JButton} et un objet \texttt{JComboBox}, nous avons créé la partie \textit{communication} du panneau de contrôle.
 
  Le \texttt{JComboBox} est tout simplement une liste contenant tous les ports série disponible sur la machine et récupérable grâce à la librairie JSerialComm.
-Les \texttt{JButton} sont des boutons, permettant de se connecter ou se déconnecter du port choisi (voir figure \ref{fig:app_pc_comms}). Évidemment, nous avons mis en place des mécanismes pour que les boutons \guillemotleft\ Connexion \guillemotright\ et \guillemotleft\ Déconnexion \guillemotright\ soient actifs seulement s'il le faut.
-Par exemple, l'utilisateur ne doit pas être capable de cliquer sur \guillemotleft\ Déconnexion \guillemotright\ s'il n'est pas connecté au préalable. 
+Les \texttt{JButton} sont des boutons, permettant de se connecter ou se déconnecter du port choisi (voir figure \ref{fig:app_pc_comms}). Évidemment, nous avons mis en place des mécanismes pour que les boutons \guillemotleft ~Connexion \guillemotright\ et \guillemotleft\ Déconnexion~\guillemotright\ soient actifs seulement s'il le faut.
+Par exemple, l'utilisateur ne doit pas être capable de cliquer sur \guillemotleft ~Déconnexion~\guillemotright\ s'il n'est pas connecté au préalable. 
 Ce fonctionnement permet de faciliter l'apprentissage du logiciel et de limiter les bugs d'interaction avec l'utilisateur.
 
 \begin{figure}[htbp]
@@ -889,9 +889,9 @@ Ce fonctionnement permet de faciliter l'apprentissage du logiciel et de limiter 
 
 En dessous de ces trois éléments se trouvent trois autres boutons, qui ne concernent pas la connexion avec l'Arduino, mais les paramètres du détecteur de posture : 
 \begin{itemize}
-\item Le bouton \guillemotleft\ Tare \guillemotright\ permet de faire le zéro des capteurs.
-\item Le bouton \guillemotleft\ Config chaise \guillemotright\ permet de configurer les paramètres de la chaise (c'est-à-dire le nombre des pieds et leurs positions)
-\item Le bouton \guillemotleft\ Calibrer la zone \guillemotright\ permet de centrer la deadzone à la position actuelle du barycentre (voir figure \ref{fig:app_pc_chaise}). Ce dernier bouton est important, car il permet à l'utilisateur de contrôler la position de la zone optimale. 
+\item Le bouton \guillemotleft ~Tare~\guillemotright\ permet de faire le zéro des capteurs.
+\item Le bouton \guillemotleft ~Config chaise~\guillemotright\ permet de configurer les paramètres de la chaise (c'est-à-dire le nombre des pieds et leurs positions)
+\item Le bouton \guillemotleft ~Calibrer la zone~\guillemotright\ permet de centrer la deadzone à la position actuelle du barycentre (voir figure \ref{fig:app_pc_chaise}). Ce dernier bouton est important, car il permet à l'utilisateur de contrôler la position de la zone optimale. 
 Il est à noter que celle-ci n'est pas forcément au centre de la chaise, puisqu'elle dépend de la forme et de la posture optimale sur la chaise en question.
 \end{itemize}
 
