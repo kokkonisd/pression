@@ -1,0 +1,136 @@
+% how-to guide: https://www.sharelatex.com/blog/2013/08/13/beamer-series-pt1.html
+
+\documentclass{beamer}
+\usetheme{Warsaw}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+
+\title{Correcteur de posture assise à base d'Arduino}
+\subtitle{\small DI 6}
+\author[KOKKONIS Dimitrios \\\and LOCHE Jérémy]{\small {\small \texttt{Auteurs}}\\ KOKKONIS Dimitrios \\\and LOCHE Jérémy\\
+\vspace{5px}
+{\small \texttt{Encadrant}}\\ BEAUFILS Sébastien}
+\institute{\textsc{École Polytechnique de l'Université de Tours}}
+\date{11 mai 2017}
+
+% new environments
+\newenvironment{figim}[2]{%
+	\begin{figure}[htbp]
+	\caption{#1}
+	\label{#2}
+	\begin{center}
+}{%
+	\end{center}
+	\end{figure}
+}
+
+\begin{document}
+
+\begin{frame}
+\vspace{0.1cm}
+\includegraphics[height=1cm]{images/Logo_PeiP_v2009_RGB_3cm_300dpi.jpg}
+\includegraphics[height=1cm]{images/logo_Polytech_Tours_RVB_3cm_300dpi.jpg}
+\hfill
+\includegraphics[height=1cm]{images/logo_UFR_4cm_300dpi.jpg}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Plan}
+\tableofcontents
+\end{frame}
+
+\section*{Introduction}
+\begin{frame}
+\begin{block}{Introduction}
+\begin{itemize}
+\pause
+\item Objectif :
+\pause
+\begin{itemize}
+\item Créer un correcteur de posture assise
+\pause
+\item Communiquer un résultat
+\end{itemize}
+\pause
+\item Solution apportée :
+\begin{itemize}
+\pause
+\item Création d'un système embarqué 
+\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{La communication en série}
+\begin{frame}
+\begin{block}{La communication en série}
+\pause
+blablabla
+\end{block}
+\end{frame}
+
+\section{Les cellules de charge}
+\begin{frame}
+\begin{block}{Les cellules de charge}
+\pause
+blablabla
+\end{block}
+\end{frame}
+
+\section{L'Arduino}
+\begin{frame}
+\begin{block}{L'Arduino}
+\pause
+blablabla
+\end{block}
+\end{frame}
+
+\section{La modélsation et la réalisation du correcteur de posture}
+\begin{frame}
+\begin{block}{La modélsation et la réalisation du correcteur de posture}
+\pause
+blablabla
+\end{block}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+\begin{block}{Conclusion}
+\pause
+blablabla
+\end{block}
+\end{frame}
+
+\subsection*{Bibliographie}
+\begin{frame}
+\frametitle{Bibliographie}
+\begin{thebibliography}{99}
+{\tiny \bibitem{site-arduino} Arduino, \textit{Le site officiel d'Arduino}. 2017. \texttt{\tiny URL : https://www.arduino.cc/} (visité le 26/04/2017).
+
+\bibitem{ntu-swing} Nanyang Technological University, \textit{Java Programming Tutorial - Custom Graphics}. 2016. \texttt{\tiny URL : http://www.ntu.edu.sg/home/ehchua/programming/java/J4b\_CustomGraphics.html} (visité le 26/04/2017).
+
+\bibitem{load-cell} Electronics Stack Exchange, \textit{How to mount a Half Bridge Load cell}. 2016. \texttt{\tiny URL : https://electronics.stackexchange.com/questions/233574/how-to-mount-a-half-bridge-load-cell} (visité le 26/04/2017).
+
+\bibitem{hx711} bodge, \textit{HX711 Arduino library}. 2016. \texttt{\tiny URL : https://github.com/bogde/HX711} (visité le 26/04/2017).
+
+\bibitem{android-studio} Google, \textit{Android Studio}. 2017. \texttt{\tiny URL : https://developer.android.com/studio/index.html} (visité le 26/04/2017).
+
+\bibitem{repo-github} KOKKONIS Dimitrios, LOCHE Jérémy, \textit{pression}. 2017. \texttt{\tiny URL : https://github.com/kokkonisd/pression} (visité le 26/04/2017).
+
+\bibitem{sparkfun} Sparkfun, \textit{Getting Started with Load Cells}. 2016. \texttt{\tiny URL : https://learn.sparkfun.com/tutorials/getting-started-with-load-cells} (visité le 26/04/2017).
+
+\bibitem{wheatstone} National Instruments, \textit{Comment effectuer une mesure avec une cellule de charge ou un transducteur de pression}. 2013. \texttt{\tiny URL : http://www.ni.com/tutorial/7138/fr/} (visité le 26/04/2017).}
+\end{thebibliography}
+\end{frame}
+
+\subsection*{Liens utiles}
+\begin{frame}
+\frametitle{Liens utiles}
+\begin{itemize}
+\item \url{www.polytech.univ-tours.fr}
+\end{itemize}
+\end{frame}
+
+\end{document}

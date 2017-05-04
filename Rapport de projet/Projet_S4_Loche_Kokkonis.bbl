@@ -121,6 +121,33 @@
       \verb https://developer.android.com/studio/index.html
       \endverb
     \endentry
+    \entry{wheatstone}{online}{}
+      \name{author}{1}{}{%
+        {{hash=e07a8a16139f25a4c05b0e1e9aedfa3a}{%
+           family={Instruments},
+           familyi={I\bibinitperiod},
+           given={National},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{fullhash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{authornamehash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{authorfullhash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \field{sortinit}{I}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labelprefix}{WWW}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Comment effectuer une mesure avec une cellule de charge ou un transducteur de pression}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2013}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb http://www.ni.com/tutorial/7138/fr/
+      \endverb
+    \endentry
     \entry{repo_github}{online}{}
       \name{author}{1}{}{%
         {{hash=e7dfd961fab221d964ca36f57f5a0531}{%
@@ -298,6 +325,32 @@
       \field{urldateera}{ce}
       \verb{url}
       \verb https://developer.android.com/studio/index.html
+      \endverb
+    \endentry
+    \entry{wheatstone}{online}{}
+      \name{author}{1}{}{%
+        {{hash=e07a8a16139f25a4c05b0e1e9aedfa3a}{%
+           family={Instruments},
+           familyi={I\bibinitperiod},
+           given={National},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{fullhash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{authornamehash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \strng{authorfullhash}{e07a8a16139f25a4c05b0e1e9aedfa3a}
+      \field{sortinit}{I}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Comment effectuer une mesure avec une cellule de charge ou un transducteur de pression}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2017}
+      \field{year}{2013}
+      \field{urldateera}{ce}
+      \verb{url}
+      \verb http://www.ni.com/tutorial/7138/fr/
       \endverb
     \endentry
     \entry{repo_github}{online}{}
