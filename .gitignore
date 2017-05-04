@@ -28,3 +28,6 @@ Soutenance/*.toc
 Soutenance/*.lof
 Soutenance/*.dvi
 Soutenance/*.out.ps
+Soutenance/*.nav
+Soutenance/*.out
+Soutenance/*.snm
