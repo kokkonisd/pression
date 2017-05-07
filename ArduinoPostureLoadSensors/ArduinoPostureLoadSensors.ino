@@ -120,7 +120,7 @@ void writeData(int *sensorData) {
   }
       
   Serial.write(CODE_END);
-  Serial.println();
+  //Serial.println(); //useless return
   bluetoothSerial.write(CODE_END);
 }
 
@@ -131,7 +131,7 @@ void setup(void) {
   pinMode(TxD,OUTPUT);
   Serial.begin(COMM_SPEED_USB); // We'll send debugging information via the Serial monitor
   bluetoothSerial.begin(COMM_SPEED_BLUETOOTH);
-
+  
   Serial.println("Before setting up the scale:");
   Serial.print("read: \t\t");
   Serial.print(sensor1.read());      // print a raw reading from the ADC
@@ -142,7 +142,7 @@ void setup(void) {
   Serial.print(";");
   Serial.print(sensor4.read());      // print a raw reading from the ADC
   Serial.println(";");
-
+  /* Testing code, slows down the boot process
   Serial.print("read average: \t\t");
   Serial.print(sensor1.read_average(20));      // print average of 20 raw reading from the ADC
   Serial.print(";");
@@ -173,11 +173,11 @@ void setup(void) {
   Serial.print(sensor4.get_units(5), 1);  // print the average of 5 readings from the ADC minus tare weight (not set) divided
   Serial.println(";");
             // by the SCALE parameter (not set yet)
-
-  sensor1.set_scale(1240.f);                      // this value is obtained by calibrating the scale with known weights; see the README for details
-  sensor2.set_scale(1240.f);
-  sensor3.set_scale(1240.f);
-  sensor4.set_scale(1240.f);
+  */
+  sensor1.set_scale(2480.f);                      // this value is obtained by calibrating the scale with known weights; see the README for details
+  sensor2.set_scale(2480.f);
+  sensor3.set_scale(2480.f);
+  sensor4.set_scale(2480.f);
 
   sensor1.tare();
   sensor2.tare();
