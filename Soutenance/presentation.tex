@@ -46,18 +46,13 @@
 \begin{frame}
 \begin{block}{Introduction}
 \begin{itemize}
-\pause
-\item Objectif :
-\pause
+\item Objectifs :
 \begin{itemize}
-\item Créer un correcteur de posture assise
-\pause
-\item Communiquer un résultat
+\item Déterminer la posture assise d'une personne à l'aide de capteurs placés sous les pieds de la chaise
+\item Créer une interface utilisateur adaptée pour communiquer le résultat
 \end{itemize}
-\pause
 \item Solution apportée :
 \begin{itemize}
-\pause
 \item Création d'un système embarqué 
 \end{itemize}
 \end{itemize}
@@ -65,17 +60,38 @@
 \end{frame}
 
 \begin{frame}
-\begin{block}{Plan du système :}
-\pause
+\begin{block}{Déterminer la posture assise d'une personne ?}
+Pourquoi utiliser des capteurs sous les pieds de la chaise ?
+\begin{figure}
+\begin{center}
+\includegraphics[height=5cm]{images/Chaise_forces_homo.jpg}
+\includegraphics[height=5cm]{images/Chaise_forces_hetero.jpg}
+\end{center}
+\caption{Répartition des forces sur une chaise en fonction de la posture}
+\label{fig:chaise_repartition}
+\end{figure}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Les problèmes :}
+\begin{enumerate}
+\item Quels capteurs choisir pour mesurer la force sous les pieds de la chaise ?
+\item Comment mesurer la valeur de ces capteurs ?
+\item Comment faire savoir à l'utilisateur la qualité de sa posture assise ?
+\end{enumerate}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{La solution: le système embarqué}
 \begin{itemize}
-\item 4 cellules de charge dont la résistance varie lorsqu'on applique une force sur eux
-\pause
-\item 4 ponts Wheatstone (construits à partir des cellules de charge) qui permettent de mésurer une tension
-\pause
-\item 4 amplificateurs qui amplifient le signal fourni par les cellules de charge
-\pause
-\item un Arduino Uno, qui récupère les données fournies par les amplificateurs, les traite, et les envoie à l'application
-\pause
+\item 4 cellules de charge %dont la résistance varie lorsqu'on applique une force sur eux
+\item 4 ponts Wheatstone %(construits à partir des cellules de charge) qui permettent de mésurer une tension
+\item 4 amplificateurs HX711 %qui amplifient le signal fourni par les cellules de charge
+\item 1 Arduino Uno et son Shield Bluetooth%, qui récupère les données fournies par les amplificateurs, les traite, et les envoie à l'application
 \item une application (PC ou Android), qui reçoit les données de l'Arduino (par Bluetooth ou par USB) et permet de visualiser la posture à partir de ces données
 \end{itemize}
 \end{block}
@@ -84,15 +100,11 @@
 \section{Les cellules de charge}
 \begin{frame}
 \begin{block}{Les cellules de charge}
-\pause
 \begin{itemize}
-\item Il s'agit des résistances variables
-\pause
+\item Il s'agit de résistance variables
 \item Leur résistance change quand elles sont déformées
-\pause
 \item Les variations de la résistance sont toutefois très faibles ($m\Omega$ ou $\mu\Omega$)
 \end{itemize}
-\pause
 \begin{figure}
 \begin{center}
 \includegraphics[height=2.8cm]{images/load_cell.jpg}
@@ -104,16 +116,31 @@
 \end{frame}
 
 \begin{frame}
-\begin{block}{Comment mesurer les variations ?}
-\pause
+\begin{block}{Notre choix de cellule de charge}
+4 cellules de charges récupérés dans un pèse personne électronique.
+\begin{itemize}
+\item Capacité de la cellule: jusqu'à 50 kg 
+\item Capacité totale du correcteur de posture: jusqu'à 200 kg
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[height=3.5cm]{images/load_sensor.jpg}
+\includegraphics[height=3.5cm]{images/load_sensor2.jpg}
+\end{center}
+\caption{Cellule de charge de pèse personne électronique}
+\label{fig:load_cell_1}
+\end{figure}
+\end{block}
+tem\end{frame}
+
+
+\begin{frame}
+\begin{block}{Comment mesurer les variations de résistances?}
 \begin{itemize}
 \item Le pont Wheatstone
-\pause
 \begin{itemize}
 \item Permet de transformer la mesure de la résistance en une mesure de tension
-\pause
 \item Toutefois le signal est aussi très faible (de l'ordre du $mV$)
-\pause
 \end{itemize}
 \end{itemize}
 
@@ -131,17 +158,15 @@
 \begin{block}{Comment amplifier le signal ?}
 \begin{itemize}
 \item Les amplificateurs HX711
-\pause
 \begin{itemize}
 \item Prennent un pont de wheatstone en entrée
-\pause
 \item On peut les connecter aux pins digitales de l'Arduino
-\pause
 \end{itemize}
 \end{itemize}
 
 \begin{figure}
 \begin{center}
+\includegraphics[height=3cm]{images/HX711.jpg}
 \includegraphics[height=3cm]{images/load_sensor_connected.jpg}
 \end{center}
 \caption{4 cellules de charges en demi-pont connectées à l'Arduino en utilisant des amplis HX711.}
@@ -150,32 +175,34 @@
 \end{block}
 \end{frame}
 
-\section{L'Arduino}
+\section{Le micro-contrôleur Arduino}
 \begin{frame}
-\begin{block}{L'Arduino}
-\pause
+\begin{block}{Le micro-contrôleur Arduino}
 \begin{itemize}
-\item C'est un microcontrôleur
-\pause
-\item Peut recevoir des données analogiques ou digitales, les traiter, et les envoyer par série
-\pause
+\item Capable de lire des données analogiques ou numériques, les traiter, et les envoyer par série
 \item Utilise un compilateur \texttt{avr-g++} (C/C++)
-\pause
 \item Peut utiliser un shield Bluetooth qui permet d'envoyer des données par Bluetooth
 \end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[height=3cm]{images/uno.jpg}
+\includegraphics[height=3cm]{images/BTshield.jpg}
+\end{center}
+\caption{Arduino Uno et son Shield bluetooth}
+\label{fig:load_sensor_connected}
+\end{figure}
 \end{block}
 \end{frame}
 
 \begin{frame}
 \begin{block}{La programmation de l'Arduino}
-\pause
 \begin{itemize}
-\item Le code de l'Arduino lit les données à partir des pins digitales
-\pause
-\item Il utilise une libraire construite pour les amplificateurs, appelée \textit{HX177} \cite{hx711}
-\pause
-\item Le code est aussi capable de faire une tare sur les amplificateurs
+\item Le code C/C++: écrit dans Arduino IDE
+\item Récupère la valeur des capteurs et les envoies en série via USB et Bluetooth toutes les 100ms.
+\item Il utilise une libraire développé pour les amplificateurs, appelée \textit{HX177} \cite{hx711}
+\item Le code est aussi capable de faire la tare des amplificateurs
 \end{itemize}
+
 \end{block}
 \end{frame}
 
@@ -204,7 +231,7 @@
 \end{block}
 \end{frame}
 
-\subsection{La communication en série}
+\subsection{La communication série}
 \begin{frame}
 \begin{block}{La communication en série}
 \pause
@@ -226,9 +253,9 @@
 \end{block}
 \end{frame}
 
-\subsection{La modélsation de la chaise}
+\subsection{La modélisation de la chaise}
 \begin{frame}
-\begin{block}{La modélsation de la chaise}
+\begin{block}{La modélisation de la chaise}
 \pause
 \begin{itemize}
 \item Objet "parent" : chaise

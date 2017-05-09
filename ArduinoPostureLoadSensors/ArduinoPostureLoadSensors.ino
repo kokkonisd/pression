@@ -40,7 +40,7 @@ HX711 sensor4(DOUT4,CLK4);
 
 //Empty int array for testing receiving 'A' char
 
-const int zeroSensorValues[]={0,0,0,0};
+int zeroSensorValues[]={0,0,0,0};
 
 // variables to hold the analog readings
 int sensorReading1;
@@ -53,6 +53,8 @@ int sensorOffset=10;
 
 
 // --constants--
+
+
 // constants to set the default min and max values of the sensors
 const int MIN_DEFAULT = 0;
 const int MAX_DEFAULT = 5000;
@@ -86,10 +88,12 @@ void getData(int *data) {
     sensorReading3 = analogRead(sensorAnalog3);
     sensorReading4 = analogRead(sensorAnalog4);
     */
+
     sensorReading1=sensor1.get_units();
     sensorReading2=sensor2.get_units();
     sensorReading3=sensor3.get_units();
     sensorReading4=sensor4.get_units();
+    
 
     // map the values to the set range
     /*
@@ -120,13 +124,17 @@ void writeData(int *sensorData) {
   }
       
   Serial.write(CODE_END);
-  //Serial.println(); //useless return
+  Serial.println(); //useless return
   bluetoothSerial.write(CODE_END);
 }
 
 
 
 void setup(void) {
+
+  // disable ADC
+  ADCSRA = 0;  
+  
   pinMode(RxD,INPUT);
   pinMode(TxD,OUTPUT);
   Serial.begin(COMM_SPEED_USB); // We'll send debugging information via the Serial monitor
@@ -192,8 +200,9 @@ void loop(void) {
   long time_now = millis();
 
   // get the time difference
-  long dt = time_now - time_start;
-  if (dt >= DELAY_MS) {
+  //long dt = ;
+  //if (dt >= DELAY_MS) {
+  if ( (time_now - time_start) >= DELAY_MS) {
     // write the sensor data
     int sensorData[4];
     getData(sensorData);
