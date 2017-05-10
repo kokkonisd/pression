@@ -7,6 +7,8 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 
+\definecolor{white}{rgb}{255,255,255}
+
 \title{Correcteur de posture assise à base d'Arduino}
 \subtitle{\small DI 6}
 \author[KOKKONIS Dimitrios \\\and LOCHE Jérémy]{\small {\small \texttt{Auteurs}}\\ KOKKONIS Dimitrios \\\and LOCHE Jérémy\\
@@ -37,28 +39,39 @@
 \titlepage
 \end{frame}
 
-\begin{frame}
-\frametitle{Plan}
-\tableofcontents
-\end{frame}
+
 
 \section*{Introduction}
 \begin{frame}
 \begin{block}{Introduction}
+Problématique:
+
+\begin{center}
+\textit{Concevoir un correcteur de posture assise à l'aide d'un Arduino. }
+\end{center}
+
 \begin{itemize}
 \item Objectifs :
 \begin{itemize}
 \item Déterminer la posture assise d'une personne à l'aide de capteurs placés sous les pieds de la chaise
-\item Créer une interface utilisateur adaptée pour communiquer le résultat
+\item Créer une interface utilisateur adaptée pour communiquer la qualité de la posture
 \end{itemize}
 \item Solution apportée :
 \begin{itemize}
 \item Création d'un système embarqué 
+\item Création d'un logiciel  PC et Android adapté à la visualisation de la posture
 \end{itemize}
 \end{itemize}
 \end{block}
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Plan}
+\tableofcontents
+\end{frame}
+
+\section{Déterminer la posture assise d'une personne ?}
 \begin{frame}
 \begin{block}{Déterminer la posture assise d'une personne ?}
 Pourquoi utiliser des capteurs sous les pieds de la chaise ?
@@ -86,7 +99,7 @@ Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 
 
 \begin{frame}
-\begin{block}{La solution: le système embarqué}
+\begin{block}{La solution: le système embarqué et son logiciel}
 \begin{itemize}
 \item 4 cellules de charge %dont la résistance varie lorsqu'on applique une force sur eux
 \item 4 ponts Wheatstone %(construits à partir des cellules de charge) qui permettent de mésurer une tension
@@ -97,12 +110,15 @@ Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 \end{block}
 \end{frame}
 
-\section{Les cellules de charge}
+\section{Le micro-contrôleur Arduino et ses capteurs}
+
+\subsection{Les cellules de charge}
 \begin{frame}
-\begin{block}{Les cellules de charge}
+%\begin{block}{Les cellules de charge}
+\frametitle{\textcolor{white}{Les cellules de charge}}
 \begin{itemize}
-\item Il s'agit de résistance variables
-\item Leur résistance change quand elles sont déformées
+\item Il s'agit de résistance variables qui varient en fonction de la déformation du métal.
+\item $R=\rho \frac{l}{s}$
 \item Les variations de la résistance sont toutefois très faibles ($m\Omega$ ou $\mu\Omega$)
 \end{itemize}
 \begin{figure}
@@ -112,7 +128,7 @@ Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 \caption{Schéma d'une cellule de charge avec jauge de contrainte (image : \cite{sparkfun}).}
 \label{fig:load_cell_sparkfun}
 \end{figure}
-\end{block}
+%\end{block}
 \end{frame}
 
 \begin{frame}
@@ -175,9 +191,9 @@ tem\end{frame}
 \end{block}
 \end{frame}
 
-\section{Le micro-contrôleur Arduino}
+\subsection{Le micro-contrôleur Arduino}
 \begin{frame}
-\begin{block}{Le micro-contrôleur Arduino}
+\frametitle{\textcolor{white}{Le micro-contrôleur Arduino}}
 \begin{itemize}
 \item Capable de lire des données analogiques ou numériques, les traiter, et les envoyer par série
 \item Utilise un compilateur \texttt{avr-g++} (C/C++)
@@ -191,16 +207,15 @@ tem\end{frame}
 \caption{Arduino Uno et son Shield bluetooth}
 \label{fig:load_sensor_connected}
 \end{figure}
-\end{block}
 \end{frame}
 
 \begin{frame}
 \begin{block}{La programmation de l'Arduino}
 \begin{itemize}
 \item Le code C/C++: écrit dans Arduino IDE
-\item Récupère la valeur des capteurs et les envoies en série via USB et Bluetooth toutes les 100ms.
-\item Il utilise une libraire développé pour les amplificateurs, appelée \textit{HX177} \cite{hx711}
-\item Le code est aussi capable de faire la tare des amplificateurs
+\item Récupère les valeurs des capteurs et les envoie via USB et Bluetooth toutes les 100ms.
+\item Il utilise une libraire développée pour les amplificateurs, appelée \textit{HX711} \cite{hx711}
+\item Le code est aussi capable de faire la tare des capteurs (faire le zéro)
 \end{itemize}
 
 \end{block}
@@ -208,128 +223,102 @@ tem\end{frame}
 
 \section{Les applications}
 \begin{frame}
-\begin{block}{Les applications}
-\pause
+\frametitle{\textcolor{white}{Les applications}}
 \begin{itemize}
-\item 2 applications diffèrentes :
-\pause
+\item 2 applications différentes :
 \begin{itemize}
 \item Application PC (Windows/OSX/Linux)
-\pause
 \item Application Android
-\pause
 \item Construites en \texttt{Java} avec \textit{Eclipse} et \textit{Android Studio}
 \end{itemize}
-\item Se divisent en 2 parties générales :
-\pause
+\item Se basent sur 2 fonctionnalités principales :
 \begin{itemize}
-\item La communication en série
-\pause
-\item La modélisation de la chaise et la visualisation
+\item La communication série
+\item La visualisation de la posture
 \end{itemize}
 \end{itemize}
-\end{block}
+
 \end{frame}
 
 \subsection{La communication série}
 \begin{frame}
-\begin{block}{La communication en série}
-\pause
+\frametitle{\textcolor{white}{La communication en série}}
+Fonctionnement de la communication série:
+
+
+Application en JAVA:
 \begin{itemize}
-\item Basée sur la librairie \texttt{jSerialComm}
-\pause
-\item Ce module permet de :
-\pause
+\item La librairie \texttt{jSerialComm}
+\item Elle permet de :
 \begin{itemize}
-\item Trouver les ports sériales disponibles sur la machine
-\pause
+\item Trouver les ports séries disponibles sur la machine
 \item Se connecter aux ports et établir un flux de communication (envoyer/recevoir des données)
-\pause
 \item Interpréter les données d'entrée
-\pause
 \item Fermer le flux de communication et se déconnecter
 \end{itemize}
 \end{itemize}
-\end{block}
 \end{frame}
 
-\subsection{La modélisation de la chaise}
-\begin{frame}
-\begin{block}{La modélisation de la chaise}
-\pause
-\begin{itemize}
-\item Objet "parent" : chaise
-\pause
-\begin{itemize}
-\item Objet "enfant" : pied
-\pause
-\begin{itemize}
-\item Comporte un ID unique associé à l'amplificateur correspondant
-\pause
-\item Comporte une position
-\pause
-\item Comporte une valeur
-\end{itemize}
-\item Comporte une "zone optimale" (appelée "deadzone") :
-\pause
-\begin{itemize}
-\item Position
-\pause
-\item Rayon
-\pause
-\end{itemize}
-\item Comporte un barycentre
-\end{itemize}
-\end{itemize}
-\end{block}
-\end{frame}
+%\subsection{La modélisation de la chaise}
+%\begin{frame}
+%\begin{block}{La modélisation de la chaise}
+%\begin{itemize}
+%\item Objet "parent" : chaise
+%\begin{itemize}
+%\item Objet "enfant" : pied
+%\begin{itemize}
+%\item Comporte un ID unique associé à l'amplificateur correspondant
+%\item Comporte une position
+%\item Comporte une valeur
+%\end{itemize}
+%\item Comporte une "zone optimale" (appelée "deadzone") :
+%\begin{itemize}
+%\item Position
+%\item Rayon
+%\end{itemize}
+%\item Comporte un barycentre
+%\end{itemize}
+%\end{itemize}
+%\end{block}
+%\end{frame}
+
+%\begin{frame}
+%\begin{block}{Comment changer de référentiel ?}
+%\begin{figure}[htbp]
+%\includegraphics[height=4cm]{images/refs}
+%\caption{Le même point exprimé en deux référentiels : \textit{réel} (à gauche) et \textit{numérique} (à droite).}
+%\label{fig:visualisation_referentiels}
+%\end{figure}
+%\end{block}
+%\end{frame}
 
 \begin{frame}
-\begin{block}{Comment changer de référentiel ?}
-\begin{figure}[htbp]
-\includegraphics[height=4cm]{images/refs}
-\caption{Le même point exprimé en deux référentiels : \textit{réel} (à gauche) et \textit{numérique} (à droite).}
-\label{fig:visualisation_referentiels}
-\end{figure}
-\end{block}
-\end{frame}
-
-\begin{frame}
-\begin{block}{La visualisation}
+\frametitle{\textcolor{white}{La visualisation}}
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[height=5cm]{images/screenshot_pc1}
+\includegraphics[height=4.5cm]{images/screenshot_pc1}
+\includegraphics[height=4.5cm]{images/screenshot_android1.png}
 \end{center}
-\caption{L'application PC.}
+\caption{L'application PC (gauche) et Android (droite)}
 \label{fig:screenshot_pc}
 \end{figure}
-\end{block}
 \end{frame}
 
 \section{Conclusion}
 \begin{frame}
 \begin{block}{Conclusion}
-\pause
 \begin{itemize}
 \item Avantages :
-\pause
 \begin{itemize}
 \item Compatibilité avec plusieurs types de chaises (par exemple, une chaise à 3 pieds)
-\pause
 \item Facile à utiliser
-\pause
 \item Petite consommation électrique 
-\pause
 \item Compatibilité avec plusieurs plateformes (PC/mobile, Windows/OSX/Linux/Android)
-\pause
 \end{itemize}
 \item Améliorations possibles :
-\pause
 \begin{itemize}
 \item Fabriquer un montage qui rend l'utilisation plus facile (par exemple construire des boites en aluminium pour les cellules et une boite métallique pour l'Arduino et les amplificateurs)
-\pause
 \item Construire une application iOS
-\pause
 \item Construire un meilleur GUI
 \end{itemize}
 \end{itemize}
