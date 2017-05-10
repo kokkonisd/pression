@@ -6,6 +6,7 @@
 \usepackage[french]{babel}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{eurosym}
 
 \definecolor{white}{rgb}{255,255,255}
 
@@ -231,10 +232,17 @@ tem\end{frame}
 \item Application Android
 \item Construites en \texttt{Java} avec \textit{Eclipse} et \textit{Android Studio}
 \end{itemize}
+
+\begin{figure}
+\includegraphics[height=2cm]{images/eclipse.png}
+\hspace{1cm}
+\includegraphics[height=2cm]{images/android-studio.png}
+\end{figure}
+
 \item Se basent sur 2 fonctionnalités principales :
 \begin{itemize}
-\item La communication série
-\item La visualisation de la posture
+\item La communication série $TX \rightarrow RX$
+\item La visualisation de la posture (l'interface utilisateur)
 \end{itemize}
 \end{itemize}
 
@@ -243,16 +251,21 @@ tem\end{frame}
 \subsection{La communication série}
 \begin{frame}
 \frametitle{\textcolor{white}{La communication en série}}
-Fonctionnement de la communication série:
 
+\begin{figure}
+\includegraphics[height=5.5cm]{images/rxtx.png}
+\caption{Principe de la communication série}
+\end{figure}
+\end{frame}
 
+\begin{frame}
 Application en JAVA:
 \begin{itemize}
 \item La librairie \texttt{jSerialComm}
 \item Elle permet de :
 \begin{itemize}
 \item Trouver les ports séries disponibles sur la machine
-\item Se connecter aux ports et établir un flux de communication (envoyer/recevoir des données)
+\item Se connecter aux ports et établir des flux de communication (envoyer/recevoir des données)
 \item Interpréter les données d'entrée
 \item Fermer le flux de communication et se déconnecter
 \end{itemize}
@@ -292,12 +305,14 @@ Application en JAVA:
 %\end{block}
 %\end{frame}
 
+\subsection{La visualisation}
 \begin{frame}
 \frametitle{\textcolor{white}{La visualisation}}
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[height=4.5cm]{images/screenshot_pc1}
-\includegraphics[height=4.5cm]{images/screenshot_android1.png}
+\includegraphics[height=4.2cm]{images/screenshot_pc1}
+\hspace{0.1cm}
+\includegraphics[height=4.2cm]{images/screenshot_android1.png}
 \end{center}
 \caption{L'application PC (gauche) et Android (droite)}
 \label{fig:screenshot_pc}
@@ -305,29 +320,94 @@ Application en JAVA:
 \end{frame}
 
 \section{Conclusion}
+
+\subsection{Consommation énergétique}
+
 \begin{frame}
-\begin{block}{Conclusion}
-\begin{itemize}
-\item Avantages :
+\frametitle{\textcolor{white}{Consommation énergétique}}
+\begin{table}
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Matériel} & \textbf{Consommation} \\\hline\hline
+Arduino & 50 mA \\\hline
+Shield Bluetooth & 30 mA \\\hline
+$4 \times$HX711 + Cellules de charge & 25 mA \\\hline
+\textbf{Total} &  \textbf{105 mA} \\\hline
+\end{tabular}
+\end{center}
+\caption{Consommation théorique de chaque partie du montage électronique}
+\label{tab:consommation}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{| c | c | c |}
+\hline
+\textbf{Matériel} & \textbf{Courant} & \textbf{Puissance} \\ \hline \hline
+$4\times$HX711 + Cellules de charge & 26mA &130 mW \\\hline
+Total & 113mA & 566mW\\\hline
+\end{tabular}
+\end{center}
+\caption{Consommation réelle (mesurée) à 5V}
+\label{tab:consommation}
+\end{table}
+\end{frame}
+
+\subsection{Prix de revient}
+\begin{frame}
+\frametitle{\textcolor{white}{Prix de revient}}
+\begin{table}
+\begin{center}
+\begin{tabular}{| c | c |}
+\hline
+\textbf{Matériel} & \textbf{Prix} \\\hline\hline
+Arduino UNO & 20 \euro \\\hline
+Shield Bluetooth & 25 \euro \\\hline
+$4 \times$HX711 & 1,80 \euro (par pièce) \\\hline
+$4 \times$Cellule de charge & 12 \euro \\\hline
+Batterie Lithium USB (2000 mAh) & 10 \euro \\\hline
+Cable USB-B$\rightarrow$A & 2 \euro \\\hline
+Breadbord (plaque prototype) \& Fils & 9 \euro \\\hline
+$8 \times$Résistance (1 k$\Omega$) & 0,04 \euro (par pièce) \\\hline
+\textbf{Total} &  \textbf{85,52 \euro} \\\hline
+\end{tabular}
+\end{center}
+\caption{Le prix de chaque partie du montage électronique sur \textit{Amazon}}
+\label{tab:prix_amazon}
+\end{table}
+\end{frame}
+
+\subsection{Avantages et évolution}
+\begin{frame}
+\frametitle{\textcolor{white}{Avantages}}
+
 \begin{itemize}
 \item Compatibilité avec plusieurs types de chaises (par exemple, une chaise à 3 pieds)
 \item Facile à utiliser
-\item Petite consommation électrique 
+\item Petite consommation électrique (17h d'autonomie avec une batterie de 2000mAh)
 \item Compatibilité avec plusieurs plateformes (PC/mobile, Windows/OSX/Linux/Android)
 \end{itemize}
-\item Améliorations possibles :
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{\textcolor{white}{\'Evolution}}
 \begin{itemize}
-\item Fabriquer un montage qui rend l'utilisation plus facile (par exemple construire des boites en aluminium pour les cellules et une boite métallique pour l'Arduino et les amplificateurs)
-\item Construire une application iOS
-\item Construire un meilleur GUI
+\item Miniaturisation: Arduino Uno $\rightarrow$ Arduino Pro Mini;
+\item Incruster les capteurs directement dans les pieds de la chaise;
+\item L'amélioration de l'autonomie;
+\item LEDs RGB et vibreurs au niveau du plateau de l'assise pour notifier l'utilisateur en cas de mauvaise assise;
+\item Mode graduel d'avertissement (LEDs, Vibreur et Son);
+\item Paramétrage dans l'application mobile.
 \end{itemize}
-\end{itemize}
-\end{block}
 \end{frame}
 
 \subsection*{Bibliographie}
 \begin{frame}
-\frametitle{Bibliographie}
+\frametitle{\textcolor{white}{Bibliographie}}
 \begin{thebibliography}{99}
 {\tiny \bibitem{site-arduino} Arduino, \textit{Le site officiel d'Arduino}. 2017. \texttt{\tiny URL : https://www.arduino.cc/} (visité le 26/04/2017).
 
@@ -347,12 +427,5 @@ Application en JAVA:
 \end{thebibliography}
 \end{frame}
 
-\subsection*{Liens utiles}
-\begin{frame}
-\frametitle{Liens utiles}
-\begin{itemize}
-\item \url{www.polytech.univ-tours.fr}
-\end{itemize}
-\end{frame}
 
 \end{document}
