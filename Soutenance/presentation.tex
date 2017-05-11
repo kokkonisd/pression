@@ -10,6 +10,10 @@
 
 \definecolor{white}{rgb}{255,255,255}
 
+\setbeamerfont{page number in head/foot}{size=\small}
+
+\setbeamertemplate{footline}[frame number]
+
 \title{Correcteur de posture assise à base d'Arduino}
 \subtitle{\small DI 6}
 \author[KOKKONIS Dimitrios \\\and LOCHE Jérémy]{\small {\small \texttt{Auteurs}}\\ KOKKONIS Dimitrios \\\and LOCHE Jérémy\\
@@ -74,7 +78,7 @@ Problématique:
 
 \section{Déterminer la posture assise d'une personne ?}
 \begin{frame}
-\begin{block}{Déterminer la posture assise d'une personne ?}
+\frametitle{\textcolor{white}{Déterminer la posture assise d'une personne ?}}
 Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 \begin{figure}
 \begin{center}
@@ -84,7 +88,6 @@ Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 \caption{Répartition des forces sur une chaise en fonction de la posture}
 \label{fig:chaise_repartition}
 \end{figure}
-\end{block}
 \end{frame}
 
 
@@ -148,7 +151,7 @@ Pourquoi utiliser des capteurs sous les pieds de la chaise ?
 \label{fig:load_cell_1}
 \end{figure}
 \end{block}
-tem\end{frame}
+\end{frame}
 
 
 \begin{frame}
@@ -231,12 +234,15 @@ tem\end{frame}
 \item Application PC (Windows/OSX/Linux)
 \item Application Android
 \item Construites en \texttt{Java} avec \textit{Eclipse} et \textit{Android Studio}
+\item Développement partagé avec \textit{Github}
 \end{itemize}
 
 \begin{figure}
 \includegraphics[height=2cm]{images/eclipse.png}
 \hspace{1cm}
 \includegraphics[height=2cm]{images/android-studio.png}
+\hspace{1cm}
+\includegraphics[height=2cm]{images/github.png}
 \end{figure}
 
 \item Se basent sur 2 fonctionnalités principales :
@@ -425,6 +431,21 @@ $8 \times$Résistance (1 k$\Omega$) & 0,04 \euro (par pièce) \\\hline
 
 \bibitem{wheatstone} National Instruments, \textit{Comment effectuer une mesure avec une cellule de charge ou un transducteur de pression}. 2013. \texttt{\tiny URL : http://www.ni.com/tutorial/7138/fr/} (visité le 26/04/2017).}
 \end{thebibliography}
+\end{frame}
+
+\begin{frame}
+\frametitle{\textcolor{white}{Remerciements}}
+
+\begin{center}
+\textit{\huge{Merci pour votre attention !}}
+\end{center}
+
+Cette présentation vous a été proposée par :
+\begin{itemize}
+\item LOCHE Jérémy: \\  \url{jeremy.loche@etu.univ-tours.fr}
+\item KOKKONIS Dimitrios: \url{dimitrios.kokkonis@etu.univ-tours.fr}
+\end{itemize}
+
 \end{frame}
 
 
